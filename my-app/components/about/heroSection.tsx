@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle, ArrowRight, Cloud, Shield, Sparkles } from 'lucide-react';
+import { CheckCircle, ArrowRight } from 'lucide-react';
 
 function HeroSection() {
   return (
@@ -8,24 +8,18 @@ function HeroSection() {
       {/* Animated Background Elements */}
       <div className="absolute inset-0">
         {/* Floating particles */}
-        <div className="absolute top-10 left-10 w-2 h-2 bg-lime-400 rounded-full animate-ping"></div>
-        <div className="absolute top-32 right-20 w-1 h-1 bg-blue-400 rounded-full animate-pulse"></div>
-        <div className="absolute bottom-40 left-20 w-3 h-3 bg-purple-400 rounded-full animate-bounce"></div>
-        <div className="absolute top-1/3 right-1/3 w-2 h-2 bg-lime-300 rounded-full animate-ping"></div>
-        <div className="absolute bottom-20 right-10 w-1 h-1 bg-cyan-400 rounded-full animate-pulse"></div>
+
+        {/*<div className="absolute top-32 right-20 w-1 h-1 bg-blue-400 rounded-full animate-pulse"></div>*/}
+        {/*<div className="absolute bottom-40 left-20 w-3 h-3 bg-purple-400 rounded-full animate-bounce"></div>*/}
+        {/*<div className="absolute top-1/3 right-1/3 w-2 h-2 bg-lime-300 rounded-full animate-ping"></div>*/}
+        {/*<div className="absolute bottom-20 right-10 w-1 h-1 bg-cyan-400 rounded-full animate-pulse"></div>*/}
         
         {/* Gradient orbs */}
-        <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-lime-400/20 to-transparent rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-tl from-blue-500/20 to-transparent rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-2xl animate-spin"></div>
+        {/*<div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-lime-400/20 to-transparent rounded-full blur-3xl animate-pulse"></div>*/}
+        {/*<div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-tl from-blue-500/20 to-transparent rounded-full blur-3xl animate-pulse"></div>*/}
+        {/*<div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-2xl animate-spin"></div>*/}
       </div>
 
-      {/* Header */}
-      <div className="relative z-10 px-6 lg:px-12 py-8 border-b border-gray-700/30 backdrop-blur-sm">
-        <h1 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-white via-white-400 to-white bg-clip-text text-transparent text-center">
-          About Us
-        </h1>
-      </div>
 
       {/* Hero Content */}
       <div className="relative z-10 grid lg:grid-cols-2 min-h-screen">
@@ -34,7 +28,7 @@ function HeroSection() {
         <div className="px-6 lg:px-12 py-12 lg:py-20 flex items-center">
           <div className="max-w-xl space-y-8 transform transition-all duration-1000">
             
-            <div className="space-y-6">
+            <div className="space-y-6 ml-15">
               <p className="text-gray-300 text-lg leading-relaxed">
                 You need information security services to proactively prevent and protect 
                 confidential data, as well as detect internal and external threats. Protect 
@@ -44,53 +38,31 @@ function HeroSection() {
               </p>
 
               <p className="text-gray-300 leading-relaxed">
-                For 15 years and running, it has been delivering smiles to hundreds of IT 
-                advisors, developers, users, and business owners. Easy solutions for all 
-                difficult IT problems to ensure high availability. Provide users with 
-                appropriate view and access permissions to requests, problems, changes, 
-                contracts, assets, solutions, and reports with our experienced professionals.
+                You need information security services to proactively prevent and protect
+                confidential data, as well as detect internal and external threats. Protect
+                your business by choosing a managed security service provider. Our
+                security services can help ensure your business. Trusted by the world's best
+                organizations
               </p>
             </div>
 
-            {/* Features Grid */}
-            <div className="grid grid-cols-1 gap-4 space-y-2">
-              <div className="flex items-center space-x-3 group transform transition-all duration-300 hover:translate-x-2 hover:scale-105">
-                <div className="bg-gradient-to-r from-lime-400 to-lime-500 rounded-full p-1 shadow-lg group-hover:shadow-lime-400/50 transition-all duration-300">
-                  <CheckCircle className="h-5 w-5 text-white" />
-                </div>
-                <span className="text-gray-300 font-medium group-hover:text-lime-400 transition-colors duration-300">Eliminate repeat entries</span>
-              </div>
-              
-              <div className="flex items-center space-x-3 group transform transition-all duration-300 hover:translate-x-2 hover:scale-105">
-                <div className="bg-gradient-to-r from-lime-400 to-lime-500 rounded-full p-1 shadow-lg group-hover:shadow-lime-400/50 transition-all duration-300">
-                  <CheckCircle className="h-5 w-5 text-white" />
-                </div>
-                <span className="text-gray-300 font-medium group-hover:text-lime-400 transition-colors duration-300">Drive Business Process</span>
-              </div>
-              
-              <div className="flex items-center space-x-3 group transform transition-all duration-300 hover:translate-x-2 hover:scale-105">
-                <div className="bg-gradient-to-r from-lime-400 to-lime-500 rounded-full p-1 shadow-lg group-hover:shadow-lime-400/50 transition-all duration-300">
-                  <CheckCircle className="h-5 w-5 text-white" />
-                </div>
-                <span className="text-gray-300 font-medium group-hover:text-lime-400 transition-colors duration-300">Structure Data, and Docs</span>
-              </div>
-            </div>
 
-            <div className="grid grid-cols-1 gap-4 space-y-2">
+
+            <div className="grid grid-cols-1 gap-4 space-y-2 ml-15">
               <div className="flex items-center space-x-3 group transform transition-all duration-300 hover:translate-x-2 hover:scale-105">
                 <div className="bg-gradient-to-r from-lime-400 to-lime-500 rounded-full p-1 shadow-lg group-hover:shadow-lime-400/50 transition-all duration-300">
                   <CheckCircle className="h-5 w-5 text-white" />
                 </div>
                 <span className="text-gray-300 font-medium group-hover:text-lime-400 transition-colors duration-300">Simplicity Communication</span>
               </div>
-              
+
               <div className="flex items-center space-x-3 group transform transition-all duration-300 hover:translate-x-2 hover:scale-105">
                 <div className="bg-gradient-to-r from-lime-400 to-lime-500 rounded-full p-1 shadow-lg group-hover:shadow-lime-400/50 transition-all duration-300">
                   <CheckCircle className="h-5 w-5 text-white" />
                 </div>
                 <span className="text-gray-300 font-medium group-hover:text-lime-400 transition-colors duration-300">Speed Up Transactions</span>
               </div>
-              
+
               <div className="flex items-center space-x-3 group transform transition-all duration-300 hover:translate-x-2 hover:scale-105">
                 <div className="bg-gradient-to-r from-lime-400 to-lime-500 rounded-full p-1 shadow-lg group-hover:shadow-lime-400/50 transition-all duration-300">
                   <CheckCircle className="h-5 w-5 text-white" />
@@ -105,7 +77,7 @@ function HeroSection() {
         <div className="relative flex items-center justify-center">
           
           {/* Animated green accent border */}
-          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-lime-400 via-lime-500 to-lime-400 animate-pulse"></div>
+
           
           {/* Main content area with glass morphism */}
           <div className="relative flex items-center justify-center w-full h-full px-8">

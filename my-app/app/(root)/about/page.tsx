@@ -1,19 +1,18 @@
-import ChooseUs from '@/components/about/chooseUs'
-import HeroSection from '@/components/about/heroSection'
-import IncidentResolutions from '@/components/about/last'
-import ModernTimeline from '@/components/about/middle'
-import { MicrochipIcon } from 'lucide-react'
 import React from 'react'
+import HeroSection from "@/components/about/heroSection";
+import ModernTimeline from "@/components/about/middle";
+import ChooseUs from "@/components/about/chooseUs";
+import IncidentResolutions from "@/components/about/last";
 
-function page() {
-  return (
-    <div>
-      <HeroSection/>
-      <ModernTimeline/>
-      <ChooseUs/>
-      <IncidentResolutions/>
-      </div>
-  )
+function About() {
+    return (
+        <div>
+            <HeroSection/>
+            <ModernTimeline/>
+            <ChooseUs/>
+            <IncidentResolutions/>
+        </div>
+    )
 }
 
-export default page
+export default About

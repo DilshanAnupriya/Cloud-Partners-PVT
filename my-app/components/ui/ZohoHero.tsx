@@ -12,11 +12,9 @@ import {
     UserGroupIcon
 } from '@heroicons/react/24/outline';
 
-
 const ZohoHero = () => {
     const { scrollY } = useScroll();
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-    const [isScrolled, setIsScrolled] = useState(false);
 
     // Parallax effect for subtle depth
     const y1 = useTransform(scrollY, [0, 300], [0, 50]);
@@ -27,16 +25,10 @@ const ZohoHero = () => {
             setMousePosition({ x: e.clientX, y: e.clientY });
         };
 
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 100);
-        };
-
         window.addEventListener('mousemove', handleMouseMove);
-        window.addEventListener('scroll', handleScroll);
 
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('scroll', handleScroll);
         };
     }, []);
 
@@ -83,93 +75,11 @@ const ZohoHero = () => {
         { icon: Globe, text: 'Global Scale' },
     ];
 
-    const navItems = ['Home', 'Products', 'Our Services', 'Our Team','About Us'];
-
     return (
         <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 text-white">
-            {/* Fixed Navigation Bar */}
-            <motion.nav
-                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-                    isScrolled
-                        ? 'bg-gray-900/95 backdrop-blur-md border-b border-gray-700/50 shadow-lg'
-                        : 'bg-transparent'
-                }`}
-                initial={{ y: -100 }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.6, ease: 'easeOut' }}
-            >
-                <div className="container mx-auto px-6 py-4">
-                    <div className="flex justify-between items-center">
-                        <motion.div
-                            className="flex items-center space-x-3"
-                            whileHover={{ scale: 1.05 }}
-                            transition={{ type: 'spring', stiffness: 400 }}
-                        >
-                            {/* Logo */}
-                            <motion.div
-                                className="relative w-10 h-10  rounded-full flex items-center justify-center shadow-lg"
-                                whileHover={{ rotate: 5 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                <img
-                                    alt="company logo"
-                                    className="rounded-full object-cover object-center"
-                                    src="/companyLogo.png"
-                                />
-                                {/* Subtle glow effect */}
-                                <motion.div
-                                    className="absolute inset-0 bg-gradient-to-br from-[#0974B0]/20 to-[#219E4A]/20 rounded-xl blur-md"
-                                    animate={{
-                                        scale: [1, 1.2, 1],
-                                        opacity: [0.5, 0.8, 0.5]
-                                    }}
-                                    transition={{
-                                        duration: 3,
-                                        repeat: Infinity,
-                                        ease: "easeInOut"
-                                    }}
-                                />
-                            </motion.div>
-
-                            {/* Company Name */}
-                            <span className="text-2xl font-extrabold text-white">
-                                Cloud Partners
-                            </span>
-                        </motion.div>
-
-                        <div className="hidden md:flex space-x-8 text-gray-300 font-medium">
-                            {navItems.map((item, index) => (
-                                <motion.a
-                                    key={item}
-                                    href="#"
-                                    className="hover:text-[#0974B0] transition-colors duration-300 relative group"
-                                    whileHover={{ y: -2, color: '#0974B0' }}
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: index * 0.1 + 0.4 }}
-                                >
-                                    {item}
-                                    <motion.div
-                                        className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#0974B0] group-hover:w-full transition-all duration-300"
-                                        whileHover={{ width: "100%" }}
-                                    />
-                                </motion.a>
-                            ))}
-                        </div>
-
-                        <motion.button
-                            className="bg-[#0974B0] text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-[#08669A] transition-all duration-300 border border-[#0974B0]/20"
-                            whileHover={{ scale: 1.05, boxShadow: '0 10px 20px rgba(9, 116, 176, 0.4)' }}
-                            whileTap={{ scale: 0.95 }}
-                        >
-                            Contact Us
-                        </motion.button>
-                    </div>
-                </div>
-            </motion.nav>
-
+            {/* Mouse follower gradient */}
             <motion.div
-                className="absolute w-48 h-48 bg-gradient-to-br from-[#0974B0]/30 to-[#219E4A]/20 rounded-full blur-3xl pointer-events-none "
+                className="absolute w-48 h-48 bg-gradient-to-br from-[#0974B0]/30 to-[#219E4A]/20 rounded-full blur-3xl pointer-events-none"
                 animate={{
                     x: mousePosition.x - 96,
                     y: mousePosition.y - 96,
@@ -294,12 +204,11 @@ const ZohoHero = () => {
                                         <h3 className="text-2xl font-bold text-white mb-2">Zoho Workspace</h3>
                                         <p className="text-gray-400 text-sm">Unified business solutions at your fingertips</p>
                                     </div>
-                                    <div className="w-26 h-20  rounded-xl flex items-center justify-center">
+                                    <div className="w-26 h-20 rounded-xl flex items-center justify-center">
                                         <img
                                             alt="zoho logo"
                                             className=""
                                             src="/zohologo.png"
-
                                         />
                                     </div>
                                 </div>
