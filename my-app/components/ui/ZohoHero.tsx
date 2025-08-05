@@ -1,27 +1,76 @@
 "use client";
+import React, { useState, useEffect, useRef } from 'react';
+import { ArrowRight, Code, Users, Play, Shield, Star, TrendingUp, Database, Cloud, BarChart3 } from 'lucide-react';
+import { motion, useAnimation } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 
-import React, { useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, Variants } from 'framer-motion';
-import { ArrowRight, Code, Users, Zap, Globe, Play } from 'lucide-react';
-import {
-    BriefcaseIcon,
-    ChartBarIcon,
-    CurrencyDollarIcon,
-    EnvelopeIcon,
-    PencilSquareIcon,
-    UserGroupIcon
-} from '@heroicons/react/24/outline';
-
-const ZohoHero = () => {
-    const { scrollY } = useScroll();
+const ProfessionalHero = () => {
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+    const canvasRef = useRef(null);
 
-    // Parallax effect for subtle depth
-    const y1 = useTransform(scrollY, [0, 300], [0, 50]);
-    const y2 = useTransform(scrollY, [0, 300], [0, -30]);
+    const controls = useAnimation();
+    const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 });
 
     useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
+        if (inView) {
+            controls.start('visible');
+        }
+
+        // Dark themed particle effect
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        const resizeCanvas = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        };
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const createParticle = () => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 2 + 0.5,
+            speedX: Math.random() * 0.3 - 0.15,
+            speedY: Math.random() * 0.3 - 0.15,
+            color: `rgba(148, 163, 184, ${Math.random() * 0.4 + 0.1})`,
+            life: Math.random() * 200 + 100
+        });
+
+        const initParticles = () => {
+            particles = Array.from({ length: 60 }, createParticle);
+        };
+
+        const drawParticles = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, index) => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.fill();
+
+                p.x += p.speedX;
+                p.y += p.speedY;
+                p.life--;
+
+                if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+
+                if (p.life <= 0) {
+                    particles[index] = createParticle();
+                }
+            });
+            requestAnimationFrame(drawParticles);
+        };
+
+        initParticles();
+        drawParticles();
+
+        const handleMouseMove = (e) => {
             setMousePosition({ x: e.clientX, y: e.clientY });
         };
 
@@ -29,330 +78,361 @@ const ZohoHero = () => {
 
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('resize', resizeCanvas);
         };
-    }, []);
+    }, [inView, controls]);
 
-    const containerVariants: Variants = {
+    const partnerships = [
+        {
+            name: 'Google Cloud Platform',
+            subtitle: 'Enterprise Solutions Partner',
+            apps: ['Analytics', 'Storage', 'Compute', 'Security'],
+            icon: '/google.webp',
+            metrics: [
+                { label: 'Uptime', value: '99.99%', trend: '+0.02%' },
+                { label: 'Performance', value: '2.1s', trend: '-0.3s' },
+                { label: 'Users', value: '24.5K', trend: '+12%' },
+                { label: 'Revenue', value: '$1.2M', trend: '+24%' }
+            ]
+        }
+    ];
+
+    const services = [
+        {
+            icon: Code,
+            text: 'System Integration',
+            desc: 'Enterprise API & automation solutions',
+            color: 'text-blue-400',
+            bgColor: 'bg-gradient-to-br from-slate-800/60 to-slate-900/40',
+            iconBg: 'bg-blue-500/20',
+            borderColor: 'border-slate-700/60'
+        },
+        {
+            icon: Users,
+            text: 'Consulting Services',
+            desc: 'Strategic technology advisory',
+            color: 'text-emerald-400',
+            bgColor: 'bg-gradient-to-br from-slate-800/60 to-slate-900/40',
+            iconBg: 'bg-emerald-500/20',
+            borderColor: 'border-slate-700/60'
+        },
+    ];
+
+    const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
             transition: {
-                staggerChildren: 0.2,
-                duration: 0.8,
-            },
-        },
+                staggerChildren: 0.12
+            }
+        }
     };
 
-    const itemVariants: Variants = {
-        hidden: { y: 50, opacity: 0 },
+    const itemVariants = {
+        hidden: { opacity: 0, y: 30 },
         visible: {
+            opacity: 1,
             y: 0,
-            opacity: 1,
             transition: {
-                duration: 0.8,
-                ease: 'easeOut',
-            },
-        },
+                duration: 0.5,
+                ease: [0.22, 1, 0.36, 1]
+            }
+        }
     };
 
-    const cardVariants: Variants = {
-        hidden: { scale: 0.8, opacity: 0, rotateX: 15 },
-        visible: {
-            scale: 1,
-            opacity: 1,
-            rotateX: 0,
+    const floatingVariants = {
+        animate: {
+            y: [-5, 5, -5],
+            rotate: [-1, 1, -1],
             transition: {
-                duration: 1,
-                ease: 'easeOut',
-            },
-        },
+                duration: 6,
+                repeat: Infinity,
+                ease: "easeInOut"
+            }
+        }
     };
-
-    const features = [
-        { icon: Code, text: 'Advanced Development' },
-        { icon: Users, text: 'Team Collaboration' },
-        { icon: Zap, text: 'Lightning Fast' },
-        { icon: Globe, text: 'Global Scale' },
-    ];
 
     return (
-        <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 text-white">
-            {/* Mouse follower gradient */}
+        <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 text-white overflow-hidden">
+            {/* Dark particle background */}
+            <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-10" />
+
+            {/* Professional mouse follow effect */}
             <motion.div
-                className="absolute w-48 h-48 bg-gradient-to-br from-[#0974B0]/30 to-[#219E4A]/20 rounded-full blur-3xl pointer-events-none"
+                className="fixed w-96 h-96 pointer-events-none z-20 opacity-40"
                 animate={{
-                    x: mousePosition.x - 96,
-                    y: mousePosition.y - 96,
+                    x: mousePosition.x - 192,
+                    y: mousePosition.y - 192,
                 }}
-                transition={{
-                    type: 'spring',
-                    damping: 20,
-                    stiffness: 100,
-                }}
-            />
+                transition={{ type: 'spring', stiffness: 20, damping: 30 }}
+            >
+                <div className="w-full h-full bg-gradient-to-r from-blue-500/20 via-slate-400/10 to-emerald-500/20 rounded-full blur-3xl" />
+            </motion.div>
+
+            {/* Floating decorative elements */}
+
+
+
+            {/* Dark grid pattern */}
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.03)_1px,transparent_1px)] bg-[size:50px_50px] z-0"></div>
+
+            {/* Dark gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-slate-900/40 z-5"></div>
 
             <motion.div
-                className="relative z-10 container mx-auto px-6 pt-10 pb-16"
+                ref={ref}
                 variants={containerVariants}
                 initial="hidden"
-                animate="visible"
+                animate={controls}
+                className="relative z-30 container mx-auto px-6 pt-20 pb-24"
             >
-                {/* Hero Content */}
-                <div className="flex flex-col lg:flex-row items-center justify-between gap-12 mt-36">
-                    {/* Left Side - Text Content */}
-                    <motion.div className="lg:w-1/2" variants={itemVariants}>
-                        <motion.div
-                            className="inline-flex items-center px-4 py-2 bg-[#0974B0]/20 rounded-full mb-6 border border-[#0974B0]/30 text-[#4FB3D9] text-sm font-medium backdrop-blur-sm"
-                            whileHover={{ scale: 1.05, backgroundColor: '#0974B0', color: '#fff' }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <Zap className="w-4 h-4 mr-2" />
-                            <span>Transforming Business Innovation</span>
-                        </motion.div>
-
-                        <motion.h1
-                            className="text-5xl lg:text-6xl font-extrabold mb-6 leading-tight"
-                            variants={itemVariants}
-                        >
-                            Empower Your
-                            <br />
-                            <span className="bg-gradient-to-r from-[#0974B0] to-[#219E4A] bg-clip-text text-transparent">
-                                Business
+                <div className="flex flex-col lg:flex-row items-center justify-between gap-16 pt-12">
+                    <motion.div variants={itemVariants} className="lg:w-1/2 space-y-8">
+                        {/* Professional badge */}
+                        <motion.div variants={itemVariants}>
+                            <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-blue-500/10 text-blue-300 border border-blue-500/20 backdrop-blur-sm">
+                                <Star className="w-4 h-4 mr-2" />
+                                Certified Google Cloud Partner
                             </span>
-                            <br />
-                            with Zoho
-                        </motion.h1>
+                        </motion.div>
 
-                        <motion.p
-                            className="text-lg text-gray-300 mb-8 max-w-md leading-relaxed"
-                            variants={itemVariants}
-                        >
-                            Discover cutting-edge tools and enterprise solutions designed to scale your business and drive innovation in the digital era.
-                        </motion.p>
+                        {/* Dark themed heading */}
+                        <motion.div variants={itemVariants} className="space-y-6">
+                            <h1 className="text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight">
+                                <span className="text-white">Enterprise</span>{' '}
+                                <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-300">
+                                    Cloud
+                                </span>
+                                <br />
+                                <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-emerald-300">
+                                    Solutions
+                                </span>{' '}
+                                <span className="text-white">for</span>
+                                <br />
+                                <span className="text-slate-300">Modern Business</span>
+                            </h1>
+                            <p className="text-xl text-slate-300 max-w-xl leading-relaxed">
+                                Streamline operations and accelerate growth with enterprise-grade Google Cloud implementations.
+                                Trusted by Fortune 500 companies worldwide.
+                            </p>
+                        </motion.div>
 
-                        <motion.div
-                            className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-12"
-                            variants={itemVariants}
-                        >
+                        {/* Dark themed buttons */}
+                        <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 pt-4">
                             <motion.button
-                                className="bg-[#0974B0] text-white px-8 py-4 rounded-lg font-semibold flex items-center justify-center group hover:bg-[#08669A] transition-all duration-300 border border-[#0974B0]/20"
+                                className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-4 rounded-xl font-semibold flex items-center justify-center shadow-lg shadow-blue-500/25"
                                 whileHover={{
-                                    scale: 1.05,
-                                    boxShadow: '0 15px 30px rgba(9, 116, 176, 0.4)',
+                                    scale: 1.02,
+                                    boxShadow: '0 12px 24px rgba(59, 130, 246, 0.35)',
+                                    background: 'linear-gradient(to right, #3b82f6, #2563eb)'
                                 }}
-                                whileTap={{ scale: 0.95 }}
+                                whileTap={{ scale: 0.98 }}
                             >
-                                Start Now
-                                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                Schedule Consultation
+                                <ArrowRight className="ml-2 w-5 h-5" />
                             </motion.button>
-
                             <motion.button
-                                className="border border-[#0974B0]/50 text-[#4FB3D9] px-8 py-4 rounded-lg font-semibold flex items-center justify-center group hover:bg-[#0974B0]/10 hover:border-[#0974B0] transition-all duration-300 backdrop-blur-sm"
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
+                                className="border-2 border-slate-600 text-slate-300 px-8 py-4 rounded-xl font-semibold flex items-center justify-center bg-slate-800/30 backdrop-blur-sm hover:bg-slate-700/40 transition-colors"
+                                whileHover={{
+                                    scale: 1.02,
+                                    borderColor: 'rgb(71, 85, 105)',
+                                    backgroundColor: 'rgba(51, 65, 85, 0.4)'
+                                }}
+                                whileTap={{ scale: 0.98 }}
                             >
-                                <Play className="mr-2 w-5 h-5" />
-                                Watch Demo
+                                <Play className="mr-2 w-5 h-5 text-slate-400" />
+                                View Case Studies
                             </motion.button>
                         </motion.div>
 
-                        {/* Feature Icons */}
-                        <motion.div
-                            className="flex flex-wrap gap-6"
-                            variants={itemVariants}
-                        >
-                            {features.map((feature, index) => (
+                        {/* Dark themed services */}
+                        <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-8">
+                            {services.map((service, index) => (
                                 <motion.div
                                     key={index}
-                                    className="flex items-center space-x-2 text-gray-300"
-                                    whileHover={{ scale: 1.05, color: '#4FB3D9' }}
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: index * 0.1 + 0.8 }}
+                                    variants={itemVariants}
+                                    className={`flex items-start space-x-4 p-6 rounded-xl ${service.bgColor} backdrop-blur-sm border ${service.borderColor} hover:shadow-lg hover:shadow-slate-800/50 transition-all duration-300 cursor-pointer`}
+                                    whileHover={{
+                                        scale: 1.02,
+                                        backgroundColor: 'rgba(51, 65, 85, 0.4)'
+                                    }}
                                 >
-                                    <feature.icon className="w-5 h-5 text-[#219E4A]" />
-                                    <span className="text-sm font-medium">{feature.text}</span>
+                                    <motion.div
+                                        className={`flex-shrink-0 w-12 h-12 ${service.iconBg} rounded-lg flex items-center justify-center backdrop-blur-sm border border-slate-700/40`}
+                                        whileHover={{ rotate: 5, scale: 1.05 }}
+                                    >
+                                        <service.icon className={`w-6 h-6 ${service.color}`} />
+                                    </motion.div>
+                                    <div>
+                                        <div className="font-semibold text-white text-base mb-1">{service.text}</div>
+                                        <div className="text-slate-400 text-sm">{service.desc}</div>
+                                    </div>
                                 </motion.div>
                             ))}
                         </motion.div>
                     </motion.div>
 
-                    {/* Right Side - Visual Elements */}
+                    {/* Dark Professional Dashboard */}
                     <motion.div
+                        variants={itemVariants}
                         className="lg:w-1/2 relative"
-                        variants={cardVariants}
-                        initial="hidden"
-                        animate="visible"
-                        style={{ y: y1 }}
                     >
-                        {/* Main Dashboard Card */}
                         <motion.div
-                            className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 border border-gray-700/50 rounded-3xl p-8 shadow-2xl backdrop-blur-lg relative overflow-hidden"
+                            className="bg-slate-800/80 backdrop-blur-xl border border-slate-700/60 rounded-2xl p-8 shadow-2xl shadow-black/20 relative overflow-hidden"
                             whileHover={{
-                                scale: 1.02,
-                                boxShadow: '0 25px 50px rgba(0, 0, 0, 0.4)',
+                                scale: 1.01,
+                                boxShadow: '0 25px 50px rgba(0, 0, 0, 0.3)',
+                                borderColor: 'rgba(71, 85, 105, 0.8)'
                             }}
-                            style={{ transformStyle: 'preserve-3d' }}
+                            variants={floatingVariants}
+                            animate="animate"
                         >
-                            {/* Gradient Overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-[#0974B0]/10 to-[#219E4A]/10 rounded-3xl" />
+                            {/* Animated dark background gradient */}
+                            <motion.div
+                                className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-slate-700/10 to-emerald-500/5 rounded-2xl"
+                                animate={{
+                                    background: [
+                                        'linear-gradient(45deg, rgba(59, 130, 246, 0.05), rgba(71, 85, 105, 0.1), rgba(16, 185, 129, 0.05))',
+                                        'linear-gradient(135deg, rgba(71, 85, 105, 0.1), rgba(16, 185, 129, 0.05), rgba(59, 130, 246, 0.05))',
+                                        'linear-gradient(225deg, rgba(16, 185, 129, 0.05), rgba(59, 130, 246, 0.05), rgba(71, 85, 105, 0.1))'
+                                    ]
+                                }}
+                                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                            />
 
                             <div className="relative z-10">
-                                {/* Header */}
-                                <div className="flex items-center justify-between mb-8">
-                                    <div>
-                                        <h3 className="text-2xl font-bold text-white mb-2">Zoho Workspace</h3>
-                                        <p className="text-gray-400 text-sm">Unified business solutions at your fingertips</p>
-                                    </div>
-                                    <div className="w-26 h-20 rounded-xl flex items-center justify-center">
-                                        <img
-                                            alt="zoho logo"
-                                            className=""
-                                            src="/zohologo.png"
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* App Grid */}
-                                <div className="grid grid-cols-3 gap-4 mb-6">
-                                    {[
-                                        { name: 'CRM', icon: <UserGroupIcon className="w-6 h-6 text-gray-300" />, delay: 0.2 },
-                                        { name: 'Mail', icon: <EnvelopeIcon className="w-6 h-6 text-gray-300" />, delay: 0.3 },
-                                        { name: 'Books', icon: <CurrencyDollarIcon className="w-6 h-6 text-gray-300" />, delay: 0.4 },
-                                        { name: 'Projects', icon: <BriefcaseIcon className="w-6 h-6 text-gray-300" />, delay: 0.5 },
-                                        { name: 'Analytics', icon: <ChartBarIcon className="w-6 h-6 text-gray-300" />, delay: 0.6 },
-                                        { name: 'Creator', icon: <PencilSquareIcon className="w-6 h-6 text-gray-300" />, delay: 0.7 },
-                                    ].map((app, index) => (
-                                        <motion.div
-                                            key={app.name}
-                                            className="bg-gray-800/60 rounded-xl p-4 text-center cursor-pointer relative overflow-hidden border border-gray-700"
-                                            initial={{ opacity: 0, scale: 0.8 }}
-                                            animate={{ opacity: 1, scale: 1 }}
-                                            transition={{ delay: app.delay, duration: 0.5 }}
-                                            whileHover={{
-                                                scale: 1.05,
-                                                rotateY: 5,
-                                                boxShadow: '0 10px 20px rgba(0, 0, 0, 0.3)'
-                                            }}
-                                            whileTap={{ scale: 0.95 }}
-                                        >
-                                            <motion.div
-                                                className="absolute inset-0 bg-white/10 rounded-xl"
-                                                initial={{ x: '-100%' }}
-                                                whileHover={{ x: '100%' }}
-                                                transition={{ duration: 0.6 }}
-                                            />
-                                            <div className="relative z-10">
-                                                <div className="mb-2">
-                                                    {app.icon}
-                                                </div>
-                                                <div className="text-white font-semibold text-sm mb-1">{app.name}</div>
-                                                <div className="text-gray-400 text-xs">Active</div>
-                                            </div>
-                                        </motion.div>
-                                    ))}
-                                </div>
-
-                                {/* Stats Bar */}
+                                {/* Dark themed header */}
                                 <motion.div
-                                    className="bg-gray-900/60 rounded-2xl p-6 border border-gray-700/30"
+                                    className="flex items-center justify-between mb-8"
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.8, duration: 0.6 }}
+                                    transition={{ delay: 0.3 }}
                                 >
-                                    <div className="flex justify-between items-center mb-4">
-                                        <span className="text-white font-medium">Business Performance</span>
-                                        <span className="text-[#219E4A] text-sm font-semibold">+12% this month</span>
+                                    <div>
+                                        <h3 className="text-xl font-bold text-white mb-1">
+                                            Analytics Dashboard
+                                        </h3>
+                                        <p className="text-slate-400 text-sm">Real-time business metrics</p>
+                                    </div>
+                                    <div className="flex items-center space-x-3">
+                                        <div className="flex space-x-2">
+                                            <motion.div
+                                                className="w-2 h-2 bg-emerald-400 rounded-full"
+                                                animate={{ opacity: [0.5, 1, 0.5] }}
+                                                transition={{ repeat: Infinity, duration: 2 }}
+                                            />
+                                            <motion.div
+                                                className="w-2 h-2 bg-blue-400 rounded-full"
+                                                animate={{ opacity: [0.5, 1, 0.5] }}
+                                                transition={{ repeat: Infinity, duration: 2, delay: 0.3 }}
+                                            />
+                                        </div>
+                                        <span className="text-xs font-semibold text-emerald-400 bg-emerald-500/20 px-3 py-1 rounded-full border border-emerald-500/30">
+                                            LIVE
+                                        </span>
+                                    </div>
+                                </motion.div>
+
+                                {/* Dark themed metrics grid */}
+                                {partnerships[0] && (
+                                    <motion.div
+                                        className="grid grid-cols-2 gap-4 mb-8"
+                                        variants={containerVariants}
+                                        initial="hidden"
+                                        animate="visible"
+                                    >
+                                        {partnerships[0].metrics.map((metric, index) => (
+                                            <motion.div
+                                                key={metric.label}
+                                                variants={itemVariants}
+                                                className="bg-slate-700/50 backdrop-blur-sm rounded-xl p-4 border border-slate-600/40 hover:border-slate-500/60 transition-all duration-300"
+                                                whileHover={{
+                                                    scale: 1.02,
+                                                    backgroundColor: 'rgba(51, 65, 85, 0.6)'
+                                                }}
+                                            >
+                                                <div className="flex items-center justify-between">
+                                                    <div>
+                                                        <div className="text-xs text-slate-400 font-medium mb-1">{metric.label}</div>
+                                                        <div className="text-lg font-bold text-white">{metric.value}</div>
+                                                    </div>
+                                                    <div className={`text-xs font-semibold px-2 py-1 rounded ${
+                                                        metric.trend.startsWith('+')
+                                                            ? 'text-emerald-400 bg-emerald-500/20 border border-emerald-500/30'
+                                                            : 'text-blue-400 bg-blue-500/20 border border-blue-500/30'
+                                                    }`}>
+                                                        {metric.trend}
+                                                    </div>
+                                                </div>
+                                            </motion.div>
+                                        ))}
+                                    </motion.div>
+                                )}
+
+                                {/* Dark themed partnership card */}
+                                <motion.div
+                                    variants={itemVariants}
+                                    initial="hidden"
+                                    animate="visible"
+                                    className="bg-slate-700/40 backdrop-blur-sm rounded-xl p-6 border border-slate-600/50 hover:border-slate-500/70 transition-all duration-300 cursor-pointer relative overflow-hidden"
+                                    whileHover={{
+                                        scale: 1.01,
+                                        backgroundColor: 'rgba(51, 65, 85, 0.5)'
+                                    }}
+                                >
+                                    <div className="flex items-center justify-between mb-6">
+                                        <div className="flex items-center space-x-4">
+                                            <motion.div
+                                                className="w-12 h-12 bg-slate-600/50 backdrop-blur-sm rounded-lg flex items-center justify-center border border-slate-500/40"
+                                                whileHover={{ scale: 1.05 }}
+                                            >
+                                                <img alt="Google Cloud" src="/google.webp" className="w-6 h-6" />
+                                            </motion.div>
+                                            <div>
+                                                <div className="font-semibold text-white text-base">Google Cloud Platform</div>
+                                                <div className="text-slate-400 text-sm">Enterprise Solutions Partner</div>
+                                            </div>
+                                        </div>
+                                        <motion.div
+                                            className="flex items-center space-x-2 bg-blue-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold"
+                                            whileHover={{ scale: 1.05 }}
+                                        >
+                                            <Shield className="w-3 h-3" />
+                                            CERTIFIED
+                                        </motion.div>
                                     </div>
 
-                                    {/* Animated Progress Bars */}
-                                    <div className="space-y-3">
-                                        {[
-                                            { label: 'Revenue', value: 85, color: '#0974B0' },
-                                            { label: 'Leads', value: 72, color: '#219E4A' },
-                                            { label: 'Productivity', value: 94, color: '#F59E0B' },
-                                        ].map((metric, index) => (
-                                            <div key={metric.label}>
-                                                <div className="flex justify-between text-sm mb-1">
-                                                    <span className="text-gray-300">{metric.label}</span>
-                                                    <span className="text-white font-medium">{metric.value}%</span>
-                                                </div>
-                                                <div className="w-full bg-gray-700 rounded-full h-2">
-                                                    <motion.div
-                                                        className="h-2 rounded-full"
-                                                        style={{ backgroundColor: metric.color }}
-                                                        initial={{ width: 0 }}
-                                                        animate={{ width: `${metric.value}%` }}
-                                                        transition={{ delay: 1 + index * 0.1, duration: 1, ease: 'easeOut' }}
-                                                    />
-                                                </div>
-                                            </div>
-                                        ))}
+                                    <div className="grid grid-cols-4 gap-4">
+                                        {partnerships[0].apps.map((app, appIndex) => {
+                                            const icons = [BarChart3, Database, Cloud, Shield];
+                                            const colors = ['text-blue-400', 'text-emerald-400', 'text-purple-400', 'text-orange-400'];
+                                            const backgrounds = ['bg-blue-500/20', 'bg-emerald-500/20', 'bg-purple-500/20', 'bg-orange-500/20'];
+                                            const Icon = icons[appIndex];
+
+                                            return (
+                                                <motion.div
+                                                    key={app}
+                                                    variants={itemVariants}
+                                                    className="flex flex-col items-center space-y-2 cursor-pointer"
+                                                    whileHover={{ scale: 1.05, y: -2 }}
+                                                    transition={{ duration: 0.2 }}
+                                                >
+                                                    <div className={`w-10 h-10 ${backgrounds[appIndex]} backdrop-blur-sm rounded-lg flex items-center justify-center border border-slate-600/40`}>
+                                                        <Icon className={`w-5 h-5 ${colors[appIndex]}`} />
+                                                    </div>
+                                                    <span className="text-xs font-medium text-slate-300 text-center">{app}</span>
+                                                </motion.div>
+                                            );
+                                        })}
                                     </div>
                                 </motion.div>
                             </div>
                         </motion.div>
-
-                        {/* Orbiting Elements */}
-                        <motion.div
-                            className="absolute top-1/2 left-1/2 w-2 h-2 bg-[#0974B0] rounded-full"
-                            animate={{
-                                rotate: 360,
-                                x: [0, 60, 0, -60, 0],
-                                y: [0, -40, 0, 40, 0],
-                            }}
-                            transition={{
-                                duration: 8,
-                                repeat: Infinity,
-                                ease: 'linear',
-                            }}
-                            style={{ transformOrigin: 'center' }}
-                        />
-
-                        <motion.div
-                            className="absolute top-1/2 left-1/2 w-1 h-1 bg-[#219E4A] rounded-full"
-                            animate={{
-                                rotate: -360,
-                                x: [0, -40, 0, 40, 0],
-                                y: [0, 30, 0, -30, 0],
-                            }}
-                            transition={{
-                                duration: 6,
-                                repeat: Infinity,
-                                ease: 'linear',
-                            }}
-                            style={{ transformOrigin: 'center' }}
-                        />
                     </motion.div>
                 </div>
-
-                {/* Bottom Stats */}
-                <motion.div
-                    className="mt-36 grid grid-cols-2 md:grid-cols-4 gap-8"
-                    variants={containerVariants}
-                    initial="hidden"
-                    animate="visible"
-                >
-                    {[
-                        { number: '50M+', label: 'Users Worldwide' },
-                        { number: '180+', label: 'Countries' },
-                        { number: '99.9%', label: 'Uptime' },
-                        { number: '24/7', label: 'Support' },
-                    ].map((stat, index) => (
-                        <motion.div
-                            key={index}
-                            className="text-center border border-gray-700/30 rounded-2xl"
-                            variants={itemVariants}
-                            whileHover={{ scale: 1.05 }}
-                        >
-                            <div className="text-3xl font-bold text-white mb-2 pt-10">{stat.number}</div>
-                            <div className="text-gray-400 text-sm font-medium pb-10">{stat.label}</div>
-                        </motion.div>
-                    ))}
-                </motion.div>
             </motion.div>
         </div>
     );
 };
 
-export default ZohoHero;
+export default ProfessionalHero;

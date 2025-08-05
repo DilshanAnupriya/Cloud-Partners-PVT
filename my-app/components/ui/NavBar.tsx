@@ -1,7 +1,4 @@
-"use client";
-
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 
 const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -27,86 +24,107 @@ const Navbar = () => {
     ];
 
     return (
-        <motion.nav
+        <nav
             className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
                 isScrolled
                     ? 'bg-gray-900/95 backdrop-blur-md border-b border-gray-700/50 shadow-lg'
-                    : 'bg-transparent'
+                    : 'bg-white'
             }`}
-            initial={{ y: -100 }}
-            animate={{ y: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
+            style={{
+                animation: 'slideDown 0.6s ease-out'
+            }}
         >
             <div className="container mx-auto px-6 py-4">
                 <div className="flex justify-between items-center">
-                    <motion.div
-                        className="flex items-center space-x-3"
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ type: 'spring', stiffness: 400 }}
-                    >
+                    <div className="flex items-center space-x-3 hover:scale-105 transition-transform duration-300 cursor-pointer">
                         {/* Logo */}
-                        <motion.div
-                            className="relative w-10 h-10 rounded-full flex items-center justify-center shadow-lg"
-                            whileHover={{ rotate: 5 }}
-                            transition={{ duration: 0.3 }}
-                        >
+                        <div className="relative w-10 h-10 rounded-full flex items-center justify-center shadow-lg hover:rotate-6 transition-transform duration-300">
                             <img
-                                alt="company logo"
-                                className="rounded-full object-cover object-center"
+                                className="rounded-full"
+                                alt="Logo"
                                 src="/companyLogo.png"
-                            />
+                                />
                             {/* Subtle glow effect */}
-                            <motion.div
-                                className="absolute inset-0 bg-gradient-to-br from-[#0974B0]/20 to-[#219E4A]/20 rounded-xl blur-md"
-                                animate={{
-                                    scale: [1, 1.2, 1],
-                                    opacity: [0.5, 0.8, 0.5]
-                                }}
-                                transition={{
-                                    duration: 3,
-                                    repeat: Infinity,
-                                    ease: "easeInOut"
+                            <div
+                                className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-green-500/20 rounded-full blur-md opacity-0 hover:opacity-100 transition-opacity duration-300"
+                                style={{
+                                    animation: 'pulse 3s ease-in-out infinite'
                                 }}
                             />
-                        </motion.div>
+                        </div>
 
                         {/* Company Name */}
-                        <span className="text-2xl font-extrabold text-white">
-                            Cloud Partners
+                        <span className={`text-2xl font-extrabold transition-colors duration-300 ${
+                            isScrolled ? 'text-white':'text-black'
+                        }`}>
+                            <>Cloud</> Partners
                         </span>
-                    </motion.div>
+                    </div>
 
-                    <div className="hidden md:flex space-x-8 text-gray-300 font-medium">
+                    <div className="hidden md:flex space-x-8 font-medium">
                         {navItems.map((item, index) => (
-                            <motion.a
+                            <a
                                 key={item.label}
                                 href={item.href}
-                                className="hover:text-[#0974B0] transition-colors duration-300 relative group"
-                                whileHover={{ y: -2, color: '#0974B0' }}
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: index * 0.1 + 0.4 }}
+                                className={`relative group transition-all duration-300 hover:-translate-y-1 ${
+                                    isScrolled
+                                        ? 'text-gray-200 hover:text-blue-400'
+                                        : 'text-gray-700 hover:text-blue-600'
+                                }`}
+                                style={{
+                                    animationDelay: `${index * 0.1 + 0.4}s`,
+                                    animation: 'fadeInUp 0.5s ease-out forwards'
+                                }}
                             >
                                 {item.label}
-                                <motion.div
-                                    className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#0974B0] group-hover:w-full transition-all duration-300"
-                                    whileHover={{ width: "100%" }}
-                                />
-                            </motion.a>
+                                <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-500 group-hover:w-full transition-all duration-300" />
+                            </a>
                         ))}
                     </div>
 
-                    <motion.a
+                    <a
                         href="/contact"
-                        className="bg-[#0974B0] text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-[#08669A] transition-all duration-300 border border-[#0974B0]/20 inline-block"
-                        whileHover={{ scale: 1.05, boxShadow: '0 10px 20px rgba(9, 116, 176, 0.4)' }}
-                        whileTap={{ scale: 0.95 }}
+                        className="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-blue-700 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 border border-blue-600/20 inline-block active:scale-95"
                     >
                         Contact Us
-                    </motion.a>
+                    </a>
                 </div>
             </div>
-        </motion.nav>
+
+            {/* Custom keyframe animations */}
+            <style jsx>{`
+                @keyframes slideDown {
+                    from {
+                        transform: translateY(-100%);
+                    }
+                    to {
+                        transform: translateY(0);
+                    }
+                }
+
+                @keyframes fadeInUp {
+                    from {
+                        opacity: 0;
+                        transform: translateY(-10px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                @keyframes pulse {
+                    0%, 100% {
+                        transform: scale(1);
+                        opacity: 0.5;
+                    }
+                    50% {
+                        transform: scale(1.2);
+                        opacity: 0.8;
+                    }
+                }
+            `}</style>
+        </nav>
     );
 };
 
