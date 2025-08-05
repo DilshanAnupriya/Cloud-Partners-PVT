@@ -65,6 +65,7 @@ export default function HomePage() {
     return (
         <div className="w-full">
             <ProfessionalHero/>
+            <CustomerLogo/>
             <HeroParallax products={products} />
             <InfoSection/>
         </div>

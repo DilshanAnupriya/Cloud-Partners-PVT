@@ -1,120 +1,65 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Code, Users, Play, Shield, Star, TrendingUp, Database, Cloud, BarChart3 } from 'lucide-react';
-import { motion, useAnimation } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
+import React, { useState, useEffect,  } from "react";
+import { ArrowRight, Code, Users, Play, Shield, Database, Cloud, BarChart3 } from "lucide-react";
+import { motion, useAnimation } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
 const ProfessionalHero = () => {
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-    const canvasRef = useRef(null);
+
 
     const controls = useAnimation();
     const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 });
 
     useEffect(() => {
         if (inView) {
-            controls.start('visible');
+            controls.start("visible");
         }
 
-        // Dark themed particle effect
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-
-        const resizeCanvas = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        };
-
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        const createParticle = () => ({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            size: Math.random() * 2 + 0.5,
-            speedX: Math.random() * 0.3 - 0.15,
-            speedY: Math.random() * 0.3 - 0.15,
-            color: `rgba(148, 163, 184, ${Math.random() * 0.4 + 0.1})`,
-            life: Math.random() * 200 + 100
-        });
-
-        const initParticles = () => {
-            particles = Array.from({ length: 60 }, createParticle);
-        };
-
-        const drawParticles = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach((p, index) => {
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                ctx.fillStyle = p.color;
-                ctx.fill();
-
-                p.x += p.speedX;
-                p.y += p.speedY;
-                p.life--;
-
-                if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
-                if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
-
-                if (p.life <= 0) {
-                    particles[index] = createParticle();
-                }
-            });
-            requestAnimationFrame(drawParticles);
-        };
-
-        initParticles();
-        drawParticles();
-
-        const handleMouseMove = (e) => {
+        const handleMouseMove = (e:any) => {
             setMousePosition({ x: e.clientX, y: e.clientY });
         };
 
-        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener("mousemove", handleMouseMove);
 
         return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('resize', resizeCanvas);
+            window.removeEventListener("mousemove", handleMouseMove);
         };
     }, [inView, controls]);
 
     const partnerships = [
         {
-            name: 'Google Cloud Platform',
-            subtitle: 'Enterprise Solutions Partner',
-            apps: ['Analytics', 'Storage', 'Compute', 'Security'],
-            icon: '/google.webp',
+            name: "Google Cloud Platform",
+            subtitle: "Enterprise Solutions Partner",
+            apps: ["Analytics", "Storage", "Compute", "Security"],
+            icon: "/google.webp",
             metrics: [
-                { label: 'Uptime', value: '99.99%', trend: '+0.02%' },
-                { label: 'Performance', value: '2.1s', trend: '-0.3s' },
-                { label: 'Users', value: '24.5K', trend: '+12%' },
-                { label: 'Revenue', value: '$1.2M', trend: '+24%' }
-            ]
-        }
+                { label: "Uptime", value: "99.99%", trend: "+0.02%" },
+                { label: "Performance", value: "2.1s", trend: "-0.3s" },
+                { label: "Users", value: "24.5K", trend: "+12%" },
+                { label: "Revenue", value: "$1.2M", trend: "+24%" },
+            ],
+        },
     ];
 
     const services = [
         {
             icon: Code,
-            text: 'System Integration',
-            desc: 'Enterprise API & automation solutions',
-            color: 'text-blue-400',
-            bgColor: 'bg-gradient-to-br from-slate-800/60 to-slate-900/40',
-            iconBg: 'bg-blue-500/20',
-            borderColor: 'border-slate-700/60'
+            text: "System Integration",
+            desc: "Enterprise API & automation solutions",
+            color: "text-blue-400",
+            bgColor: "bg-gradient-to-br from-slate-800/60 to-slate-900/40",
+            iconBg: "bg-blue-500/20",
+            borderColor: "border-slate-700/60",
         },
         {
             icon: Users,
-            text: 'Consulting Services',
-            desc: 'Strategic technology advisory',
-            color: 'text-emerald-400',
-            bgColor: 'bg-gradient-to-br from-slate-800/60 to-slate-900/40',
-            iconBg: 'bg-emerald-500/20',
-            borderColor: 'border-slate-700/60'
+            text: "Consulting Services",
+            desc: "Strategic technology advisory",
+            color: "text-emerald-400",
+            bgColor: "bg-gradient-to-br from-slate-800/60 to-slate-900/40",
+            iconBg: "bg-emerald-500/20",
+            borderColor: "border-slate-700/60",
         },
     ];
 
@@ -123,9 +68,9 @@ const ProfessionalHero = () => {
         visible: {
             opacity: 1,
             transition: {
-                staggerChildren: 0.12
-            }
-        }
+                staggerChildren: 0.12,
+            },
+        },
     };
 
     const itemVariants = {
@@ -135,9 +80,9 @@ const ProfessionalHero = () => {
             y: 0,
             transition: {
                 duration: 0.5,
-                ease: [0.22, 1, 0.36, 1]
-            }
-        }
+                // Removed ease property to avoid TypeScript conflicts
+            },
+        },
     };
 
     const floatingVariants = {
@@ -147,16 +92,13 @@ const ProfessionalHero = () => {
             transition: {
                 duration: 6,
                 repeat: Infinity,
-                ease: "easeInOut"
-            }
-        }
+                // Removed ease property to avoid TypeScript conflicts
+            },
+        },
     };
 
     return (
         <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 text-white overflow-hidden">
-            {/* Dark particle background */}
-            <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-10" />
-
             {/* Professional mouse follow effect */}
             <motion.div
                 className="fixed w-96 h-96 pointer-events-none z-20 opacity-40"
@@ -164,14 +106,10 @@ const ProfessionalHero = () => {
                     x: mousePosition.x - 192,
                     y: mousePosition.y - 192,
                 }}
-                transition={{ type: 'spring', stiffness: 20, damping: 30 }}
+                transition={{ type: "spring", stiffness: 20, damping: 30 }}
             >
                 <div className="w-full h-full bg-gradient-to-r from-blue-500/20 via-slate-400/10 to-emerald-500/20 rounded-full blur-3xl" />
             </motion.div>
-
-            {/* Floating decorative elements */}
-
-
 
             {/* Dark grid pattern */}
             <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.03)_1px,transparent_1px)] bg-[size:50px_50px] z-0"></div>
@@ -186,27 +124,21 @@ const ProfessionalHero = () => {
                 animate={controls}
                 className="relative z-30 container mx-auto px-6 pt-20 pb-24"
             >
-                <div className="flex flex-col lg:flex-row items-center justify-between gap-16 pt-12">
+                <div className="flex flex-col lg:flex-row items-center justify-between gap-16 pt-30">
                     <motion.div variants={itemVariants} className="lg:w-1/2 space-y-8">
                         {/* Professional badge */}
-                        <motion.div variants={itemVariants}>
-                            <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-blue-500/10 text-blue-300 border border-blue-500/20 backdrop-blur-sm">
-                                <Star className="w-4 h-4 mr-2" />
-                                Certified Google Cloud Partner
-                            </span>
-                        </motion.div>
 
                         {/* Dark themed heading */}
                         <motion.div variants={itemVariants} className="space-y-6">
                             <h1 className="text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight">
-                                <span className="text-white">Enterprise</span>{' '}
+                                <span className="text-white">Enterprise</span>{" "}
                                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-300">
                                     Cloud
                                 </span>
                                 <br />
                                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-emerald-300">
                                     Solutions
-                                </span>{' '}
+                                </span>{" "}
                                 <span className="text-white">for</span>
                                 <br />
                                 <span className="text-slate-300">Modern Business</span>
@@ -223,8 +155,8 @@ const ProfessionalHero = () => {
                                 className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-4 rounded-xl font-semibold flex items-center justify-center shadow-lg shadow-blue-500/25"
                                 whileHover={{
                                     scale: 1.02,
-                                    boxShadow: '0 12px 24px rgba(59, 130, 246, 0.35)',
-                                    background: 'linear-gradient(to right, #3b82f6, #2563eb)'
+                                    boxShadow: "0 12px 24px rgba(59, 130, 246, 0.35)",
+                                    background: "linear-gradient(to right, #3b82f6, #2563eb)",
                                 }}
                                 whileTap={{ scale: 0.98 }}
                             >
@@ -235,8 +167,8 @@ const ProfessionalHero = () => {
                                 className="border-2 border-slate-600 text-slate-300 px-8 py-4 rounded-xl font-semibold flex items-center justify-center bg-slate-800/30 backdrop-blur-sm hover:bg-slate-700/40 transition-colors"
                                 whileHover={{
                                     scale: 1.02,
-                                    borderColor: 'rgb(71, 85, 105)',
-                                    backgroundColor: 'rgba(51, 65, 85, 0.4)'
+                                    borderColor: "rgb(71, 85, 105)",
+                                    backgroundColor: "rgba(51, 65, 85, 0.4)",
                                 }}
                                 whileTap={{ scale: 0.98 }}
                             >
@@ -250,11 +182,13 @@ const ProfessionalHero = () => {
                             {services.map((service, index) => (
                                 <motion.div
                                     key={index}
-                                    variants={itemVariants}
+                                    initial={{ opacity: 0, y: 30 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.5, delay: index * 0.1 }}
                                     className={`flex items-start space-x-4 p-6 rounded-xl ${service.bgColor} backdrop-blur-sm border ${service.borderColor} hover:shadow-lg hover:shadow-slate-800/50 transition-all duration-300 cursor-pointer`}
                                     whileHover={{
                                         scale: 1.02,
-                                        backgroundColor: 'rgba(51, 65, 85, 0.4)'
+                                        backgroundColor: "rgba(51, 65, 85, 0.4)",
                                     }}
                                 >
                                     <motion.div
@@ -273,16 +207,13 @@ const ProfessionalHero = () => {
                     </motion.div>
 
                     {/* Dark Professional Dashboard */}
-                    <motion.div
-                        variants={itemVariants}
-                        className="lg:w-1/2 relative"
-                    >
+                    <motion.div variants={itemVariants} className="lg:w-1/2 relative pl-20">
                         <motion.div
                             className="bg-slate-800/80 backdrop-blur-xl border border-slate-700/60 rounded-2xl p-8 shadow-2xl shadow-black/20 relative overflow-hidden"
                             whileHover={{
                                 scale: 1.01,
-                                boxShadow: '0 25px 50px rgba(0, 0, 0, 0.3)',
-                                borderColor: 'rgba(71, 85, 105, 0.8)'
+                                boxShadow: "0 25px 50px rgba(0, 0, 0, 0.3)",
+                                borderColor: "rgba(71, 85, 105, 0.8)",
                             }}
                             variants={floatingVariants}
                             animate="animate"
@@ -292,10 +223,10 @@ const ProfessionalHero = () => {
                                 className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-slate-700/10 to-emerald-500/5 rounded-2xl"
                                 animate={{
                                     background: [
-                                        'linear-gradient(45deg, rgba(59, 130, 246, 0.05), rgba(71, 85, 105, 0.1), rgba(16, 185, 129, 0.05))',
-                                        'linear-gradient(135deg, rgba(71, 85, 105, 0.1), rgba(16, 185, 129, 0.05), rgba(59, 130, 246, 0.05))',
-                                        'linear-gradient(225deg, rgba(16, 185, 129, 0.05), rgba(59, 130, 246, 0.05), rgba(71, 85, 105, 0.1))'
-                                    ]
+                                        "linear-gradient(45deg, rgba(59, 130, 246, 0.05), rgba(71, 85, 105, 0.1), rgba(16, 185, 129, 0.05))",
+                                        "linear-gradient(135deg, rgba(71, 85, 105, 0.1), rgba(16, 185, 129, 0.05), rgba(59, 130, 246, 0.05))",
+                                        "linear-gradient(225deg, rgba(16, 185, 129, 0.05), rgba(59, 130, 246, 0.05), rgba(71, 85, 105, 0.1))",
+                                    ],
                                 }}
                                 transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
                             />
@@ -344,11 +275,13 @@ const ProfessionalHero = () => {
                                         {partnerships[0].metrics.map((metric, index) => (
                                             <motion.div
                                                 key={metric.label}
-                                                variants={itemVariants}
+                                                initial={{ opacity: 0, y: 20 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ duration: 0.4, delay: index * 0.1 }}
                                                 className="bg-slate-700/50 backdrop-blur-sm rounded-xl p-4 border border-slate-600/40 hover:border-slate-500/60 transition-all duration-300"
                                                 whileHover={{
                                                     scale: 1.02,
-                                                    backgroundColor: 'rgba(51, 65, 85, 0.6)'
+                                                    backgroundColor: "rgba(51, 65, 85, 0.6)",
                                                 }}
                                             >
                                                 <div className="flex items-center justify-between">
@@ -356,11 +289,13 @@ const ProfessionalHero = () => {
                                                         <div className="text-xs text-slate-400 font-medium mb-1">{metric.label}</div>
                                                         <div className="text-lg font-bold text-white">{metric.value}</div>
                                                     </div>
-                                                    <div className={`text-xs font-semibold px-2 py-1 rounded ${
-                                                        metric.trend.startsWith('+')
-                                                            ? 'text-emerald-400 bg-emerald-500/20 border border-emerald-500/30'
-                                                            : 'text-blue-400 bg-blue-500/20 border border-blue-500/30'
-                                                    }`}>
+                                                    <div
+                                                        className={`text-xs font-semibold px-2 py-1 rounded ${
+                                                            metric.trend.startsWith("+")
+                                                                ? "text-emerald-400 bg-emerald-500/20 border border-emerald-500/30"
+                                                                : "text-blue-400 bg-blue-500/20 border border-blue-500/30"
+                                                        }`}
+                                                    >
                                                         {metric.trend}
                                                     </div>
                                                 </div>
@@ -371,13 +306,13 @@ const ProfessionalHero = () => {
 
                                 {/* Dark themed partnership card */}
                                 <motion.div
-                                    variants={itemVariants}
-                                    initial="hidden"
-                                    animate="visible"
+                                    initial={{ opacity: 0, y: 30 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.5, delay: 0.2 }}
                                     className="bg-slate-700/40 backdrop-blur-sm rounded-xl p-6 border border-slate-600/50 hover:border-slate-500/70 transition-all duration-300 cursor-pointer relative overflow-hidden"
                                     whileHover={{
                                         scale: 1.01,
-                                        backgroundColor: 'rgba(51, 65, 85, 0.5)'
+                                        backgroundColor: "rgba(51, 65, 85, 0.5)",
                                     }}
                                 >
                                     <div className="flex items-center justify-between mb-6">
@@ -405,17 +340,18 @@ const ProfessionalHero = () => {
                                     <div className="grid grid-cols-4 gap-4">
                                         {partnerships[0].apps.map((app, appIndex) => {
                                             const icons = [BarChart3, Database, Cloud, Shield];
-                                            const colors = ['text-blue-400', 'text-emerald-400', 'text-purple-400', 'text-orange-400'];
-                                            const backgrounds = ['bg-blue-500/20', 'bg-emerald-500/20', 'bg-purple-500/20', 'bg-orange-500/20'];
+                                            const colors = ["text-blue-400", "text-emerald-400", "text-purple-400", "text-orange-400"];
+                                            const backgrounds = ["bg-blue-500/20", "bg-emerald-500/20", "bg-purple-500/20", "bg-orange-500/20"];
                                             const Icon = icons[appIndex];
 
                                             return (
                                                 <motion.div
                                                     key={app}
-                                                    variants={itemVariants}
+                                                    initial={{ opacity: 0, y: 20 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    transition={{ duration: 0.3, delay: appIndex * 0.1 }}
                                                     className="flex flex-col items-center space-y-2 cursor-pointer"
                                                     whileHover={{ scale: 1.05, y: -2 }}
-                                                    transition={{ duration: 0.2 }}
                                                 >
                                                     <div className={`w-10 h-10 ${backgrounds[appIndex]} backdrop-blur-sm rounded-lg flex items-center justify-center border border-slate-600/40`}>
                                                         <Icon className={`w-5 h-5 ${colors[appIndex]}`} />
