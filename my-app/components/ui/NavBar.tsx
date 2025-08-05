@@ -98,10 +98,8 @@ const Navbar = () => {
                             <span className={`text-2xl font-extrabold transition-all duration-300 ${
                                 isScrolled ? 'text-white' : 'text-white'
                             } group-hover:text-blue-400`}>
-                                <span className="bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
-                                    Cloud
-                                </span>{' '}
-                                Partners
+
+                                    Cloud Partners
                             </span>
                         </div>
 
