@@ -24,7 +24,7 @@ const Navbar = () => {
         { label: 'Home', href: '/' },
         {
             label: 'Products',
-            href: '/products',
+            href: '/product',
             hasDropdown: true,
             dropdownItems: [
                 { label: 'Zoho Books', href: '/products/zoho-books', desc: 'Accounting & Finance' },

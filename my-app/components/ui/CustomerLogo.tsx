@@ -1,140 +1,311 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
-const CustomerLogos = () => {
-    const [isVisible, setIsVisible] = useState(false);
+// Extend Window interface to include gsap
+declare global {
+    interface Window {
+        gsap: any;
+    }
+}
 
-    // Dummy logo data - replace with actual company logos
-    const logos = [
-        { id: 1, name: 'TechCorp', color: '#3B82F6' },
-        { id: 2, name: 'InnovateLab', color: '#10B981' },
-        { id: 3, name: 'FutureWorks', color: '#F59E0B' },
-        { id: 4, name: 'DataFlow', color: '#EF4444' },
-        { id: 5, name: 'CloudTech', color: '#8B5CF6' },
-        { id: 6, name: 'NextGen', color: '#06B6D4' },
-        { id: 7, name: 'PixelPro', color: '#EC4899' },
-        { id: 8, name: 'CodeCraft', color: '#84CC16' },
+const GoogleProductsSection = () => {
+    const sectionRef = useRef<HTMLElement>(null);
+    const titleRef = useRef<HTMLHeadingElement>(null);
+    const subtitleRef = useRef<HTMLSpanElement>(null);
+    const descriptionRef = useRef<HTMLParagraphElement>(null);
+    const productsRef = useRef<HTMLDivElement>(null);
+    const ctaRef = useRef<HTMLDivElement>(null);
+    const statsRef = useRef<HTMLDivElement>(null);
+
+    // Google products data - more professional
+    const products = [
+        {
+            id: 1,
+            name: 'Google Workspace',
+            category: 'Productivity Suite',
+            color: '#4285F4',
+            description: 'Collaborative productivity tools including Gmail, Drive, Docs, and Meet for modern teams.',
+            features: ['Real-time collaboration', 'Advanced security', 'Admin controls']
+        },
+        {
+            id: 2,
+            name: 'Google Cloud',
+            category: 'Cloud Platform',
+            color: '#4285F4',
+            description: 'Scalable cloud infrastructure and AI/ML services for enterprise applications.',
+            features: ['Global infrastructure', 'AI/ML tools', '99.9% uptime SLA']
+        },
+        {
+            id: 3,
+            name: 'Google Analytics',
+            category: 'Data & Insights',
+            color: '#E37400',
+            description: 'Advanced web analytics platform providing actionable insights for business growth.',
+            features: ['Real-time reporting', 'Audience insights', 'Conversion tracking']
+        },
+        {
+            id: 4,
+            name: 'Google Ads',
+            category: 'Marketing Platform',
+            color: '#34A853',
+            description: 'Comprehensive advertising platform to reach customers across Google\'s ecosystem.',
+            features: ['Targeted advertising', 'Performance tracking', 'Smart bidding']
+        }
+    ];
+
+    const stats = [
+        { label: 'Active Users', value: '3B+', description: 'Monthly active users across products' },
+        { label: 'Enterprises', value: '9M+', description: 'Organizations trust Google Workspace' },
+        { label: 'Countries', value: '190+', description: 'Countries with Google services' },
+        { label: 'Uptime', value: '99.9%', description: 'Enterprise-grade reliability' }
     ];
 
     useEffect(() => {
-        const timer = setTimeout(() => setIsVisible(true), 100);
-        return () => clearTimeout(timer);
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js';
+        script.onload = () => {
+            if (window.gsap) {
+                initAnimations();
+            }
+        };
+        document.head.appendChild(script);
+
+        return () => {
+            if (document.head.contains(script)) {
+                document.head.removeChild(script);
+            }
+        };
     }, []);
 
+    const initAnimations = () => {
+        const gsap = window.gsap;
+        const tl = gsap.timeline({ delay: 0.2 });
+
+        // Set initial states
+        gsap.set([titleRef.current, subtitleRef.current, descriptionRef.current], {
+            opacity: 0,
+            y: 40
+        });
+
+        // Convert HTMLCollection to Array for proper typing
+        const productChildren = productsRef.current?.children ? Array.from(productsRef.current.children) : [];
+        const statsChildren = statsRef.current?.children ? Array.from(statsRef.current.children) : [];
+
+        gsap.set(productChildren, {
+            opacity: 0,
+            y: 50,
+            scale: 0.95
+        });
+
+        gsap.set(statsChildren, {
+            opacity: 0,
+            y: 30
+        });
+
+        gsap.set(ctaRef.current, {
+            opacity: 0,
+            y: 30
+        });
+
+        // Professional entrance animations
+        tl.to(subtitleRef.current, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out"
+        })
+            .to(titleRef.current, {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: "power3.out"
+            }, "-=0.4")
+            .to(descriptionRef.current, {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: "power3.out"
+            }, "-=0.5")
+            .to(statsChildren, {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                stagger: 0.15,
+                ease: "power2.out"
+            }, "-=0.3")
+            .to(productChildren, {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 0.8,
+                stagger: 0.2,
+                ease: "power2.out"
+            }, "-=0.4")
+            .to(ctaRef.current, {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: "power3.out"
+            }, "-=0.3");
+
+        // Professional hover animations for product cards
+        if (productsRef.current) {
+            productChildren.forEach((card) => {
+                const cardElement = card as HTMLElement;
+
+                cardElement.addEventListener('mouseenter', () => {
+                    gsap.to(cardElement, {
+                        y: -4,
+                        boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
+                        duration: 0.4,
+                        ease: "power2.out"
+                    });
+                });
+
+                cardElement.addEventListener('mouseleave', () => {
+                    gsap.to(cardElement, {
+                        y: 0,
+                        boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
+                        duration: 0.4,
+                        ease: "power2.out"
+                    });
+                });
+            });
+        }
+    };
+
     return (
-        <section className="py-50 bg-gradient-to-br from-slate-50 to-blue-50 overflow-hidden relative">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div
-                    className={`text-center mb-16 transition-all duration-1000 ease-out ${
-                        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                    }`}
-                >
-                    <div className="inline-block">
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent text-sm font-semibold tracking-wider uppercase mb-2 block animate-pulse">
-              Trusted by Industry Leaders
-            </span>
+        <section
+            ref={sectionRef}
+            className="py-24 bg-white overflow-hidden relative"
+        >
+            <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                {/* Header Section */}
+                <div className="text-center mb-20">
+                    <div className="inline-block mb-4">
+                        <span
+                            ref={subtitleRef}
+                            className="text-sm font-semibold tracking-wider text-gray-600 uppercase"
+                        >
+                            Enterprise Solutions
+                        </span>
                     </div>
 
-                    <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                        Powering Success for
-                        <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"> Innovators</span>
-                    </h2>
+                    <h1
+                        ref={titleRef}
+                        className="text-5xl lg:text-6xl font-light text-gray-900 mb-8 tracking-tight"
+                    >
+                        Google for
+                        <span className="font-medium text-blue-600"> Business</span>
+                    </h1>
 
-                    <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                        Join thousands of companies that trust us to deliver exceptional results and drive their digital transformation forward.
+                    <p
+                        ref={descriptionRef}
+                        className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed font-light"
+                    >
+                        Empower your organization with Google's enterprise-grade solutions.
+                        Designed for scalability, security, and seamless collaboration across global teams.
                     </p>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center">
-                    {logos.map((logo, index) => (
-                        <div
-                            key={logo.id}
-                            className={`group relative transition-all duration-1000 ease-out ${
-                                isVisible
-                                    ? 'opacity-100 translate-y-0 scale-100'
-                                    : 'opacity-0 translate-y-8 scale-95'
-                            }`}
-                            style={{
-                                transitionDelay: `${index * 100}ms`,
-                            }}
-                        >
-                            <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 group-hover:border-gray-200 transform hover:-translate-y-2 hover:scale-105">
-                                {/* Animated background gradient */}
-                                <div
-                                    className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity duration-500"
-                                    style={{
-                                        background: `linear-gradient(135deg, ${logo.color}22, ${logo.color}44)`,
-                                    }}
-                                />
-
-                                {/* Logo placeholder */}
-                                <div className="relative z-10 flex items-center justify-center h-16">
-                                    <div
-                                        className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-lg transition-all duration-300 group-hover:rotate-6 group-hover:scale-110"
-                                        style={{ backgroundColor: logo.color }}
-                                    >
-                                        {logo.name.charAt(0)}
-                                    </div>
-
-                                    <span className="ml-3 font-semibold text-gray-800 text-lg transition-all duration-300 group-hover:translate-x-1">
-                    {logo.name}
-                  </span>
-                                </div>
-
-                                {/* Hover effect overlay */}
-                                <div
-                                    className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-opacity-20 transition-all duration-500"
-                                    style={{ borderColor: logo.color }}
-                                />
+                {/* Stats Section */}
+                <div
+                    ref={statsRef}
+                    className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-20"
+                >
+                    {stats.map((stat, index) => (
+                        <div key={index} className="text-center">
+                            <div className="text-4xl font-light text-blue-600 mb-2">
+                                {stat.value}
+                            </div>
+                            <div className="text-lg font-medium text-gray-900 mb-1">
+                                {stat.label}
+                            </div>
+                            <div className="text-sm text-gray-600 font-light">
+                                {stat.description}
                             </div>
                         </div>
                     ))}
                 </div>
 
-                {/* Bottom CTA section */}
+                {/* Products Grid */}
                 <div
-                    className={`text-center mt-16 transition-all duration-1000 ease-out ${
-                        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                    }`}
-                    style={{ transitionDelay: '800ms' }}
+                    ref={productsRef}
+                    className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-20"
                 >
-                    <div className="inline-block transform transition-all duration-300 hover:scale-105 active:scale-95">
-                        <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:from-blue-700 hover:to-purple-700">
-                            Join Our Success Stories
+                    {products.map((product) => (
+                        <div
+                            key={product.id}
+                            className="group bg-white rounded-2xl p-8 border border-gray-200 hover:border-gray-300 transition-all duration-400 cursor-pointer"
+                            style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}
+                        >
+                            {/* Product Header */}
+                            <div className="flex items-start justify-between mb-6">
+                                <div>
+                                    <div className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">
+                                        {product.category}
+                                    </div>
+                                    <h3 className="text-2xl font-medium text-gray-900 group-hover:text-blue-600 transition-colors duration-300">
+                                        {product.name}
+                                    </h3>
+                                </div>
+                                <div
+                                    className="w-3 h-3 rounded-full"
+                                    style={{ backgroundColor: product.color }}
+                                />
+                            </div>
+
+                            {/* Product Description */}
+                            <p className="text-gray-600 leading-relaxed mb-6 font-light">
+                                {product.description}
+                            </p>
+
+                            {/* Features */}
+                            <div className="space-y-2">
+                                {product.features.map((feature, idx) => (
+                                    <div key={idx} className="flex items-center text-sm text-gray-700">
+                                        <div
+                                            className="w-1.5 h-1.5 rounded-full mr-3"
+                                            style={{ backgroundColor: product.color }}
+                                        />
+                                        {feature}
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Learn More Link */}
+                            <div className="mt-6 pt-6 border-t border-gray-100">
+                                <button className="text-blue-600 font-medium text-sm hover:text-blue-700 transition-colors duration-300 group-hover:translate-x-1 transform transition-transform">
+                                    Learn More →
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Call to Action */}
+                <div ref={ctaRef} className="text-center">
+                    <div className="inline-flex flex-col sm:flex-row gap-4">
+                        <button className="bg-blue-600 text-white px-8 py-4 rounded-lg font-medium text-lg hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl">
+                            Get Started
+                        </button>
+                        <button className="bg-white text-gray-900 px-8 py-4 rounded-lg font-medium text-lg border-2 border-gray-300 hover:border-gray-400 transition-all duration-300 transform hover:-translate-y-0.5">
+                            Schedule a Demo
                         </button>
                     </div>
 
-                    <p className="text-gray-600 mt-4 transition-opacity duration-700 delay-1000">
-                        Ready to be our next success story? Let's get started today.
+                    <p className="text-gray-500 mt-8 text-lg font-light max-w-2xl mx-auto">
+                        Join millions of organizations worldwide that trust Google's enterprise solutions
+                        to drive innovation and growth.
                     </p>
                 </div>
             </div>
 
-            {/* Floating elements for visual interest */}
-            <div className="absolute top-20 left-10 w-20 h-20 bg-blue-200 rounded-full opacity-20 animate-float" />
-            <div className="absolute bottom-20 right-10 w-16 h-16 bg-purple-200 rounded-full opacity-20 animate-float-reverse" />
-
-            <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0) rotate(0deg); }
-          50% { transform: translateY(-20px) rotate(180deg); }
-        }
-        
-        @keyframes float-reverse {
-          0%, 100% { transform: translateY(0) rotate(0deg); }
-          50% { transform: translateY(20px) rotate(-180deg); }
-        }
-        
-        .animate-float {
-          animation: float 8s ease-in-out infinite;
-        }
-        
-        .animate-float-reverse {
-          animation: float-reverse 10s ease-in-out infinite;
-        }
-      `}</style>
+            {/* Subtle Background Elements */}
+            <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-blue-50 to-transparent opacity-50 rounded-full transform translate-x-48 -translate-y-48" />
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-gray-50 to-transparent opacity-50 rounded-full transform -translate-x-48 translate-y-48" />
         </section>
     );
 };
 
-export default CustomerLogos;
+export default GoogleProductsSection;
