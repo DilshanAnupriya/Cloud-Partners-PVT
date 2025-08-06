@@ -1,8 +1,9 @@
+import TeamHero from '@/components/team/teamhero'
 import React from 'react'
 
 function Team() {
     return (
-        <div>Team</div>
+        <div><TeamHero/></div>
     )
 }
 
