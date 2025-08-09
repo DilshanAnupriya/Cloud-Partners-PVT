@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
-    const [isProductsOpen, setIsProductsOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
 
@@ -22,19 +21,7 @@ const Navbar = () => {
 
     const navItems = [
         { label: 'Home', href: '/' },
-        {
-            label: 'Products',
-            href: '/product',
-            hasDropdown: true,
-            dropdownItems: [
-                { label: 'Zoho Books', href: '/products/zoho-books', desc: 'Accounting & Finance' },
-                { label: 'Zoho CRM', href: '/products/zoho-crm', desc: 'Customer Management' },
-                { label: 'Zoho Creator', href: '/products/zoho-creator', desc: 'App Development' },
-                { label: 'Zoho Mail', href: '/products/zoho-mail', desc: 'Email Solutions' },
-                { label: 'Zoho Analytics', href: '/products/zoho-analytics', desc: 'Business Intelligence' },
-                { label: 'View All Products', href: '/products', desc: 'Complete Suite' }
-            ]
-        },
+        { label: 'Products', href: '/product' },
         { label: 'Services', href: '/services' },
         { label: 'Our Team', href: '/team' },
         { label: 'About Us', href: '/about' }
@@ -98,8 +85,7 @@ const Navbar = () => {
                             <span className={`text-2xl font-extrabold transition-all duration-300 ${
                                 isScrolled ? 'text-white' : 'text-white'
                             } group-hover:text-blue-400`}>
-
-                                    Cloud Partners
+                                Cloud Partners
                             </span>
                         </div>
 
@@ -107,78 +93,18 @@ const Navbar = () => {
                         <div className="hidden lg:flex items-center space-x-8">
                             {navItems.map((item, index) => (
                                 <div key={item.label} className="relative group">
-                                    {item.hasDropdown ? (
-                                        <div
-                                            className="relative"
-                                            onMouseEnter={() => setIsProductsOpen(true)}
-                                            onMouseLeave={() => setIsProductsOpen(false)}
-                                        >
-                                            <button
-                                                className={`flex items-center space-x-1 relative group transition-all duration-300 hover:-translate-y-0.5 font-medium ${
-                                                    isScrolled
-                                                        ? 'text-gray-200 hover:text-blue-400'
-                                                        : 'text-white hover:text-blue-400'
-                                                } animate-fadeInUp`}
-                                                style={{ animationDelay: `${index * 100 + 400}ms` }}
-                                            >
-                                                <span>{item.label}</span>
-                                                <ChevronDown
-                                                    className={`w-4 h-4 transition-transform duration-300 ${
-                                                        isProductsOpen ? 'rotate-180' : ''
-                                                    }`}
-                                                />
-                                                <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-emerald-500 group-hover:w-full transition-all duration-300" />
-                                            </button>
-
-                                            {/* Dropdown Menu */}
-                                            <div
-                                                className={`absolute top-full left-0 mt-2 w-80 bg-slate-800/95 backdrop-blur-xl border border-slate-700/50 rounded-xl shadow-2xl transition-all duration-300 ${
-                                                    isProductsOpen
-                                                        ? 'opacity-100 visible translate-y-0'
-                                                        : 'opacity-0 invisible -translate-y-2'
-                                                }`}
-                                            >
-                                                <div className="p-2">
-                                                    {item.dropdownItems?.map((dropdownItem, dropIndex) => (
-                                                        <a
-                                                            key={dropdownItem.label}
-                                                            href={dropdownItem.href}
-                                                            className="flex items-start space-x-3 p-3 rounded-lg hover:bg-slate-700/50 transition-all duration-200 group/item"
-                                                            style={{
-                                                                animationDelay: `${dropIndex * 50}ms`,
-                                                                animation: isProductsOpen ? 'fadeInUp 0.3s ease-out forwards' : 'none'
-                                                            }}
-                                                        >
-                                                            <div className="w-8 h-8 bg-gradient-to-br from-blue-500/20 to-emerald-500/20 rounded-lg flex items-center justify-center group-hover/item:scale-110 transition-transform duration-200">
-                                                                <div className="w-3 h-3 bg-gradient-to-br from-blue-400 to-emerald-400 rounded-full" />
-                                                            </div>
-                                                            <div className="flex-1">
-                                                                <div className="font-medium text-white group-hover/item:text-blue-400 transition-colors duration-200">
-                                                                    {dropdownItem.label}
-                                                                </div>
-                                                                <div className="text-sm text-gray-400">
-                                                                    {dropdownItem.desc}
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <a
-                                            href={item.href}
-                                            className={`relative group transition-all duration-300 hover:-translate-y-0.5 font-medium ${
-                                                isScrolled
-                                                    ? 'text-gray-200 hover:text-blue-400'
-                                                    : 'text-white hover:text-blue-400'
-                                            } animate-fadeInUp`}
-                                            style={{ animationDelay: `${index * 100 + 400}ms` }}
-                                        >
-                                            {item.label}
-                                            <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-emerald-500 group-hover:w-full transition-all duration-300" />
-                                        </a>
-                                    )}
+                                    <a
+                                        href={item.href}
+                                        className={`relative group transition-all duration-300 hover:-translate-y-0.5 font-medium ${
+                                            isScrolled
+                                                ? 'text-gray-200 hover:text-blue-400'
+                                                : 'text-white hover:text-blue-400'
+                                        } animate-fadeInUp`}
+                                        style={{ animationDelay: `${index * 100 + 400}ms` }}
+                                    >
+                                        {item.label}
+                                        <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-emerald-500 group-hover:w-full transition-all duration-300" />
+                                    </a>
                                 </div>
                             ))}
                         </div>
@@ -214,47 +140,13 @@ const Navbar = () => {
                     <div className="bg-slate-800/95 backdrop-blur-xl border-t border-gray-700/50">
                         <div className="container mx-auto px-6 py-4 space-y-4">
                             {navItems.map((item, index) => (
-                                <div key={item.label}>
-                                    {item.hasDropdown ? (
-                                        <div>
-                                            <button
-                                                className="flex items-center justify-between w-full text-left text-white hover:text-blue-400 font-medium py-2 transition-colors duration-300"
-                                                onClick={() => setIsProductsOpen(!isProductsOpen)}
-                                            >
-                                                {item.label}
-                                                <ChevronDown
-                                                    className={`w-4 h-4 transition-transform duration-300 ${
-                                                        isProductsOpen ? 'rotate-180' : ''
-                                                    }`}
-                                                />
-                                            </button>
-                                            <div
-                                                className={`overflow-hidden transition-all duration-300 ${
-                                                    isProductsOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                                                }`}
-                                            >
-                                                <div className="pl-4 pt-2 space-y-2">
-                                                    {item.dropdownItems?.map((dropdownItem) => (
-                                                        <a
-                                                            key={dropdownItem.label}
-                                                            href={dropdownItem.href}
-                                                            className="block text-gray-300 hover:text-blue-400 py-1 transition-colors duration-300"
-                                                        >
-                                                            {dropdownItem.label}
-                                                        </a>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <a
-                                            href={item.href}
-                                            className="block text-white hover:text-blue-400 font-medium py-2 transition-colors duration-300"
-                                        >
-                                            {item.label}
-                                        </a>
-                                    )}
-                                </div>
+                                <a
+                                    key={item.label}
+                                    href={item.href}
+                                    className="block text-white hover:text-blue-400 font-medium py-2 transition-colors duration-300"
+                                >
+                                    {item.label}
+                                </a>
                             ))}
                             <a
                                 href="/contact"
