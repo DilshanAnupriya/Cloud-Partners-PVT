@@ -35,22 +35,8 @@ const GoogleProductsSection = () => {
             description: 'Scalable cloud infrastructure and AI/ML services for enterprise applications.',
             features: ['Global infrastructure', 'AI/ML tools', '99.9% uptime SLA']
         },
-        {
-            id: 3,
-            name: 'Google Analytics',
-            category: 'Data & Insights',
-            color: '#E37400',
-            description: 'Advanced web analytics platform providing actionable insights for business growth.',
-            features: ['Real-time reporting', 'Audience insights', 'Conversion tracking']
-        },
-        {
-            id: 4,
-            name: 'Google Ads',
-            category: 'Marketing Platform',
-            color: '#34A853',
-            description: 'Comprehensive advertising platform to reach customers across Google\'s ecosystem.',
-            features: ['Targeted advertising', 'Performance tracking', 'Smart bidding']
-        }
+
+
     ];
 
     const stats = [
@@ -177,7 +163,7 @@ const GoogleProductsSection = () => {
     return (
         <section
             ref={sectionRef}
-            className="py-24 bg-white overflow-hidden relative"
+            className="py-24 bg-gray-200 overflow-hidden relative"
         >
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
                 {/* Header Section */}

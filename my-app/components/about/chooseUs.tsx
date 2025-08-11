@@ -7,35 +7,31 @@ function ChooseUs() {
       icon: <Award className="w-12 h-12" />,
       title: 'Unparalleled Expertise',
       description: 'Years of industry experience and cutting-edge knowledge to deliver exceptional results.',
-      gradient: 'from-blue-400 to-cyan-400'
+      gradient: 'blue-400'
     },
     {
       icon: <Target className="w-12 h-12" />,
       title: 'Client-Centric',
       description: 'Your success is our priority. We tailor solutions to meet your unique business needs.',
-      gradient: 'from-purple-400 to-pink-400'
+      gradient: 'yellow-400'
     },
     {
       icon: <RefreshCw className="w-12 h-12" />,
       title: 'Continuous Refinement',
       description: 'We constantly evolve and improve our processes to stay ahead of industry trends.',
-      gradient: 'from-green-400 to-emerald-400'
+      gradient: 'red-400'
     },
     {
       icon: <Users className="w-12 h-12" />,
       title: 'Customer Satisfaction',
       description: 'Proven track record of delivering projects that exceed client expectations.',
-      gradient: 'from-orange-400 to-red-400'
+      gradient: 'green-400'
     }
   ];
 
   return (
-    <div className="bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 py-20 px-6 relative overflow-hidden">
+    <div className="bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900  py-20 px-6 relative overflow-hidden">
       {/* Background decoration */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500 rounded-full blur-3xl"></div>
-      </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
@@ -56,7 +52,7 @@ function ChooseUs() {
               className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-all duration-500 hover:scale-105 hover:shadow-2xl"
             >
               {/* Icon */}
-              <div className={`inline-flex p-4 rounded-2xl bg-gradient-to-r ${feature.gradient} mb-6 group-hover:scale-110 transition-transform duration-300`}>
+              <div className={`inline-flex p-4 rounded-2xl bg-${feature.gradient} mb-6 group-hover:scale-110 transition-transform duration-300`}>
                 <div className="text-white">
                   {feature.icon}
                 </div>
