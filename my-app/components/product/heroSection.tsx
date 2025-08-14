@@ -2,6 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 import { ContainerScroll } from '@/components/ui/container-scroll-animation';
 import { Spotlight } from "@/components/ui/spotlight-new";
+import Link from "next/link";
 
 function HeroSection() {
     const containerRef = useRef(null);
@@ -55,12 +56,14 @@ function HeroSection() {
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 mt-10 justify-center relative z-10">
-                            <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/25">
+                            <button className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-700 hover:to-purple-700 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/25">
                                 Get Started Today
                             </button>
+                            <Link href="/contact">
                             <button className="border border-gray-600 hover:border-blue-500 px-8 py-4 rounded-lg font-semibold transition-all duration-300 hover:bg-blue-500/10 backdrop-blur-sm">
                                 Schedule Consultation
                             </button>
+                            </Link>
                         </div>
                     </div>
                 }
@@ -83,19 +86,6 @@ function HeroSection() {
                 </div>
             </ContainerScroll>
 
-            {/* Additional content below the scroll container */}
-            {/*<div className="px-4 md:px-20 pb-20 relative z-20">*/}
-            {/*    <div className="max-w-4xl mx-auto text-center text-white">*/}
-            {/*        <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">*/}
-            {/*            Why Choose Our Product?*/}
-            {/*        </h2>*/}
-            {/*        <p className="text-gray-300 text-lg leading-relaxed">*/}
-            {/*            Our product stands out from the competition with its innovative approach*/}
-            {/*            to solving complex problems. Built with modern technology and designed*/}
-            {/*            with user experience in mind, it delivers results that exceed expectations.*/}
-            {/*        </p>*/}
-            {/*    </div>*/}
-            {/*</div>*/}
         </div>
     );
 }

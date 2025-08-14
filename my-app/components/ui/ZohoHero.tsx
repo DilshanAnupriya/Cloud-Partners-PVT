@@ -3,6 +3,7 @@ import React, { useState, useEffect,  } from "react";
 import { ArrowRight, Code, Users, Play, Shield, Database, Cloud, BarChart3 } from "lucide-react";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import Link from "next/link";
 
 const ProfessionalHero = () => {
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -151,18 +152,20 @@ const ProfessionalHero = () => {
 
                         {/* Dark themed buttons */}
                         <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 pt-4">
-                            <motion.button
-                                className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-4 rounded-xl font-semibold flex items-center justify-center shadow-lg shadow-blue-500/25"
-                                whileHover={{
-                                    scale: 1.02,
-                                    boxShadow: "0 12px 24px rgba(59, 130, 246, 0.35)",
-                                    background: "linear-gradient(to right, #3b82f6, #2563eb)",
-                                }}
-                                whileTap={{ scale: 0.98 }}
-                            >
-                                Schedule Consultation
-                                <ArrowRight className="ml-2 w-5 h-5" />
-                            </motion.button>
+                            <Link href="/contact">
+                                <motion.button
+                                    className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-4 rounded-xl font-semibold flex items-center justify-center shadow-lg shadow-blue-500/25"
+                                    whileHover={{
+                                        scale: 1.02,
+                                        boxShadow: "0 12px 24px rgba(59, 130, 246, 0.35)",
+                                        background: "linear-gradient(to right, #3b82f6, #2563eb)",
+                                    }}
+                                    whileTap={{ scale: 0.98 }}
+                                >
+                                    Schedule Consultation
+                                    <ArrowRight className="ml-2 w-5 h-5" />
+                                </motion.button>
+                            </Link>
                             <motion.button
                                 className="border-2 border-slate-600 text-slate-300 px-8 py-4 rounded-xl font-semibold flex items-center justify-center bg-slate-800/30 backdrop-blur-sm hover:bg-slate-700/40 transition-colors"
                                 whileHover={{

@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight, Shield, Users, Clock, CheckCircle } from 'lucide-react';
+import Link from "next/link";
 
 function IncidentResolutions() {
   const stats = [
@@ -123,9 +124,11 @@ function IncidentResolutions() {
             <p className="text-gray-600 text-lg mb-8 max-w-2xl mx-auto">
               Get in touch with our expert team and experience professional incident resolution services.
             </p>
+            <Link href="/contact">
             <button className="bg-gradient-to-r from-green-600 to-blue-600 text-white px-10 py-4 rounded-2xl font-semibold text-lg hover:shadow-2xl hover:scale-105 transition-all duration-300">
               Contact Us Today
             </button>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,5 +1,7 @@
 "use client"
+
 import React, { useEffect, useRef } from 'react';
+import Link from "next/link";
 
 // Extend Window interface to include gsap
 declare global {
@@ -272,12 +274,15 @@ const GoogleProductsSection = () => {
                 {/* Call to Action */}
                 <div ref={ctaRef} className="text-center">
                     <div className="inline-flex flex-col sm:flex-row gap-4">
-                        <button className="bg-blue-600 text-white px-8 py-4 rounded-lg font-medium text-lg hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl">
+                        <button className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-4 rounded-lg font-medium text-lg hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl">
                             Get Started
                         </button>
+                        <Link href="/contact">
                         <button className="bg-white text-gray-900 px-8 py-4 rounded-lg font-medium text-lg border-2 border-gray-300 hover:border-gray-400 transition-all duration-300 transform hover:-translate-y-0.5">
                             Schedule a Demo
                         </button>
+                        </Link>
+
                     </div>
 
                     <p className="text-gray-500 mt-8 text-lg font-light max-w-2xl mx-auto">

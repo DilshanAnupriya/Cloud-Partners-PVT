@@ -23,8 +23,8 @@ const Navbar = () => {
         { label: 'Home', href: '/' },
         { label: 'Products', href: '/product' },
         { label: 'Services', href: '/service' },
-        { label: 'Our Team', href: '/team' },
-        { label: 'About Us', href: '/about' }
+        { label: 'About Us', href: '/about' },
+        { label: 'Careers', href: '/career' }
     ];
 
     // Prevent hydration mismatch by not rendering certain elements until mounted
@@ -52,7 +52,7 @@ const Navbar = () => {
                                 </span>
                             ))}
                         </div>
-                        <div className="bg-blue-600 text-white px-6 py-2.5 rounded-lg">
+                        <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-2.5 rounded-lg">
                             Contact Us
                         </div>
                     </div>

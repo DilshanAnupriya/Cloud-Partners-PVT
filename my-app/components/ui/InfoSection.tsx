@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { CheckCircle, ArrowRight, Users, Target, Award, Briefcase } from 'lucide-react';
 import { motion } from 'framer-motion';
+import Link from "next/link";
 
 const InfoSection = () => {
     const [isVisible, setIsVisible] = useState(false);
@@ -83,6 +84,9 @@ const InfoSection = () => {
                                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                             }`}
                         >
+                            <Link href="/about">
+
+
                             <motion.button
                                 className="px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
                                 whileHover={{ scale: 1.05 }}
@@ -91,6 +95,7 @@ const InfoSection = () => {
                                 More About Us
                                 <ArrowRight className="w-5 h-5" />
                             </motion.button>
+                            </Link>
 
                         </motion.div>
                     </div>

@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from 'react'
 import { CheckCircle, ArrowRight, Users, Headphones, Cloud, Database, Mail, FileText, DollarSign, UserCheck, BarChart3, MessageSquare, Phone, Globe, Briefcase, Settings, Lock } from 'lucide-react'
+import Link from "next/link";
 
 export function ProductList() {
   const [activeCategory, setActiveCategory] = useState('all')
@@ -102,6 +103,22 @@ export function ProductList() {
       iconType: "component",
       category: "development",
       features: ["Drag-Drop Builder", "Custom Workflows", "Database Integration", "Mobile Apps"]
+    },
+    {
+      name: "Google Workspace",
+      description: "Low-code application development platform for custom business solutions",
+      icon: "/product/Logos/googleworkspace.png",
+      iconType: "component",
+      category: "google",
+      features: ["Drag-Drop Builder", "Custom Workflows", "Database Integration", "Mobile Apps"]
+    },
+    {
+      name: "Google Mail",
+      description: "Low-code application development platform for custom business solutions",
+      icon: "/product/Logos/mail.png",
+      iconType: "component",
+      category: "google",
+      features: ["Drag-Drop Builder", "Custom Workflows", "Database Integration", "Mobile Apps"]
     }
   ]
 
@@ -116,7 +133,8 @@ export function ProductList() {
     },
     {id: 'marketing', name: 'Marketing', count: zohoServices.filter(s => s.category === 'marketing').length},
     {id: 'operations', name: 'Operations', count: zohoServices.filter(s => s.category === 'operations').length},
-    {id: 'hr', name: 'Human Resources', count: zohoServices.filter(s => s.category === 'hr').length}
+    {id: 'hr', name: 'Human Resources', count: zohoServices.filter(s => s.category === 'hr').length},
+    {id: 'google', name: 'Google Products', count: zohoServices.filter(s => s.category === 'google').length}
   ]
 
   const filteredServices = activeCategory === 'all'
@@ -184,7 +202,7 @@ export function ProductList() {
                     ))}
                   </div>
                   <button
-                      className="w-full bg-gradient-to-r from-blue-600 to-blue-950 hover:from-blue-700 hover:to-purple-700 text-white py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center group shadow-md hover:shadow-lg">
+                      className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center group shadow-md hover:shadow-lg">
                     Learn More
                     <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300"/>
                   </button>
@@ -201,16 +219,20 @@ export function ProductList() {
               Let's discuss how our Zoho expertise can streamline your operations and accelerate your growth.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/contact">
               <button
-                  className="bg-white text-blue-600 hover:bg-gray-50 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:bg-gray-50 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
                 <Phone className="w-5 h-5 inline mr-2"/>
                 Contact Us Now
               </button>
+              </Link>
+              <Link href="/about">
               <button
                   className="border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg">
                 <Globe className="w-5 h-5 inline mr-2"/>
-                View Our Portfolio
+                About Us
               </button>
+                </Link>
             </div>
           </div>
         </div>
