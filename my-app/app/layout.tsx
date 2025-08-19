@@ -13,10 +13,13 @@ export default function RootLayout({
     return (
         <html lang="en">
         <body>
-        <main>
+        <div className="min-h-screen flex flex-col">
             <Navbar/>
-            {children}
-        </main>
+            <main className="flex-1">
+                {children}
+            </main>
+            <Footer/>
+        </div>
 
         {/* The Zoho widget will render into this div */}
         <div id='zsiqwidget' className="relative"></div>
@@ -35,7 +38,6 @@ export default function RootLayout({
             src="https://salesiq.zohopublic.com/widget?wc=siqd0aa83c69dffd1139da78d07defe6dacc6b13204f0cd92dbe16fae95f339eb65"
             strategy="afterInteractive"
         />
-        <Footer/>
         </body>
         </html>
     );

@@ -7,8 +7,6 @@ import IncidentResolutions from "@/components/about/last";
 function About() {
     return (
         <div>
-            <HeroSection/>
-            <ModernTimeline/>
             <ChooseUs/>
             <IncidentResolutions/>
         </div>

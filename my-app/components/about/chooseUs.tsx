@@ -30,7 +30,7 @@ function ChooseUs() {
   ];
 
   return (
-    <div className="bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900  py-20 px-6 relative overflow-hidden">
+    <div className="bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 pt-50 py-20 px-6 relative overflow-hidden">
       {/* Background decoration */}
 
       <div className="max-w-7xl mx-auto relative z-10">
@@ -71,34 +71,7 @@ function ChooseUs() {
             </div>
           ))}
         </div>
-
-        {/* Bottom Stats */}
-        <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          <div className="group">
-            <div className="text-4xl md:text-5xl font-bold text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text mb-2 group-hover:scale-110 transition-transform duration-300">
-              500+
-            </div>
-            <div className="text-gray-300 text-lg group-hover:text-white transition-colors duration-300">Projects Completed</div>
-          </div>
-          <div className="group">
-            <div className="text-4xl md:text-5xl font-bold text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text mb-2 group-hover:scale-110 transition-transform duration-300">
-              98%
-            </div>
-            <div className="text-gray-300 text-lg group-hover:text-white transition-colors duration-300">Client Satisfaction</div>
-          </div>
-          <div className="group">
-            <div className="text-4xl md:text-5xl font-bold text-transparent bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text mb-2 group-hover:scale-110 transition-transform duration-300">
-              7+
-            </div>
-            <div className="text-gray-300 text-lg group-hover:text-white transition-colors duration-300">Years Experience</div>
-          </div>
-          <div className="group">
-            <div className="text-4xl md:text-5xl font-bold text-transparent bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text mb-2 group-hover:scale-110 transition-transform duration-300">
-              24/7
-            </div>
-            <div className="text-gray-300 text-lg group-hover:text-white transition-colors duration-300">Support Available</div>
-          </div>
-        </div>
+    
       </div>
     </div>
   );
