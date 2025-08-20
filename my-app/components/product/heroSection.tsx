@@ -1,5 +1,6 @@
 "use client"
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
+import Image from 'next/image';
 import { ContainerScroll } from '@/components/ui/container-scroll-animation';
 import { Spotlight } from "@/components/ui/spotlight-new";
 import Link from "next/link";
@@ -60,9 +61,9 @@ function HeroSection() {
                                 Get Started Today
                             </button>
                             <Link href="/contact">
-                            <button className="border border-gray-600 hover:border-blue-500 px-8 py-4 rounded-lg font-semibold transition-all duration-300 hover:bg-blue-500/10 backdrop-blur-sm">
-                                Schedule Consultation
-                            </button>
+                                <button className="border border-gray-600 hover:border-blue-500 px-8 py-4 rounded-lg font-semibold transition-all duration-300 hover:bg-blue-500/10 backdrop-blur-sm">
+                                    Schedule Consultation
+                                </button>
                             </Link>
                         </div>
                     </div>
@@ -74,10 +75,13 @@ function HeroSection() {
                         {/* Product glow effect */}
                         <div className="absolute inset-0 bg-gradient-to-t from-blue-500/20 via-transparent to-purple-500/20 rounded-2xl blur-xl"></div>
 
-                        <img
+                        <Image
                             alt="Product cover"
                             src="/product/productCover-2.png"
-                            className="w-full h-full object-cover rounded-2xl relative z-10 shadow-2xl"
+                            fill
+                            className="object-cover rounded-2xl relative z-10 shadow-2xl"
+                            priority
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
                         />
 
                         {/* Rim lighting effect */}

@@ -3,36 +3,6 @@ import { ArrowRight, Shield, Users, Clock, CheckCircle } from 'lucide-react';
 import Link from "next/link";
 
 function IncidentResolutions() {
-  const stats = [
-    {
-      number: '3',
-      suffix: '+',
-      label: 'Years of Excellence',
-      icon: <Shield className="w-8 h-8" />,
-      gradient: 'from-blue-500 to-cyan-500'
-    },
-    {
-      number: '160',
-      suffix: '+',
-      label: 'Issues Resolved',
-      icon: <CheckCircle className="w-8 h-8" />,
-      gradient: 'from-green-500 to-emerald-500'
-    },
-    {
-      number: '15',
-      suffix: '+',
-      label: 'Expert Team Members',
-      icon: <Users className="w-8 h-8" />,
-      gradient: 'from-purple-500 to-pink-500'
-    },
-    {
-      number: '150',
-      suffix: '+',
-      label: 'Happy Clients',
-      icon: <Clock className="w-8 h-8" />,
-      gradient: 'from-orange-500 to-red-500'
-    }
-  ];
 
   return (
       <div className="bg-white py-20 px-6 relative overflow-hidden">

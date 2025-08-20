@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Clock, Send, RotateCcw, CheckCircle, Users, Code, Settings, Shield, ArrowRight } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, RotateCcw, CheckCircle, Users, Code, Settings, ArrowRight } from 'lucide-react';
 
 // Define interfaces for type safety
 interface FormData {
@@ -120,7 +120,7 @@ function Contact() {
       } else {
         throw new Error('Form submission failed.');
       }
-    } catch (error) {
+    } catch {
       alert('We apologize for the inconvenience. Please try again or contact our support team directly for immediate assistance.');
       setIsSubmitting(false);
     }
@@ -413,7 +413,7 @@ function Contact() {
           <div className="mt-20 bg-gradient-to-r from-slate-800 to-blue-900 rounded-2xl p-12 text-white text-center">
             <h2 className="text-3xl font-bold mb-4">Trusted by Industry Leaders</h2>
             <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-              From Fortune 500 companies to innovative startups, we've helped organizations across healthcare,
+              From Fortune 500 companies to innovative startups, we&apos;ve helped organizations across healthcare,
               finance, manufacturing, and technology sectors optimize their operations with Zoho & Google solutions.
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-8">
