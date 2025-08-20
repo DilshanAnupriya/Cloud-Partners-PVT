@@ -3,11 +3,29 @@
 import React, { useEffect, useRef } from 'react';
 import Link from "next/link";
 
-// Define GSAP interface properly
+// Define GSAP types properly without 'any'
+interface GSAPTimeline {
+    to: (target: GSAPTarget, vars: GSAPVars) => GSAPTimeline;
+    delay?: number;
+}
+
+interface GSAPVars {
+    opacity?: number;
+    y?: number;
+    scale?: number;
+    duration?: number;
+    ease?: string;
+    stagger?: number;
+    boxShadow?: string;
+    delay?: number;
+}
+
+type GSAPTarget = Element | Element[] | string | null | undefined;
+
 interface GSAP {
-    timeline: (options?: any) => any;
-    set: (target: any, vars: any) => void;
-    to: (target: any, vars: any) => any;
+    timeline: (options?: { delay?: number }) => GSAPTimeline;
+    set: (target: GSAPTarget, vars: GSAPVars) => void;
+    to: (target: GSAPTarget, vars: GSAPVars) => GSAPTimeline;
 }
 
 // Extend Window interface to include gsap with proper typing
@@ -44,8 +62,6 @@ const GoogleProductsSection = () => {
             description: 'Scalable cloud infrastructure and AI/ML services for enterprise applications.',
             features: ['Global infrastructure', 'AI/ML tools', '99.9% uptime SLA']
         },
-
-
     ];
 
     const stats = [
@@ -76,11 +92,14 @@ const GoogleProductsSection = () => {
         const gsap = window.gsap;
         const tl = gsap.timeline({ delay: 0.2 });
 
-        // Set initial states
-        gsap.set([titleRef.current, subtitleRef.current, descriptionRef.current], {
-            opacity: 0,
-            y: 40
-        });
+        // Set initial states - filter out null refs with proper type narrowing
+        const headerElements = [titleRef.current, subtitleRef.current, descriptionRef.current].filter((el): el is HTMLElement => el !== null);
+        if (headerElements.length > 0) {
+            gsap.set(headerElements, {
+                opacity: 0,
+                y: 40
+            });
+        }
 
         // Convert HTMLCollection to Array for proper typing
         const productChildren = productsRef.current?.children ? Array.from(productsRef.current.children) : [];
@@ -92,56 +111,77 @@ const GoogleProductsSection = () => {
             scale: 0.95
         });
 
-        gsap.set(statsChildren, {
-            opacity: 0,
-            y: 30
-        });
+        if (statsRef.current) {
+            gsap.set(statsChildren, {
+                opacity: 0,
+                y: 30
+            });
+        }
 
-        gsap.set(ctaRef.current, {
-            opacity: 0,
-            y: 30
-        });
+        if (ctaRef.current) {
+            gsap.set(ctaRef.current, {
+                opacity: 0,
+                y: 30
+            });
+        }
 
         // Professional entrance animations
-        tl.to(subtitleRef.current, {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: "power3.out"
-        })
-            .to(titleRef.current, {
-                opacity: 1,
-                y: 0,
-                duration: 1,
-                ease: "power3.out"
-            }, "-=0.4")
-            .to(descriptionRef.current, {
+        if (subtitleRef.current) {
+            tl.to(subtitleRef.current, {
                 opacity: 1,
                 y: 0,
                 duration: 0.8,
                 ease: "power3.out"
-            }, "-=0.5")
-            .to(statsChildren, {
+            });
+        }
+
+        if (titleRef.current) {
+            tl.to(titleRef.current, {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: "power3.out"
+            });
+        }
+
+        if (descriptionRef.current) {
+            tl.to(descriptionRef.current, {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: "power3.out"
+            });
+        }
+
+        if (statsChildren.length > 0) {
+            tl.to(statsChildren, {
                 opacity: 1,
                 y: 0,
                 duration: 0.6,
                 stagger: 0.15,
                 ease: "power2.out"
-            }, "-=0.3")
-            .to(productChildren, {
+            });
+        }
+
+        if (productChildren.length > 0) {
+            tl.to(productChildren, {
                 opacity: 1,
                 y: 0,
                 scale: 1,
                 duration: 0.8,
                 stagger: 0.2,
                 ease: "power2.out"
-            }, "-=0.4")
-            .to(ctaRef.current, {
+            });
+        }
+
+        if (ctaRef.current) {
+            tl.to(ctaRef.current, {
                 opacity: 1,
                 y: 0,
                 duration: 0.8,
                 ease: "power3.out"
-            }, "-=0.3");
+            });
+        }
 
         // Professional hover animations for product cards
         if (productsRef.current) {
@@ -289,7 +329,6 @@ const GoogleProductsSection = () => {
                                 Schedule a Demo
                             </button>
                         </Link>
-
                     </div>
 
                     <p className="text-gray-500 mt-8 text-lg font-light max-w-2xl mx-auto">
