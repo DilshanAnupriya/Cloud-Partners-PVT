@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
+import Link from "next/link";
 
 const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -49,11 +50,11 @@ const Navbar = () => {
                             </span>
                         </div>
                         <div className="hidden md:flex space-x-8">
-                            {navItems.map((item) => (
-                                <span key={item.label} className="text-white">
-                                    {item.label}
-                                </span>
-                            ))}
+                            <Link href="/" >Home</Link>
+                            <Link href="/product" >product</Link>
+                            <Link href="/service" >service</Link>
+                            <Link href="/about" >about</Link>
+                            <Link href="/career" >career</Link>
                         </div>
                         <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-2.5 rounded-lg">
                             Contact Us
