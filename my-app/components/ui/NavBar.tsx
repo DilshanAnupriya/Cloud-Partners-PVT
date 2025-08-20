@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 
 const Navbar = () => {
@@ -35,10 +36,12 @@ const Navbar = () => {
                     <div className="flex justify-between items-center">
                         <div className="flex items-center space-x-3">
                             <div className="relative w-10 h-10 rounded-full flex items-center justify-center">
-                                <img
+                                <Image
                                     className="rounded-full"
                                     alt="Logo"
                                     src="/companyLogo.png"
+                                    width={40}
+                                    height={40}
                                 />
                             </div>
                             <span className="text-2xl font-extrabold text-white">
@@ -75,10 +78,12 @@ const Navbar = () => {
                         {/* Logo Section */}
                         <div className="flex items-center space-x-3 group cursor-pointer">
                             <div className="relative w-10 h-10 rounded-full flex items-center justify-center overflow-hidden">
-                                <img
+                                <Image
                                     className="rounded-full w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                                     alt="Logo"
                                     src="/companyLogo.png"
+                                    width={40}
+                                    height={40}
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-emerald-500/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse" />
                             </div>
@@ -139,7 +144,7 @@ const Navbar = () => {
                 >
                     <div className="bg-slate-800/95 backdrop-blur-xl border-t border-gray-700/50">
                         <div className="container mx-auto px-6 py-4 space-y-4">
-                            {navItems.map((item, index) => (
+                            {navItems.map((item) => (
                                 <a
                                     key={item.label}
                                     href={item.href}

@@ -3,10 +3,17 @@
 import React, { useEffect, useRef } from 'react';
 import Link from "next/link";
 
-// Extend Window interface to include gsap
+// Define GSAP interface properly
+interface GSAP {
+    timeline: (options?: any) => any;
+    set: (target: any, vars: any) => void;
+    to: (target: any, vars: any) => any;
+}
+
+// Extend Window interface to include gsap with proper typing
 declare global {
     interface Window {
-        gsap: any;
+        gsap: GSAP;
     }
 }
 
@@ -191,7 +198,7 @@ const GoogleProductsSection = () => {
                         ref={descriptionRef}
                         className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed font-light"
                     >
-                        Empower your organization with Google's enterprise-grade solutions.
+                        Empower your organization with Google&apos;s enterprise-grade solutions.
                         Designed for scalability, security, and seamless collaboration across global teams.
                     </p>
                 </div>
@@ -278,15 +285,15 @@ const GoogleProductsSection = () => {
                             Get Started
                         </button>
                         <Link href="/contact">
-                        <button className="bg-white text-gray-900 px-8 py-4 rounded-lg font-medium text-lg border-2 border-gray-300 hover:border-gray-400 transition-all duration-300 transform hover:-translate-y-0.5">
-                            Schedule a Demo
-                        </button>
+                            <button className="bg-white text-gray-900 px-8 py-4 rounded-lg font-medium text-lg border-2 border-gray-300 hover:border-gray-400 transition-all duration-300 transform hover:-translate-y-0.5">
+                                Schedule a Demo
+                            </button>
                         </Link>
 
                     </div>
 
                     <p className="text-gray-500 mt-8 text-lg font-light max-w-2xl mx-auto">
-                        Join millions of organizations worldwide that trust Google's enterprise solutions
+                        Join millions of organizations worldwide that trust Google&apos;s enterprise solutions
                         to drive innovation and growth.
                     </p>
                 </div>

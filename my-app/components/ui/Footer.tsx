@@ -1,4 +1,6 @@
 import React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
 
 const Footer = () => {
@@ -12,13 +14,19 @@ const Footer = () => {
                     {/* Company Info */}
                     <div className="space-y-4">
                         <div className="flex items-center space-x-2">
-                            <div className="w-10 h-8  flex items-center justify-center">
-                                <img alt="logo" src="/companyLogo.png" className="w-15 h-10 rounded-xl" />
+                            <div className="w-10 h-8 flex items-center justify-center">
+                                <Image
+                                    alt="logo"
+                                    src="/companyLogo.png"
+                                    width={60}
+                                    height={40}
+                                    className="w-15 h-10 rounded-xl"
+                                />
                             </div>
                             <h3 className="text-xl font-bold">Cloud Partners</h3>
                         </div>
                         <p className="text-gray-300 text-sm leading-relaxed">
-                            Building innovative solutions for tomorrow's challenges. We're dedicated to
+                            Building innovative solutions for tomorrow&apos;s challenges. We&apos;re dedicated to
                             delivering exceptional products and services that make a difference.
                         </p>
                         <div className="flex space-x-4">
@@ -42,29 +50,29 @@ const Footer = () => {
                         <h4 className="text-lg font-semibold">Quick Links</h4>
                         <ul className="space-y-2">
                             <li>
-                                <a href="/about" className="text-gray-300 hover:text-white transition-colors text-sm">
+                                <Link href="/about" className="text-gray-300 hover:text-white transition-colors text-sm">
                                     About Us
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="/service" className="text-gray-300 hover:text-white transition-colors text-sm">
+                                <Link href="/service" className="text-gray-300 hover:text-white transition-colors text-sm">
                                     Services
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="/product" className="text-gray-300 hover:text-white transition-colors text-sm">
+                                <Link href="/product" className="text-gray-300 hover:text-white transition-colors text-sm">
                                     Products
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="/careers" className="text-gray-300 hover:text-white transition-colors text-sm">
+                                <Link href="/careers" className="text-gray-300 hover:text-white transition-colors text-sm">
                                     Careers
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="/blog" className="text-gray-300 hover:text-white transition-colors text-sm">
+                                <Link href="/blog" className="text-gray-300 hover:text-white transition-colors text-sm">
                                     Blog
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </div>
@@ -74,29 +82,29 @@ const Footer = () => {
                         <h4 className="text-lg font-semibold">Support</h4>
                         <ul className="space-y-2">
                             <li>
-                                <a href="/help" className="text-gray-300 hover:text-white transition-colors text-sm">
+                                <Link href="/help" className="text-gray-300 hover:text-white transition-colors text-sm">
                                     Help Center
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="/contact" className="text-gray-300 hover:text-white transition-colors text-sm">
+                                <Link href="/contact" className="text-gray-300 hover:text-white transition-colors text-sm">
                                     Contact Us
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="/faq" className="text-gray-300 hover:text-white transition-colors text-sm">
+                                <Link href="/faq" className="text-gray-300 hover:text-white transition-colors text-sm">
                                     FAQ
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="/documentation" className="text-gray-300 hover:text-white transition-colors text-sm">
+                                <Link href="/documentation" className="text-gray-300 hover:text-white transition-colors text-sm">
                                     Documentation
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="/status" className="text-gray-300 hover:text-white transition-colors text-sm">
+                                <Link href="/status" className="text-gray-300 hover:text-white transition-colors text-sm">
                                     System Status
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </div>
@@ -109,7 +117,7 @@ const Footer = () => {
                                 <MapPin size={16} className="text-gray-400 mt-1" />
                                 <div className="text-gray-300 text-sm">
                                     <p>400 Level 04</p>
-                                    <p>Sri Sangaraja  Mawatha</p>
+                                    <p>Sri Sangaraja Mawatha</p>
                                     <p>Colombo 12, State 12345</p>
                                 </div>
                             </div>
@@ -162,15 +170,15 @@ const Footer = () => {
                             © {currentYear} Company Name. All rights reserved.
                         </div>
                         <div className="flex space-x-6">
-                            <a href="/privacy" className="text-gray-400 hover:text-white transition-colors text-sm">
+                            <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors text-sm">
                                 Privacy Policy
-                            </a>
-                            <a href="/terms" className="text-gray-400 hover:text-white transition-colors text-sm">
+                            </Link>
+                            <Link href="/terms" className="text-gray-400 hover:text-white transition-colors text-sm">
                                 Terms of Service
-                            </a>
-                            <a href="/cookies" className="text-gray-400 hover:text-white transition-colors text-sm">
+                            </Link>
+                            <Link href="/cookies" className="text-gray-400 hover:text-white transition-colors text-sm">
                                 Cookie Policy
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>

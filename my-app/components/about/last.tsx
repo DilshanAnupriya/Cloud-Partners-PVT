@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Shield, Users, Clock, CheckCircle } from 'lucide-react';
+import { ArrowRight, Shield, CheckCircle } from 'lucide-react';
 import Link from "next/link";
 
 function IncidentResolutions() {

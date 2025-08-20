@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { CheckCircle, ArrowRight, Users, Target, Award, Briefcase } from 'lucide-react';
+import Image from 'next/image';
+import { ArrowRight, Users, Target, Award, Briefcase } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from "next/link";
 
@@ -55,9 +56,9 @@ const InfoSection = () => {
                             }`}
                         >
                             Welcome to Cloud Partners, where artistry meets technology for business brilliance!
-                            We're Zoho Official Partners specializing in Zoho One Projects, Zoho Creator,
+                            We&apos;re Zoho Official Partners specializing in Zoho One Projects, Zoho Creator,
                             Zoho CRM, and API Integration. Our software solutions boost productivity,
-                            streamline workflows, and enhance sales, unleashing your team's potential
+                            streamline workflows, and enhance sales, unleashing your team&apos;s potential
                             and making your business processes seamless.
                         </p>
 
@@ -87,14 +88,14 @@ const InfoSection = () => {
                             <Link href="/about">
 
 
-                            <motion.button
-                                className="px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                            >
-                                More About Us
-                                <ArrowRight className="w-5 h-5" />
-                            </motion.button>
+                                <motion.button
+                                    className="px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    More About Us
+                                    <ArrowRight className="w-5 h-5" />
+                                </motion.button>
                             </Link>
 
                         </motion.div>
@@ -108,9 +109,11 @@ const InfoSection = () => {
                             }`}
                         >
                             <div className="aspect-[4/3] bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                                <img
+                                <Image
                                     src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                                     alt="Professional team working on Zoho solutions"
+                                    width={800}
+                                    height={600}
                                     className="w-full h-full object-cover"
                                 />
                             </div>

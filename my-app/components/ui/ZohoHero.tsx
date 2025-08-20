@@ -1,5 +1,6 @@
 "use client";
-import React, { useState, useEffect,  } from "react";
+import React, { useState, useEffect } from "react";
+import Image from 'next/image';
 import { ArrowRight, Code, Users, Play, Shield, Database, Cloud, BarChart3 } from "lucide-react";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
@@ -7,7 +8,6 @@ import Link from "next/link";
 
 const ProfessionalHero = () => {
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
 
     const controls = useAnimation();
     const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 });
@@ -17,7 +17,7 @@ const ProfessionalHero = () => {
             controls.start("visible");
         }
 
-        const handleMouseMove = (e:any) => {
+        const handleMouseMove = (e: MouseEvent) => {
             setMousePosition({ x: e.clientX, y: e.clientY });
         };
 
@@ -81,7 +81,6 @@ const ProfessionalHero = () => {
             y: 0,
             transition: {
                 duration: 0.5,
-                // Removed ease property to avoid TypeScript conflicts
             },
         },
     };
@@ -93,7 +92,6 @@ const ProfessionalHero = () => {
             transition: {
                 duration: 6,
                 repeat: Infinity,
-                // Removed ease property to avoid TypeScript conflicts
             },
         },
     };
@@ -324,7 +322,13 @@ const ProfessionalHero = () => {
                                                 className="w-12 h-12 bg-slate-600/50 backdrop-blur-sm rounded-lg flex items-center justify-center border border-slate-500/40"
                                                 whileHover={{ scale: 1.05 }}
                                             >
-                                                <img alt="Google Cloud" src="/google.webp" className="w-6 h-6" />
+                                                <Image
+                                                    alt="Google Cloud"
+                                                    src="/google.webp"
+                                                    width={24}
+                                                    height={24}
+                                                    className="w-6 h-6"
+                                                />
                                             </motion.div>
                                             <div>
                                                 <div className="font-semibold text-white text-base">Google Cloud Platform</div>
