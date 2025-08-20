@@ -1,4 +1,3 @@
-
 "use client"
 import React, { useState } from 'react';
 import {
@@ -46,7 +45,6 @@ export default function  JobApplicationForm ()  {
     });
 
     const [currentStep, setCurrentStep] = useState(1);
-    const [uploadProgress, setUploadProgress] = useState({ resume: 0, coverLetter: 0 });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -109,7 +107,7 @@ export default function  JobApplicationForm ()  {
                     </div>
                     <h1 className="text-4xl font-bold mb-4 animate-fade-in">Application Submitted!</h1>
                     <p className="text-xl text-slate-300 mb-8 animate-fade-in">
-                        Thank you for your interest in joining our team. We'll review your application and get back to you within 5-7 business days.
+                        Thank you for your interest in joining our team. We&apos;ll review your application and get back to you within 5-7 business days.
                     </p>
                     <button
                         onClick={() => window.location.reload()}
