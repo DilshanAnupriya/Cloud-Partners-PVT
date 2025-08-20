@@ -1,21 +1,12 @@
 
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
-    Upload,
     User,
-    Mail,
-    Phone,
-    MapPin,
-    Calendar,
-    FileText,
     Briefcase,
-    Award,
-    ChevronDown,
     ArrowLeft,
     Send,
     Check,
-    X,
     ArrowRight,
     Loader2
 } from 'lucide-react';
@@ -61,35 +52,7 @@ export default function  JobApplicationForm ()  {
 
     const totalSteps = 4;
 
-    const positions = [
-        "Senior Frontend Developer",
-        "UX/UI Designer",
-        "DevOps Engineer",
-        "Product Manager",
-        "Data Scientist",
-        "Marketing Specialist",
-        "Backend Developer",
-        "Mobile Developer"
-    ];
 
-    const departments = [
-        "Engineering",
-        "Design",
-        "Infrastructure",
-        "Product",
-        "Analytics",
-        "Marketing",
-        "Sales",
-        "Human Resources"
-    ];
-
-    const experienceLevels = [
-        "Entry Level (0-2 years)",
-        "Mid Level (3-5 years)",
-        "Senior Level (6-8 years)",
-        "Lead Level (9-12 years)",
-        "Executive Level (12+ years)"
-    ];
 
     const handleInputChange = (field: string, value: string) => {
         setFormData(prev => ({
@@ -98,28 +61,6 @@ export default function  JobApplicationForm ()  {
         }));
     };
 
-    const handleFileUpload = (field: 'resume' | 'coverLetter', file: File | null) => {
-        if (file) {
-            setFormData(prev => ({
-                ...prev,
-                [field]: file
-            }));
-
-            // Simulate upload progress
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += 10;
-                setUploadProgress(prev => ({
-                    ...prev,
-                    [field]: progress
-                }));
-
-                if (progress >= 100) {
-                    clearInterval(interval);
-                }
-            }, 100);
-        }
-    };
 
     const nextStep = () => {
         if (currentStep < totalSteps) {
