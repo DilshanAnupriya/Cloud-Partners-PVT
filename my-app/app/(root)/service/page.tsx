@@ -5,17 +5,10 @@ import {
     Code,
     Smartphone,
     Globe,
-    Database,
-    Shield,
     BarChart3,
     Cloud,
-    Palette,
     ArrowRight,
     CheckCircle,
-    Star,
-    Users,
-    Clock,
-    Trophy
 } from 'lucide-react';
 
 function Page() {

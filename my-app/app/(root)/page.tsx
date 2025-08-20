@@ -1,5 +1,4 @@
 import { HeroParallax } from "@/components/ui/hero-parallax";
-import ZohoHero from "@/components/ui/ZohoHero";
 import CustomerLogo from "@/components/ui/CustomerLogo";
 import InfoSection from "@/components/ui/InfoSection";
 import ProfessionalHero from "@/components/ui/ZohoHero";

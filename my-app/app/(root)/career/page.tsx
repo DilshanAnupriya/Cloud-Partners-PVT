@@ -203,9 +203,9 @@ const CareerPage = () => {
 
                                 <p className="text-gray-700 mb-6">{job.description}</p>
                                 <Link href="/career/apply">
-                                <button className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105">
-                                    Apply Now
-                                </button>
+                                    <button className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105">
+                                        Apply Now
+                                    </button>
                                 </Link>
                             </div>
                         ))}
@@ -293,7 +293,7 @@ const CareerPage = () => {
                         Ready to Start Your Journey?
                     </h2>
                     <p className="text-xl mb-8 animate-on-scroll opacity-0 transform translate-y-4">
-                        Don't see the perfect role? Send us your resume and we'll keep you in mind for future opportunities.
+                        Don&apos;t see the perfect role? Send us your resume and we&apos;ll keep you in mind for future opportunities.
                     </p>
                     <div className="space-x-4 animate-on-scroll opacity-0 transform translate-y-4">
                         <button className="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
