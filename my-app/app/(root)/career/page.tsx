@@ -62,46 +62,33 @@ const CareerPage = () => {
 
     const jobOpenings = [
         {
-            title: "Senior Frontend Developer",
+            title: "AI/ML Engineer",
             department: "Engineering",
-            location: "Remote / San Francisco",
+            location: "On Location",
             type: "Full-time",
-            description: "Join our frontend team to build cutting-edge web applications using React, Next.js, and modern technologies."
+            description: "Join our Software development team to build cutting-edge web applications using AI/ML and modern technologies."
         },
         {
-            title: "UX/UI Designer",
-            department: "Design",
-            location: "New York / Remote",
+            title: "Business Analysis",
+            department: "Engineering",
+            location: "On Location",
             type: "Full-time",
-            description: "Create beautiful and intuitive user experiences that delight our customers and drive business growth."
+            description: "We are seeking a Business Analyst to bridge the gap between business needs and technical solutions.."
         },
         {
-            title: "DevOps Engineer",
-            department: "Infrastructure",
-            location: "Remote",
+            title: "Deployment Engineer",
+            department: "Engineering",
+            location: "On Location",
             type: "Full-time",
             description: "Build and maintain scalable infrastructure solutions using cloud technologies and automation tools."
         },
+
         {
-            title: "Product Manager",
-            department: "Product",
-            location: "San Francisco",
+            title: "Content Creator ",
+            department: "Marketing ",
+            location: "On Location",
             type: "Full-time",
-            description: "Lead product strategy and execution for our core platform, working closely with engineering and design teams."
-        },
-        {
-            title: "Data Scientist",
-            department: "Analytics",
-            location: "Boston / Remote",
-            type: "Full-time",
-            description: "Analyze complex datasets to derive insights that drive product decisions and business strategy."
-        },
-        {
-            title: "Marketing Specialist",
-            department: "Marketing",
-            location: "Remote",
-            type: "Full-time",
-            description: "Develop and execute marketing campaigns that increase brand awareness and drive customer acquisition."
+            description: "We are looking for a Content Creator to develop engaging and creative content for digital platforms."
         }
     ];
 
@@ -147,11 +134,11 @@ const CareerPage = () => {
                 <div className="max-w-6xl mx-auto px-4">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
                         <div className="animate-on-scroll opacity-0 transform translate-y-4">
-                            <div className="stat-number text-4xl font-bold text-blue-600 mb-2" data-target="500">0</div>
+                            <div className="stat-number text-4xl font-bold text-blue-600 mb-2" data-target="10">0</div>
                             <p className="text-gray-600">Team Members</p>
                         </div>
                         <div className="animate-on-scroll opacity-0 transform translate-y-4">
-                            <div className="stat-number text-4xl font-bold text-purple-600 mb-2" data-target="50">0</div>
+                            <div className="stat-number text-4xl font-bold text-purple-600 mb-2" data-target="2">0</div>
                             <p className="text-gray-600">Countries</p>
                         </div>
                         <div className="animate-on-scroll opacity-0 transform translate-y-4">
@@ -159,7 +146,7 @@ const CareerPage = () => {
                             <p className="text-gray-600">% Satisfaction</p>
                         </div>
                         <div className="animate-on-scroll opacity-0 transform translate-y-4">
-                            <div className="stat-number text-4xl font-bold text-orange-600 mb-2" data-target="15">0</div>
+                            <div className="stat-number text-4xl font-bold text-orange-600 mb-2" data-target="4">0</div>
                             <p className="text-gray-600">Open Positions</p>
                         </div>
                     </div>
@@ -202,10 +189,13 @@ const CareerPage = () => {
                                 </div>
 
                                 <p className="text-gray-700 mb-6">{job.description}</p>
-                                <Link href="/career/apply">
-                                    <button className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105">
-                                        Apply Now
-                                    </button>
+                                <Link
+                                    href="https://careers.cloudpartners.biz/forms/64407761193b29ebae1189d8165c6e0244c2cd5c6d734dfd9db6d9213d377230"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="block w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 text-center"
+                                >
+                                    Apply Now
                                 </Link>
                             </div>
                         ))}
@@ -243,7 +233,7 @@ const CareerPage = () => {
             </section>
 
             {/* CTA Section */}
-            <section className="cta-section relative py-20 bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 text-white overflow-hidden mb-20 w-350 ml-30 rounded-2xl">
+            <section className="cta-section relative py-20 bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 text-white overflow-hidden mb-20 w-350 ml-5 2xl:ml-30 rounded-2xl">
                 {/* Animated Grid Background */}
                 <div className="grid-background absolute inset-0 opacity-20">
                     <div className="grid-container">

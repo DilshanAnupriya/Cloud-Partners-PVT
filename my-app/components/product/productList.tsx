@@ -12,114 +12,128 @@ export function ProductList() {
     {
       name: "Zoho CRM",
       description: "Complete customer relationship management solution to streamline sales processes",
-      icon: "/product/Logos/zoho-logo2.webp",
+      icon: "/Pimages/Logos/zoho-logo2.webp",
       iconType: "image",
       category: "sales",
-      features: ["Lead Management", "Sales Pipeline", "Customer Analytics", "Mobile CRM"]
+      features: ["Lead Management", "Sales Pipeline", "Customer Analytics", "Mobile CRM"],
+      link:"https://store.zoho.com/ResellerCustomerSignUp.do?id=a8d16e2453e1e415548ea976b27352bbb90f31760c8f187af4f8c9ead038c1ae"
     },
     {
       name: "Zoho Books",
       description: "Comprehensive accounting software for small to medium businesses",
-      icon: "/product/Logos/BooksLogo.png",
+      icon: "/Pimages/Logos/BooksLogo.png",
       iconType: "component",
       category: "finance",
-      features: ["Invoice Management", "Expense Tracking", "Tax Compliance", "Financial Reports"]
+      features: ["Invoice Management", "Expense Tracking", "Tax Compliance", "Financial Reports"],
+      link:"https://store.zoho.com/ResellerCustomerSignUp.do?id=a8d16e2453e1e415548ea976b27352bbb90f31760c8f187af4f8c9ead038c1ae"
     },
     {
       name: "Zoho Mail",
       description: "Professional email hosting with advanced security and collaboration tools",
-      icon: "/product/Logos/MailLogo.png",
+      icon: "/Pimages/Logos/MailLogo.png",
       iconType: "component",
       category: "communication",
-      features: ["Custom Domain Email", "Calendar Integration", "Document Sharing", "Mobile Access"]
+      features: ["Custom Domain Email", "Calendar Integration", "Document Sharing", "Mobile Access"],
+      link:"https://store.zoho.com/ResellerCustomerSignUp.do?id=a8d16e2453e1e415548ea976b27352bbb90f31760c8f187af4f8c9ead038c1ae"
     },
     {
       name: "Zoho Desk",
       description: "Multi-channel customer support platform for exceptional service delivery",
-      icon: "/product/Logos/deskLogo.png",
+      icon: "/Pimages/Logos/deskLogo.png",
       iconType: "component",
       category: "support",
-      features: ["Ticket Management", "Knowledge Base", "Live Chat", "Performance Analytics"]
+      features: ["Ticket Management", "Knowledge Base", "Live Chat", "Performance Analytics"],
+      link:"https://store.zoho.com/ResellerCustomerSignUp.do?id=a8d16e2453e1e415548ea976b27352bbb90f31760c8f187af4f8c9ead038c1ae"
     },
     {
       name: "Zoho Analytics",
       description: "Business intelligence and data analytics platform for informed decision making",
-      icon: "/product/Logos/zoho-Analytics2.png",
+      icon: "/Pimages/Logos/zoho-Analytics2.png",
       iconType: "component",
       category: "analytics",
-      features: ["Data Visualization", "Custom Reports", "AI-Powered Insights", "Real-time Dashboards"]
+      features: ["Data Visualization", "Custom Reports", "AI-Powered Insights", "Real-time Dashboards"],
+      link:"https://store.zoho.com/ResellerCustomerSignUp.do?id=a8d16e2453e1e415548ea976b27352bbb90f31760c8f187af4f8c9ead038c1ae"
     },
     {
       name: "Zoho Campaigns",
       description: "Email marketing automation platform for engaging customer communications",
-      icon: "/product/Logos/campain.png",
+      icon: "/Pimages/Logos/campain.png",
       iconType: "component",
       category: "marketing",
-      features: ["Email Templates", "Automation Workflows", "A/B Testing", "Campaign Analytics"]
+      features: ["Email Templates", "Automation Workflows", "A/B Testing", "Campaign Analytics"],
+      link:"https://store.zoho.com/ResellerCustomerSignUp.do?id=a8d16e2453e1e415548ea976b27352bbb90f31760c8f187af4f8c9ead038c1ae"
     },
     {
       name: "Zoho One",
       description: "Complete suite of integrated business applications for unified operations",
-      icon: "/product/Logos/one2.webp",
+      icon: "/Pimages/Logos/one2.webp",
       iconType: "component",
       category: "suite",
-      features: ["45+ Applications", "Single Sign-On", "Unified Interface", "Data Integration"]
+      features: ["45+ Applications", "Single Sign-On", "Unified Interface", "Data Integration"],
+      link:"https://store.zoho.com/ResellerCustomerSignUp.do?id=a8d16e2453e1e415548ea976b27352bbb90f31760c8f187af4f8c9ead038c1ae"
     },
     {
       name: "Zoho Inventory",
       description: "Multi-channel inventory management system for seamless operations",
-      icon: "/product/Logos/inventoryLogo.png",
+      icon: "/Pimages/Logos/inventoryLogo.png",
       iconType: "component",
       category: "operations",
-      features: ["Stock Management", "Order Fulfillment", "Warehouse Management", "Multi-location Support"]
+      features: ["Stock Management", "Order Fulfillment", "Warehouse Management", "Multi-location Support"],
+      link:"https://store.zoho.com/ResellerCustomerSignUp.do?id=a8d16e2453e1e415548ea976b27352bbb90f31760c8f187af4f8c9ead038c1ae"
     },
     {
       name: "Zoho People",
       description: "Human resource management system for modern workforce management",
-      icon: "/product/Logos/people.png",
+      icon: "/Pimages/Logos/people.png",
       iconType: "component",
       category: "hr",
-      features: ["Employee Records", "Attendance Tracking", "Performance Management", "Self-Service Portal"]
+      features: ["Employee Records", "Attendance Tracking", "Performance Management", "Self-Service Portal"],
+      link:"https://store.zoho.com/ResellerCustomerSignUp.do?id=a8d16e2453e1e415548ea976b27352bbb90f31760c8f187af4f8c9ead038c1ae"
     },
     {
       name: "Zoho Invoice",
       description: "Professional invoicing solution for freelancers and small businesses",
-      icon: "/product/Logos/invoice.webp",
+      icon: "/Pimages/Logos/invoice.webp",
       iconType: "component",
       category: "finance",
-      features: ["Custom Templates", "Payment Tracking", "Expense Management", "Time Tracking"]
+      features: ["Custom Templates", "Payment Tracking", "Expense Management", "Time Tracking"],
+      link:"https://store.zoho.com/ResellerCustomerSignUp.do?id=a8d16e2453e1e415548ea976b27352bbb90f31760c8f187af4f8c9ead038c1ae"
     },
     {
       name: "Zoho Projects",
       description: "Comprehensive project management platform for team collaboration",
-      icon: "/product/Logos/project2.png",
+      icon: "/Pimages/Logos/project2.png",
       iconType: "component",
       category: "operations",
-      features: ["Task Management", "Team Collaboration", "Time Tracking", "Project Analytics"]
+      features: ["Task Management", "Team Collaboration", "Time Tracking", "Project Analytics"],
+      link:"https://store.zoho.com/ResellerCustomerSignUp.do?id=a8d16e2453e1e415548ea976b27352bbb90f31760c8f187af4f8c9ead038c1ae"
     },
     {
       name: "Zoho Creator",
       description: "Low-code application development platform for custom business solutions",
-      icon: "/product/Logos/creator.png",
+      icon: "/Pimages/Logos/creator.png",
       iconType: "component",
       category: "development",
-      features: ["Drag-Drop Builder", "Custom Workflows", "Database Integration", "Mobile Apps"]
+      features: ["Drag-Drop Builder", "Custom Workflows", "Database Integration", "Mobile Apps"],
+      link:"https://store.zoho.com/ResellerCustomerSignUp.do?id=a8d16e2453e1e415548ea976b27352bbb90f31760c8f187af4f8c9ead038c1ae"
     },
     {
       name: "Google Workspace",
       description: "Low-code application development platform for custom business solutions",
-      icon: "/product/Logos/googleworkspace.png",
+      icon: "/Pimages/Logos/googleworkspace.png",
       iconType: "component",
       category: "google",
-      features: ["Drag-Drop Builder", "Custom Workflows", "Database Integration", "Mobile Apps"]
+      features: ["Drag-Drop Builder", "Custom Workflows", "Database Integration", "Mobile Apps"],
+      link:'https://workspace.google.com/'
     },
     {
       name: "Google Mail",
       description: "Low-code application development platform for custom business solutions",
-      icon: "/product/Logos/mail.png",
+      icon: "/Pimages/Logos/mail.png",
       iconType: "component",
       category: "google",
-      features: ["Drag-Drop Builder", "Custom Workflows", "Database Integration", "Mobile Apps"]
+      features: ["Drag-Drop Builder", "Custom Workflows", "Database Integration", "Mobile Apps"],
+      link:'https://workspace.google.com/intl/en-US/gmail/'
     }
   ]
 
@@ -206,11 +220,15 @@ export function ProductList() {
                         </div>
                     ))}
                   </div>
-                  <button
+
+                  <Link
+                      href={service.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center group shadow-md hover:shadow-lg">
-                    Learn More
+                    Try Demo
                     <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300"/>
-                  </button>
+                  </Link>
                 </div>
             ))}
           </div>

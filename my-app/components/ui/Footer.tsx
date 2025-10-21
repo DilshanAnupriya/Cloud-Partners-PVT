@@ -60,7 +60,7 @@ const Footer = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/product" className="text-gray-300 hover:text-white transition-colors text-sm">
+                                <Link href="/" className="text-gray-300 hover:text-white transition-colors text-sm">
                                     Products
                                 </Link>
                             </li>
@@ -116,21 +116,21 @@ const Footer = () => {
                             <div className="flex items-start space-x-3">
                                 <MapPin size={16} className="text-gray-400 mt-1" />
                                 <div className="text-gray-300 text-sm">
-                                    <p>400 Level 04</p>
+                                    <p>400 Level 02</p>
                                     <p>Sri Sangaraja Mawatha</p>
-                                    <p>Colombo 12, State 12345</p>
+                                    <p>Colombo 12</p>
                                 </div>
                             </div>
                             <div className="flex items-center space-x-3">
                                 <Phone size={16} className="text-gray-400" />
                                 <a href="tel:+1234567890" className="text-gray-300 hover:text-white transition-colors text-sm">
-                                    +1 (234) 567-8900
+                                    +94 78 866 0055
                                 </a>
                             </div>
                             <div className="flex items-center space-x-3">
                                 <Mail size={16} className="text-gray-400" />
                                 <a href="mailto:info@company.com" className="text-gray-300 hover:text-white transition-colors text-sm">
-                                    info@company.com
+                                    hello@cloudpartners.com
                                 </a>
                             </div>
                         </div>

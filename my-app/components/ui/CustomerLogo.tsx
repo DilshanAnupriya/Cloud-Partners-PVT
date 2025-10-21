@@ -130,7 +130,7 @@ const GoogleProductsSection = () => {
             tl.to(subtitleRef.current, {
                 opacity: 1,
                 y: 0,
-                duration: 0.8,
+                duration: 0.3,
                 ease: "power3.out"
             });
         }
@@ -148,7 +148,7 @@ const GoogleProductsSection = () => {
             tl.to(descriptionRef.current, {
                 opacity: 1,
                 y: 0,
-                duration: 0.8,
+                duration: 0.3,
                 ease: "power3.out"
             });
         }
@@ -157,7 +157,7 @@ const GoogleProductsSection = () => {
             tl.to(statsChildren, {
                 opacity: 1,
                 y: 0,
-                duration: 0.6,
+                duration: 0.3,
                 stagger: 0.15,
                 ease: "power2.out"
             });
@@ -168,7 +168,7 @@ const GoogleProductsSection = () => {
                 opacity: 1,
                 y: 0,
                 scale: 1,
-                duration: 0.8,
+                duration: 0.3,
                 stagger: 0.2,
                 ease: "power2.out"
             });
@@ -178,12 +178,12 @@ const GoogleProductsSection = () => {
             tl.to(ctaRef.current, {
                 opacity: 1,
                 y: 0,
-                duration: 0.8,
+                duration: 0.3,
                 ease: "power3.out"
             });
         }
 
-        // Professional hover animations for product cards
+
         if (productsRef.current) {
             productChildren.forEach((card) => {
                 const cardElement = card as HTMLElement;

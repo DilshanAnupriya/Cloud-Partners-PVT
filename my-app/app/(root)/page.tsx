@@ -9,52 +9,52 @@ const products = [
     {
         title: "Zoho Books",
         link: "/projects/ecommerce",
-        thumbnail: "/product/zohoBooks.png",
+        thumbnail: "/Pimages/zohoBooks.png",
     },
     {
         title: "Zoho Catalyst",
         link: "/projects/banking",
-        thumbnail: "/product/zohoCatalyst.png",
+        thumbnail: "/Pimages/zohoCatalyst.png",
     },
     {
         title: "Zoho Creator",
         link: "/projects/social",
-        thumbnail: "/product/zohoCreator.png",
+        thumbnail: "/Pimages/zohoCreator.png",
     },
     {
         title: "Zoho CRM",
         link: "/projects/analytics",
-        thumbnail: "/product/zohoCRM.png",
+        thumbnail: "/Pimages/zohoCRM.png",
     },
     {
         title: "Zoho Forms",
         link: "/projects/healthcare",
-        thumbnail: "/product/zohoForms.png",
+        thumbnail: "/Pimages/zohoForms.png",
     },
     {
         title: "Zoho Inventory",
         link: "/projects/lms",
-        thumbnail: "/product/zohoInventory.png",
+        thumbnail: "/Pimages/zohoInventory.png",
     },
     {
         title: "Zoho Mail",
         link: "/projects/realestate",
-        thumbnail: "/product/zohoMail.png",
+        thumbnail: "/Pimages/zohoMail.png",
     },
     {
         title: "Zoho One",
         link: "/projects/food",
-        thumbnail: "/product/zohoOne.png",
+        thumbnail: "/Pimages/zohoOne.png",
     },
     {
         title: "Zoho Page Sense",
         link: "/projects/travel",
-        thumbnail: "/product/zohoPageSense.png",
+        thumbnail: "/Pimages/zohoPageSense.png",
     },
     {
         title: "Fitness Tracking App",
         link: "/projects/fitness",
-        thumbnail: "/product/zohoPeople.png",
+        thumbnail: "/Pimages/zohoPeople.png",
     },
 
 

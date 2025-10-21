@@ -21,14 +21,6 @@ const Navbar = () => {
         };
     }, []);
 
-    const navItems = [
-        { label: 'Home', href: '/' },
-        { label: 'Products', href: '/product' },
-        { label: 'Services', href: '/service' },
-        { label: 'About Us', href: '/about' },
-        { label: 'Careers', href: '/career' }
-    ];
-
     // Prevent hydration mismatch by not rendering certain elements until mounted
     if (!mounted) {
         return (
@@ -51,10 +43,10 @@ const Navbar = () => {
                         </div>
                         <div className="hidden md:flex space-x-8">
                             <Link href="/" >Home</Link>
-                            <Link href="/product" >product</Link>
-                            <Link href="/service" >service</Link>
-                            <Link href="/about" >about</Link>
-                            <Link href="/career" >career</Link>
+                            <Link href="/" >Product</Link>
+                            <Link href="/service" >Service</Link>
+                            <Link href="/about" >About</Link>
+                            <Link href="/career" >Career</Link>
                         </div>
                         <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-2.5 rounded-lg">
                             Contact Us
@@ -97,32 +89,90 @@ const Navbar = () => {
 
                         {/* Desktop Navigation */}
                         <div className="hidden lg:flex items-center space-x-8">
-                            {navItems.map((item, index) => (
-                                <div key={item.label} className="relative group">
-                                    <a
-                                        href={item.href}
-                                        className={`relative group transition-all duration-300 hover:-translate-y-0.5 font-medium ${
-                                            isScrolled
-                                                ? 'text-gray-200 hover:text-blue-400'
-                                                : 'text-white hover:text-blue-400'
-                                        } animate-fadeInUp`}
-                                        style={{ animationDelay: `${index * 100 + 400}ms` }}
-                                    >
-                                        {item.label}
-                                        <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-emerald-500 group-hover:w-full transition-all duration-300" />
-                                    </a>
-                                </div>
-                            ))}
+                            <div className="relative group">
+                                <Link
+                                    href="/"
+                                    className={`relative group transition-all duration-300 hover:-translate-y-0.5 font-medium ${
+                                        isScrolled
+                                            ? 'text-gray-200 hover:text-blue-400'
+                                            : 'text-white hover:text-blue-400'
+                                    } animate-fadeInUp`}
+                                    style={{ animationDelay: '400ms' }}
+                                >
+                                    Home
+                                    <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-emerald-500 group-hover:w-full transition-all duration-300" />
+                                </Link>
+                            </div>
+
+                            <div className="relative group">
+                                <Link
+                                    href="/product"
+                                    className={`relative group transition-all duration-300 hover:-translate-y-0.5 font-medium ${
+                                        isScrolled
+                                            ? 'text-gray-200 hover:text-blue-400'
+                                            : 'text-white hover:text-blue-400'
+                                    } animate-fadeInUp`}
+                                    style={{ animationDelay: '500ms' }}
+                                >
+                                    Products
+                                    <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-emerald-500 group-hover:w-full transition-all duration-300" />
+                                </Link>
+                            </div>
+
+                            <div className="relative group">
+                                <Link
+                                    href="/service"
+                                    className={`relative group transition-all duration-300 hover:-translate-y-0.5 font-medium ${
+                                        isScrolled
+                                            ? 'text-gray-200 hover:text-blue-400'
+                                            : 'text-white hover:text-blue-400'
+                                    } animate-fadeInUp`}
+                                    style={{ animationDelay: '600ms' }}
+                                >
+                                    Services
+                                    <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-emerald-500 group-hover:w-full transition-all duration-300" />
+                                </Link>
+                            </div>
+
+                            <div className="relative group">
+                                <Link
+                                    href="/about"
+                                    className={`relative group transition-all duration-300 hover:-translate-y-0.5 font-medium ${
+                                        isScrolled
+                                            ? 'text-gray-200 hover:text-blue-400'
+                                            : 'text-white hover:text-blue-400'
+                                    } animate-fadeInUp`}
+                                    style={{ animationDelay: '700ms' }}
+                                >
+                                    About Us
+                                    <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-emerald-500 group-hover:w-full transition-all duration-300" />
+                                </Link>
+                            </div>
+
+                            <div className="relative group">
+                                <Link
+                                    href="/career"
+                                    className={`relative group transition-all duration-300 hover:-translate-y-0.5 font-medium ${
+                                        isScrolled
+                                            ? 'text-gray-200 hover:text-blue-400'
+                                            : 'text-white hover:text-blue-400'
+                                    } animate-fadeInUp`}
+                                    style={{ animationDelay: '800ms' }}
+                                >
+                                    Careers
+                                    <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-emerald-500 group-hover:w-full transition-all duration-300" />
+                                </Link>
+                            </div>
                         </div>
 
                         {/* Right Section */}
                         <div className="flex items-center space-x-4">
-                            <a
+                            <Link
                                 href="/contact"
                                 className="hidden md:inline-block bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-2.5 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 border border-blue-600/20 active:scale-95"
                             >
                                 Contact Us
-                            </a>
+                            </Link>
 
                             {/* Mobile Menu Button */}
                             <button
@@ -145,21 +195,42 @@ const Navbar = () => {
                 >
                     <div className="bg-slate-800/95 backdrop-blur-xl border-t border-gray-700/50">
                         <div className="container mx-auto px-6 py-4 space-y-4">
-                            {navItems.map((item) => (
-                                <a
-                                    key={item.label}
-                                    href={item.href}
-                                    className="block text-white hover:text-blue-400 font-medium py-2 transition-colors duration-300"
-                                >
-                                    {item.label}
-                                </a>
-                            ))}
-                            <a
+                            <Link
+                                href="/"
+                                className="block text-white hover:text-blue-400 font-medium py-2 transition-colors duration-300"
+                            >
+                                Home
+                            </Link>
+                            <Link
+                                href="/product"
+                                className="block text-white hover:text-blue-400 font-medium py-2 transition-colors duration-300"
+                            >
+                                Products
+                            </Link>
+                            <Link
+                                href="/service"
+                                className="block text-white hover:text-blue-400 font-medium py-2 transition-colors duration-300"
+                            >
+                                Services
+                            </Link>
+                            <Link
+                                href="/about"
+                                className="block text-white hover:text-blue-400 font-medium py-2 transition-colors duration-300"
+                            >
+                                About Us
+                            </Link>
+                            <Link
+                                href="/career"
+                                className="block text-white hover:text-blue-400 font-medium py-2 transition-colors duration-300"
+                            >
+                                Careers
+                            </Link>
+                            <Link
                                 href="/contact"
                                 className="block w-full text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-xl font-semibold mt-4 transition-all duration-300 hover:from-blue-700 hover:to-blue-800"
                             >
                                 Contact Us
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>

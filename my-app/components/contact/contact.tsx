@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, RotateCcw, CheckCircle, Users, Code, Settings, ArrowRight } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, RotateCcw, CheckCircle, Users, Code, Settings, ArrowRight, AlertCircle } from 'lucide-react';
 
 // Define interfaces for type safety
 interface FormData {
@@ -13,7 +13,10 @@ interface FormData {
 
 interface FormErrors {
   fullName?: string;
+  company?: string;
   email?: string;
+  mobile?: string;
+  description?: string;
 }
 
 function Contact() {
@@ -26,6 +29,7 @@ function Contact() {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
+  const [touched, setTouched] = useState<{[key: string]: boolean}>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
@@ -37,6 +41,7 @@ function Contact() {
       [name]: value
     }));
 
+    // Clear error for this field when user starts typing
     if (errors[name as keyof FormErrors]) {
       setErrors(prev => ({
         ...prev,
@@ -45,25 +50,153 @@ function Contact() {
     }
   };
 
-  const validateEmail = (email: string): boolean => {
-    if (!email.trim()) return true;
-    const atPos = email.indexOf('@');
-    const dotPos = email.lastIndexOf('.');
-    return atPos >= 1 && dotPos >= atPos + 2 && dotPos + 2 < email.length;
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name } = e.target;
+    setTouched(prev => ({
+      ...prev,
+      [name]: true
+    }));
+
+    // Validate this field on blur
+    validateField(name, formData[name as keyof FormData]);
+  };
+
+  const validateField = (fieldName: string, value: string) => {
+    const newErrors = { ...errors };
+
+    switch (fieldName) {
+      case 'fullName':
+        if (!value.trim()) {
+          newErrors.fullName = 'Full name is required';
+        } else if (value.trim().length < 2) {
+          newErrors.fullName = 'Full name must be at least 2 characters';
+        } else if (value.trim().length > 50) {
+          newErrors.fullName = 'Full name must be less than 50 characters';
+        } else if (!/^[a-zA-Z\s'-]+$/.test(value.trim())) {
+          newErrors.fullName = 'Full name can only contain letters, spaces, hyphens, and apostrophes';
+        } else {
+          delete newErrors.fullName;
+        }
+        break;
+
+      case 'company':
+        if (value.trim() && value.trim().length < 2) {
+          newErrors.company = 'Company name must be at least 2 characters';
+        } else if (value.trim().length > 100) {
+          newErrors.company = 'Company name must be less than 100 characters';
+        } else {
+          delete newErrors.company;
+        }
+        break;
+
+      case 'email':
+        if (value.trim()) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(value.trim())) {
+            newErrors.email = 'Please enter a valid email address';
+          } else if (value.trim().length > 100) {
+            newErrors.email = 'Email address must be less than 100 characters';
+          } else {
+            delete newErrors.email;
+          }
+        } else {
+          delete newErrors.email;
+        }
+        break;
+
+      case 'mobile':
+        if (value.trim()) {
+          // Remove all non-digit characters for validation
+          const digitsOnly = value.replace(/\D/g, '');
+          if (digitsOnly.length < 10) {
+            newErrors.mobile = 'Phone number must have at least 10 digits';
+          } else if (digitsOnly.length > 15) {
+            newErrors.mobile = 'Phone number cannot exceed 15 digits';
+          } else {
+            delete newErrors.mobile;
+          }
+        } else {
+          delete newErrors.mobile;
+        }
+        break;
+
+      case 'description':
+        if (value.trim() && value.trim().length < 10) {
+          newErrors.description = 'Description must be at least 10 characters';
+        } else if (value.trim().length > 2000) {
+          newErrors.description = 'Description must be less than 2000 characters';
+        } else {
+          delete newErrors.description;
+        }
+        break;
+    }
+
+    setErrors(newErrors);
   };
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
+    // Full Name validation (required)
     if (!formData.fullName.trim()) {
-      newErrors.fullName = 'Full Name is required.';
+      newErrors.fullName = 'Full name is required';
+    } else if (formData.fullName.trim().length < 2) {
+      newErrors.fullName = 'Full name must be at least 2 characters';
+    } else if (formData.fullName.trim().length > 50) {
+      newErrors.fullName = 'Full name must be less than 50 characters';
+    } else if (!/^[a-zA-Z\s'-]+$/.test(formData.fullName.trim())) {
+      newErrors.fullName = 'Full name can only contain letters, spaces, hyphens, and apostrophes';
     }
 
-    if (formData.email.trim() && !validateEmail(formData.email)) {
-      newErrors.email = 'Please enter a valid email address.';
+    // Company validation (optional)
+    if (formData.company.trim()) {
+      if (formData.company.trim().length < 2) {
+        newErrors.company = 'Company name must be at least 2 characters';
+      } else if (formData.company.trim().length > 100) {
+        newErrors.company = 'Company name must be less than 100 characters';
+      }
+    }
+
+    // Email validation (optional but must be valid if provided)
+    if (formData.email.trim()) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email.trim())) {
+        newErrors.email = 'Please enter a valid email address';
+      } else if (formData.email.trim().length > 100) {
+        newErrors.email = 'Email address must be less than 100 characters';
+      }
+    }
+
+    // Mobile validation (optional but must be valid if provided)
+    if (formData.mobile.trim()) {
+      const digitsOnly = formData.mobile.replace(/\D/g, '');
+      if (digitsOnly.length < 10) {
+        newErrors.mobile = 'Phone number must have at least 10 digits';
+      } else if (digitsOnly.length > 15) {
+        newErrors.mobile = 'Phone number cannot exceed 15 digits';
+      }
+    }
+
+    // Description validation (optional but must meet criteria if provided)
+    if (formData.description.trim()) {
+      if (formData.description.trim().length < 10) {
+        newErrors.description = 'Description must be at least 10 characters';
+      } else if (formData.description.trim().length > 2000) {
+        newErrors.description = 'Description must be less than 2000 characters';
+      }
     }
 
     setErrors(newErrors);
+
+    // Mark all fields as touched to show errors
+    setTouched({
+      fullName: true,
+      company: true,
+      email: true,
+      mobile: true,
+      description: true
+    });
+
     return Object.keys(newErrors).length === 0;
   };
 
@@ -113,6 +246,9 @@ function Contact() {
           description: ''
         });
 
+        // Reset touched state
+        setTouched({});
+
         // Hide success message after 8 seconds
         setTimeout(() => {
           setShowSuccess(false);
@@ -135,6 +271,17 @@ function Contact() {
       description: ''
     });
     setErrors({});
+    setTouched({});
+  };
+
+  const getFieldClassName = (fieldName: string, hasError: boolean) => {
+    const baseClasses = "w-full px-4 py-3 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-gray-900 placeholder-gray-400";
+
+    if (hasError) {
+      return `${baseClasses} border-red-300 bg-red-50 focus:ring-red-500`;
+    }
+
+    return `${baseClasses} border-gray-200 hover:border-gray-300 focus:border-blue-500`;
   };
 
   return (
@@ -215,7 +362,7 @@ function Contact() {
                     <div className="ml-5">
                       <h3 className="text-lg font-semibold text-gray-900 mb-1"></h3>
                       <p className="text-gray-600">400 Sri Sangaraja Mawatha</p>
-                      <p className="text-gray-600">Level 04</p>
+                      <p className="text-gray-600">Level 02</p>
                       <p className="text-gray-600">Colombo 12</p>
                     </div>
                   </div>
@@ -233,7 +380,7 @@ function Contact() {
                 </div>
 
                 <div className="p-8">
-                  <div className="space-y-8">
+                  <div className="space-y-6">
                     {/* Full Name - Required */}
                     <div>
                       <label htmlFor="fullName" className="block text-sm font-semibold text-gray-800 mb-3">
@@ -245,18 +392,17 @@ function Contact() {
                           name="fullName"
                           value={formData.fullName}
                           onChange={handleInputChange}
-                          maxLength={80}
-                          className={`w-full px-2 py-2 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-gray-900 placeholder-gray-400 ${
-                              errors.fullName ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300 focus:border-blue-500'
-                          }`}
+                          onBlur={handleBlur}
+                          maxLength={50}
+                          className={getFieldClassName('fullName', !!errors.fullName)}
                           placeholder="Enter your full name"
                           aria-required="true"
                       />
-                      {errors.fullName && (
-                          <p className="mt-3 text-sm text-red-600 flex items-center">
-                            <span className="w-1.5 h-1.5 bg-red-500 rounded-full mr-2"></span>
-                            {errors.fullName}
-                          </p>
+                      {errors.fullName && touched.fullName && (
+                          <div className="mt-3 flex items-start">
+                            <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 mr-2 flex-shrink-0" />
+                            <p className="text-sm text-red-600">{errors.fullName}</p>
+                          </div>
                       )}
                     </div>
 
@@ -272,10 +418,17 @@ function Contact() {
                             name="company"
                             value={formData.company}
                             onChange={handleInputChange}
-                            maxLength={200}
-                            className="w-full px-2 py-2 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent hover:border-gray-300 transition-all duration-300 text-gray-900 placeholder-gray-400"
+                            onBlur={handleBlur}
+                            maxLength={100}
+                            className={getFieldClassName('company', !!errors.company)}
                             placeholder="Your company name"
                         />
+                        {errors.company && touched.company && (
+                            <div className="mt-3 flex items-start">
+                              <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 mr-2 flex-shrink-0" />
+                              <p className="text-sm text-red-600">{errors.company}</p>
+                            </div>
+                        )}
                       </div>
 
                       <div>
@@ -288,18 +441,17 @@ function Contact() {
                             name="email"
                             value={formData.email}
                             onChange={handleInputChange}
+                            onBlur={handleBlur}
                             maxLength={100}
                             autoComplete="off"
-                            className={`w-full px-2 py-2 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-gray-900 placeholder-gray-400 ${
-                                errors.email ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
-                            }`}
+                            className={getFieldClassName('email', !!errors.email)}
                             placeholder="your.email@company.com"
                         />
-                        {errors.email && (
-                            <p className="mt-3 text-sm text-red-600 flex items-center">
-                              <span className="w-1.5 h-1.5 bg-red-500 rounded-full mr-2"></span>
-                              {errors.email}
-                            </p>
+                        {errors.email && touched.email && (
+                            <div className="mt-3 flex items-start">
+                              <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 mr-2 flex-shrink-0" />
+                              <p className="text-sm text-red-600">{errors.email}</p>
+                            </div>
                         )}
                       </div>
                     </div>
@@ -315,10 +467,17 @@ function Contact() {
                           name="mobile"
                           value={formData.mobile}
                           onChange={handleInputChange}
-                          maxLength={30}
-                          className="w-full px-2 py-2 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent hover:border-gray-300 transition-all duration-300 text-gray-900 placeholder-gray-400"
+                          onBlur={handleBlur}
+                          maxLength={20}
+                          className={getFieldClassName('mobile', !!errors.mobile)}
                           placeholder="+1 (555) 123-4567"
                       />
+                      {errors.mobile && touched.mobile && (
+                          <div className="mt-3 flex items-start">
+                            <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 mr-2 flex-shrink-0" />
+                            <p className="text-sm text-red-600">{errors.mobile}</p>
+                          </div>
+                      )}
                     </div>
 
                     {/* Project Requirements */}
@@ -331,15 +490,23 @@ function Contact() {
                           name="description"
                           value={formData.description}
                           onChange={handleInputChange}
+                          onBlur={handleBlur}
                           rows={4}
-                          className="w-full px-2 py-2 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent hover:border-gray-300 transition-all duration-300 resize-vertical text-gray-900 placeholder-gray-400"
-                          placeholder=""
+                          maxLength={2000}
+                          className={getFieldClassName('description', !!errors.description)}
+                          placeholder="Describe your project requirements, current challenges, business goals, and any specific Zoho products you're interested in..."
                       />
+                      {errors.description && touched.description && (
+                          <div className="mt-3 flex items-start">
+                            <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 mr-2 flex-shrink-0" />
+                            <p className="text-sm text-red-600">{errors.description}</p>
+                          </div>
+                      )}
                       <div className="mt-3 flex justify-between items-center">
                         <p className="text-xs text-gray-500">
                           Be specific about your industry, company size, and technical requirements for the best consultation.
                         </p>
-                        <p className="text-xs text-gray-400">
+                        <p className={`text-xs ${formData.description.length > 1900 ? 'text-red-500' : 'text-gray-400'}`}>
                           {formData.description.length}/2000
                         </p>
                       </div>
@@ -418,7 +585,7 @@ function Contact() {
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-8">
               <div className="text-center">
-                <div className="text-3xl font-bold text-blue-300">500+</div>
+                <div className="text-3xl font-bold text-blue-300">50+</div>
                 <div className="text-sm text-blue-200">Projects Delivered</div>
               </div>
               <div className="text-center">

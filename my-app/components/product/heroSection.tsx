@@ -77,7 +77,7 @@ function HeroSection() {
 
                         <Image
                             alt="Product cover"
-                            src="/product/productCover-2.png"
+                            src="/Pimages/productCover-2.png"
                             fill
                             className="object-cover rounded-2xl relative z-10 shadow-2xl"
                             priority
