@@ -9,7 +9,7 @@ function HeroSection() {
     const containerRef = useRef(null);
 
     return (
-        <div className="bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 min-h-screen relative overflow-hidden" ref={containerRef}>
+        <div className="bg-black min-h-screen relative overflow-hidden" ref={containerRef}>
             {/* Spotlight Effect */}
             <Spotlight
                 gradientFirst="radial-gradient(68.54% 68.72% at 55.02% 31.46%, hsla(220, 100%, 85%, .12) 0, hsla(220, 100%, 65%, .04) 50%, hsla(220, 100%, 45%, 0) 80%)"

@@ -1,9 +1,33 @@
+// app/layout.tsx
 "use client"
 
 import "./globals.css";
-import Navbar from "@/components/ui/NavBar";
 import Script from "next/script";
+import { AuthProvider } from './Context/AuthContext';
+import { usePathname } from 'next/navigation';
+import Navbar from "@/components/ui/NavBar";
 import Footer from "@/components/ui/Footer";
+
+function LayoutContent({ children }: { children: React.ReactNode }) {
+    const pathname = usePathname();
+    const isDashboard = pathname?.startsWith('/dashboard');
+
+    if (isDashboard) {
+        // Dashboard pages - no navbar/footer
+        return <>{children}</>;
+    }
+
+    // Public pages - with navbar/footer
+    return (
+        <div className="min-h-screen flex flex-col">
+            <Navbar />
+            <main className="flex-1">
+                {children}
+            </main>
+            <Footer />
+        </div>
+    );
+}
 
 export default function RootLayout({
                                        children,
@@ -13,18 +37,12 @@ export default function RootLayout({
     return (
         <html lang="en">
         <body>
-        <div className="min-h-screen flex flex-col">
-            <main className="flex-1">
-                <Navbar />
-                {children}
-            </main>
-            <Footer/>
-        </div>
+        <AuthProvider>
+            <LayoutContent>{children}</LayoutContent>
+        </AuthProvider>
 
-        {/* The Zoho widget will render into this div */}
         <div id='zsiqwidget' className="relative"></div>
 
-        {/* Zoho SalesIQ Scripts */}
         <Script
             id="zoho-salesiq-init"
             strategy="beforeInteractive"

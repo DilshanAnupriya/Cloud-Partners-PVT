@@ -1,7 +1,6 @@
 "use client"
 import React, { useEffect, useRef } from 'react';
-import { Briefcase, MapPin, Clock, Users, TrendingUp, Award, Coffee, Zap } from 'lucide-react';
-import Link from "next/link";
+import { Coffee, TrendingUp, Award, Users, Zap, Briefcase } from 'lucide-react';
 
 const CareerPage = () => {
     const heroRef = useRef<HTMLElement>(null);
@@ -10,7 +9,36 @@ const CareerPage = () => {
     const statsRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
-        // Simulate GSAP animations with CSS transitions and JavaScript
+        // Load Zoho Recruit CSS
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://static.zohocdn.com/recruit/embed_careers_site/css/v1.1/embed_jobs.css';
+        link.type = 'text/css';
+        document.head.appendChild(link);
+
+        // Load Zoho Recruit JavaScript
+        const script = document.createElement('script');
+        script.src = 'https://static.zohocdn.com/recruit/embed_careers_site/javascript/v1.1/embed_jobs.js';
+        script.type = 'text/javascript';
+        script.async = true;
+
+        script.onload = () => {
+            // Initialize Zoho Recruit widget after script loads
+            if (window.rec_embed_js) {
+                window.rec_embed_js.load({
+                    widget_id: "rec_job_listing_div",
+                    page_name: "Careers",
+                    source: "CareerSite",
+                    site: "https://careers.cloudpartners.biz",
+                    brand_color: "#6875E2",
+                    empty_job_msg: "No current Openings"
+                });
+            }
+        };
+
+        document.body.appendChild(script);
+
+        // Animate on scroll
         const animateOnScroll = () => {
             const elements = document.querySelectorAll('.animate-on-scroll');
             elements.forEach(el => {
@@ -27,14 +55,6 @@ const CareerPage = () => {
                 heroRef.current?.classList.add('hero-animated');
             }, 100);
         }
-
-        // Stagger job cards animation
-        const jobCards = document.querySelectorAll('.job-card');
-        jobCards.forEach((card, index) => {
-            setTimeout(() => {
-                card.classList.add('job-card-animated');
-            }, 200 * index);
-        });
 
         // Stats counter animation
         const animateStats = () => {
@@ -57,40 +77,13 @@ const CareerPage = () => {
         window.addEventListener('scroll', animateOnScroll);
         setTimeout(animateStats, 1000);
 
-        return () => window.removeEventListener('scroll', animateOnScroll);
+        return () => {
+            window.removeEventListener('scroll', animateOnScroll);
+            // Cleanup scripts
+            document.head.removeChild(link);
+            document.body.removeChild(script);
+        };
     }, []);
-
-    const jobOpenings = [
-        {
-            title: "AI/ML Engineer",
-            department: "Engineering",
-            location: "On Location",
-            type: "Full-time",
-            description: "Join our Software development team to build cutting-edge web applications using AI/ML and modern technologies."
-        },
-        {
-            title: "Business Analysis",
-            department: "Engineering",
-            location: "On Location",
-            type: "Full-time",
-            description: "We are seeking a Business Analyst to bridge the gap between business needs and technical solutions.."
-        },
-        {
-            title: "Deployment Engineer",
-            department: "Engineering",
-            location: "On Location",
-            type: "Full-time",
-            description: "Build and maintain scalable infrastructure solutions using cloud technologies and automation tools."
-        },
-
-        {
-            title: "Content Creator ",
-            department: "Marketing ",
-            location: "On Location",
-            type: "Full-time",
-            description: "We are looking for a Content Creator to develop engaging and creative content for digital platforms."
-        }
-    ];
 
     const benefits = [
         { icon: <Coffee className="w-6 h-6" />, title: "Flexible Work", desc: "Work from anywhere with flexible hours" },
@@ -121,12 +114,13 @@ const CareerPage = () => {
                     <p className="hero-subtitle text-xl md:text-2xl mb-8 opacity-0 transform translate-y-8">
                         Build the future with innovative minds and cutting-edge technology
                     </p>
-                    <button className="hero-cta bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105 opacity-0 translate-y-8">
+                    <button
+                        onClick={() => jobsRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                        className="hero-cta bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105 opacity-0 translate-y-8"
+                    >
                         Explore Opportunities
                     </button>
                 </div>
-
-
             </section>
 
             {/* Stats Section */}
@@ -153,7 +147,7 @@ const CareerPage = () => {
                 </div>
             </section>
 
-            {/* Job Openings Section */}
+            {/* Job Openings Section with Zoho Recruit */}
             <section ref={jobsRef} className="py-20 bg-gray-50">
                 <div className="max-w-6xl mx-auto px-4">
                     <div className="text-center mb-16">
@@ -165,40 +159,15 @@ const CareerPage = () => {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {jobOpenings.map((job, index) => (
-                            <div
-                                key={index}
-                                className="job-card bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 opacity-0 translate-y-8"
-                            >
-                                <div className="flex justify-between items-start mb-4">
-                                    <h3 className="text-xl font-bold text-gray-800">{job.title}</h3>
-                                    <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">
-                    {job.department}
-                  </span>
+                    {/* Zoho Recruit Embedded Widget */}
+                    <div className="zoho-recruit-container animate-on-scroll opacity-0 transform translate-y-4">
+                        <div className="embed_jobs_head embed_jobs_with_style_3">
+                            <div className="embed_jobs_head2">
+                                <div className="embed_jobs_head3">
+                                    <div id="rec_job_listing_div"></div>
                                 </div>
-
-                                <div className="flex items-center text-gray-600 mb-2">
-                                    <MapPin className="w-4 h-4 mr-2" />
-                                    <span>{job.location}</span>
-                                </div>
-
-                                <div className="flex items-center text-gray-600 mb-4">
-                                    <Clock className="w-4 h-4 mr-2" />
-                                    <span>{job.type}</span>
-                                </div>
-
-                                <p className="text-gray-700 mb-6">{job.description}</p>
-                                <Link
-                                    href="https://careers.cloudpartners.biz/forms/64407761193b29ebae1189d8165c6e0244c2cd5c6d734dfd9db6d9213d377230"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="block w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 text-center"
-                                >
-                                    Apply Now
-                                </Link>
                             </div>
-                        ))}
+                        </div>
                     </div>
                 </div>
             </section>
@@ -233,8 +202,7 @@ const CareerPage = () => {
             </section>
 
             {/* CTA Section */}
-            <section className="cta-section relative py-20 bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 text-white overflow-hidden mb-20 w-350 ml-5 2xl:ml-30 rounded-2xl">
-                {/* Animated Grid Background */}
+            <section className="cta-section relative py-20 bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 text-white overflow-hidden mb-20 mx-5 2xl:mx-30 rounded-2xl">
                 <div className="grid-background absolute inset-0 opacity-20">
                     <div className="grid-container">
                         {Array.from({ length: 100 }).map((_, i) => (
@@ -243,9 +211,7 @@ const CareerPage = () => {
                     </div>
                 </div>
 
-                {/* Grid Lines */}
                 <div className="grid-lines absolute inset-0 opacity-10">
-                    {/* Vertical Lines */}
                     {Array.from({ length: 20 }).map((_, i) => (
                         <div
                             key={`v-${i}`}
@@ -253,7 +219,6 @@ const CareerPage = () => {
                             style={{ left: `${(i * 5)}%` }}
                         ></div>
                     ))}
-                    {/* Horizontal Lines */}
                     {Array.from({ length: 10 }).map((_, i) => (
                         <div
                             key={`h-${i}`}
@@ -263,7 +228,6 @@ const CareerPage = () => {
                     ))}
                 </div>
 
-                {/* Moving Grid Dots */}
                 <div className="grid-dots absolute inset-0 opacity-30">
                     {Array.from({ length: 30 }).map((_, i) => (
                         <div
@@ -286,9 +250,14 @@ const CareerPage = () => {
                         Don&apos;t see the perfect role? Send us your resume and we&apos;ll keep you in mind for future opportunities.
                     </p>
                     <div className="space-x-4 animate-on-scroll opacity-0 transform translate-y-4">
-                        <button className="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        <a
+                            href="https://careers.cloudpartners.biz/forms/64407761193b29ebae1189d8165c6e0244c2cd5c6d734dfd9db6d9213d377230"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                        >
                             Submit Resume
-                        </button>
+                        </a>
                         <button className="border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white hover:text-blue-600 transition-all duration-300 transform hover:scale-105 backdrop-blur-sm">
                             Contact HR
                         </button>
@@ -315,37 +284,22 @@ const CareerPage = () => {
                     transition: all 1s ease-out 0.6s;
                 }
 
-                .job-card.job-card-animated {
-                    opacity: 1;
-                    transform: translateY(0);
-                    transition: all 0.6s ease-out;
-                }
-
                 .animate-on-scroll.animated {
                     opacity: 1;
                     transform: translateY(0);
                     transition: all 0.6s ease-out;
                 }
 
-                .floating-circle {
-                    animation: float 6s ease-in-out infinite;
-                }
-
-                .floating-circle:nth-child(1) { animation-delay: 0s; }
-                .floating-circle:nth-child(2) { animation-delay: 1.5s; }
-                .floating-circle:nth-child(3) { animation-delay: 3s; }
-                .floating-circle:nth-child(4) { animation-delay: 4.5s; }
-
-                @keyframes float {
-                    0%, 100% { transform: translateY(0px); }
-                    50% { transform: translateY(-20px); }
-                }
-
                 .benefit-card:hover {
                     transform: translateY(-8px) scale(1.02);
                 }
 
-                /* Grid Background Effects for CTA Section */
+                /* Zoho Recruit Container Styling */
+                .zoho-recruit-container {
+                    min-height: 300px;
+                }
+
+                /* Grid Background Effects */
                 .grid-container {
                     display: grid;
                     grid-template-columns: repeat(20, 1fr);
@@ -453,13 +407,14 @@ const CareerPage = () => {
                     }
                 }
 
-                /* Enhanced hover effect for CTA buttons */
-                .cta-section button {
+                .cta-section button,
+                .cta-section a {
                     position: relative;
                     overflow: hidden;
                 }
 
-                .cta-section button:before {
+                .cta-section button:before,
+                .cta-section a:before {
                     content: '';
                     position: absolute;
                     top: 0;
@@ -470,7 +425,8 @@ const CareerPage = () => {
                     transition: left 0.5s;
                 }
 
-                .cta-section button:hover:before {
+                .cta-section button:hover:before,
+                .cta-section a:hover:before {
                     left: 100%;
                 }
 

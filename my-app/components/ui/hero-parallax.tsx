@@ -56,7 +56,7 @@ export const HeroParallax = ({
     return (
         <div
             ref={ref}
-            className="h-[260vh] 2xl:h-[220vh] bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 text-white  overflow-hidden  antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
+            className="h-[290vh] 2xl:h-[240vh] bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 text-white  overflow-hidden  antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
         >
             <Header />
             <motion.div
@@ -68,7 +68,7 @@ export const HeroParallax = ({
                 }}
                 className=""
             >
-                <motion.div className="flex flex-row-reverse space-x-reverse space-x-30 mb-20 mt-[-50]">
+                <motion.div className="flex flex-row-reverse space-x-reverse space-x-30 mb-50 mt-10">
                     {firstRow.map((product) => (
                         <ProductCard
                             product={product}
@@ -135,7 +135,7 @@ export const ProductCard = ({
                 y: -20,
             }}
             key={product.title}
-            className="group/product h-96 w-[30rem] relative shrink-0"
+            className="group/product h-108 w-[45rem] relative shrink-0"
         >
             <a
                 href={product.link}

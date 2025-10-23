@@ -97,24 +97,12 @@ const ProfessionalHero = () => {
     };
 
     return (
-        <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 text-white overflow-hidden">
-            {/* Professional mouse follow effect */}
-            <motion.div
-                className="fixed w-96 h-96 pointer-events-none z-20 opacity-40"
-                animate={{
-                    x: mousePosition.x - 192,
-                    y: mousePosition.y - 192,
-                }}
-                transition={{ type: "spring", stiffness: 20, damping: 30 }}
-            >
-                <div className="w-full h-full bg-gradient-to-r from-blue-500/20 via-slate-400/10 to-emerald-500/20 rounded-full blur-3xl" />
-            </motion.div>
-
+        <div className="relative min-h-screen bg-black text-white overflow-hidden">
             {/* Dark grid pattern */}
             <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.03)_1px,transparent_1px)] bg-[size:50px_50px] z-0"></div>
 
             {/* Dark gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-slate-900/40 z-5"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-slate-500/20 z-5"></div>
 
             <motion.div
                 ref={ref}
@@ -123,29 +111,29 @@ const ProfessionalHero = () => {
                 animate={controls}
                 className="relative z-30 container mx-auto px-6 pt-20 pb-24"
             >
-                <div className="flex flex-col lg:flex-row items-center justify-between gap-16 pt-30">
+                <div className="flex flex-col lg:flex-row items-center justify-between gap-16 pt-20 2xl:pt-40">
                     <motion.div variants={itemVariants} className="lg:w-1/2 space-y-8">
                         {/* Professional badge */}
 
                         {/* Dark themed heading */}
                         <motion.div variants={itemVariants} className="space-y-6">
                             <h1 className="text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight">
-                                <span className="text-white">Enterprise</span>{" "}
+                                <span className="text-slate-300">Enterprise</span>{" "}
                                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-300">
                                     Cloud
                                 </span>
                                 <br />
-                                <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-emerald-300">
+                                <span className="bg-clip-text  text-slate-300">
                                     Solutions
                                 </span>{" "}
-                                <span className="text-white">for</span>
+                                <span className="text-slate-300">for</span>
                                 <br />
                                 <span className="text-slate-300">Modern Business</span>
                             </h1>
-                            <p className="text-xl text-slate-300 max-w-xl leading-relaxed">
-                                Streamline operations and accelerate growth with enterprise-grade Google Cloud implementations.
-                                Trusted by Fortune 500 companies worldwide.
-                            </p>
+                            {/*<p className="text-xl text-slate-300 max-w-xl leading-relaxed">*/}
+                            {/*    Streamline operations and accelerate growth with enterprise-grade Google Cloud implementations.*/}
+                            {/*    Trusted by Fortune 500 companies worldwide.*/}
+                            {/*</p>*/}
                         </motion.div>
 
                         {/* Dark themed buttons */}
@@ -216,8 +204,6 @@ const ProfessionalHero = () => {
                                 boxShadow: "0 25px 50px rgba(0, 0, 0, 0.3)",
                                 borderColor: "rgba(71, 85, 105, 0.8)",
                             }}
-                            variants={floatingVariants}
-                            animate="animate"
                         >
                             {/* Animated dark background gradient */}
                             <motion.div
