@@ -55,11 +55,11 @@ export default function SignupPage() {
             errors.username = 'Username must be at least 3 characters';
         }
 
-        // Email validation
+        // Email validation - MUST be @cloudpartners.biz
         if (!formData.email.trim()) {
             errors.email = 'Email is required';
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-            errors.email = 'Please enter a valid email address';
+        } else if (!/^[^\s@]+@cloudpartners\.biz$/i.test(formData.email)) {
+            errors.email = 'invalid email address';
         }
 
         // Password validation
@@ -130,7 +130,7 @@ export default function SignupPage() {
                         Create your account
                     </h2>
                     <p className="mt-2 text-sm text-gray-600">
-                        Join us today and get started
+                        Join Cloud Partners today
                     </p>
                 </div>
 
@@ -161,6 +161,9 @@ export default function SignupPage() {
                                 </div>
                             </div>
                         )}
+
+                        {/* Info Alert for Domain Restriction */}
+
 
                         {/* Username Field */}
                         <div>
@@ -242,7 +245,7 @@ export default function SignupPage() {
                                     className={`appearance-none block w-full pl-10 pr-3 py-3 border ${
                                         validationErrors.email ? 'border-red-300' : 'border-gray-300'
                                     } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out sm:text-sm`}
-                                    placeholder="you@example.com"
+                                    placeholder="Enter email address"
                                 />
                             </div>
                             {validationErrors.email && (

@@ -39,7 +39,7 @@ const Navbar = () => {
 
     if (!mounted) {
         return (
-            <nav className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900">
+            <nav className="fixed top-0 left-0 right-0 z-50 bg-nav border-nav">
                 <div className="w-full px-6 py-4">
                     <div className="grid grid-cols-3 items-center">
                         <div className="flex items-center space-x-3">
@@ -52,18 +52,18 @@ const Navbar = () => {
                                     height={40}
                                 />
                             </div>
-                            <span className="text-5xl  font-extrabold text-white">Cloud Partners</span>
+                            <span className="text-5xl font-extrabold text-heading">Cloud Partners</span>
                         </div>
-                        <div className="hidden lg:flex justify-center space-x-8 text-white">
-                            <Link href="/" className="text-white">Home</Link>
-                            <Link href="/product" className="text-white">Products</Link>
-                            <Link href="/service" className="text-white">Services</Link>
-                            <Link href="/blogs" className="text-white">Blogs</Link>
-                            <Link href="/about" className="text-white">About Us</Link>
-                            <Link href="/career" className="text-white">Careers</Link>
+                        <div className="hidden lg:flex justify-center space-x-8 text-heading">
+                            <Link href="/" className="link">Home</Link>
+                            <Link href="/product" className="link">Products</Link>
+                            <Link href="/service" className="link">Services</Link>
+                            <Link href="/blogs" className="link">Blogs</Link>
+                            <Link href="/about" className="link">About Us</Link>
+                            <Link href="/career" className="link">Careers</Link>
                         </div>
                         <div className="flex justify-end">
-                            <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-2.5 rounded-lg">
+                            <div className="btn-primary px-6 py-2.5 rounded-lg text-white">
                                 Contact Us
                             </div>
                         </div>
@@ -77,9 +77,7 @@ const Navbar = () => {
         <>
             <nav
                 className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-                    isScrolled
-                        ? "bg-black backdrop-blur-xl border-b border-gray-700/50 shadow-2xl"
-                        : "bg-transparent"
+                    isScrolled ? "bg-nav border-nav" : "bg-nav border-nav"
                 } animate-slideDown`}
             >
                 <div className="w-full px-6 py-4">
@@ -95,17 +93,10 @@ const Navbar = () => {
                                     height={40}
                                 />
                             </div>
-                            {/*<span*/}
-                            {/*    className={`text-4xl font-extrabold font-serif transition-all duration-300 ${*/}
-                            {/*        isScrolled ? "text-white" : "text-white"*/}
-                            {/*    } group-hover:text-blue-400`}*/}
-                            {/*>*/}
-                            {/*    Cloud Partners*/}
-                            {/*</span>*/}
                         </div>
 
                         {/* Navigation Links - Center */}
-                        <div className="hidden lg:flex justify-center items-center space-x-10 text-[15px] font-extrabold">
+                        <div className="hidden lg:flex justify-center items-center space-x-10 text-[18px] font-extrabold">
                             {[
                                 { href: "/", label: "Home", delay: 400 },
                                 { href: "/product", label: "Products", delay: 500 },
@@ -117,13 +108,11 @@ const Navbar = () => {
                                 <div className="relative group" key={link.href}>
                                     <Link
                                         href={link.href}
-                                        className={`relative group transition-all duration-300 hover:-translate-y-0.5 font-medium ${
-                                            isScrolled ? "text-gray-200 hover:text-blue-400" : "text-white hover:text-blue-400"
-                                        } animate-fadeInUp`}
+                                        className={`relative group transition-all duration-300 hover:-translate-y-0.5 font-medium link animate-fadeInUp`}
                                         style={{ animationDelay: `${link.delay}ms` }}
                                     >
                                         {link.label}
-                                        <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-emerald-500 group-hover:w-full transition-all duration-300" />
+                                        <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[var(--primary)] to-[#2ecc71] group-hover:w-full transition-all duration-300" />
                                     </Link>
                                 </div>
                             ))}
@@ -133,7 +122,7 @@ const Navbar = () => {
                         <div className="flex items-center justify-end space-x-4">
                             <Link
                                 href="/contact"
-                                className="hidden md:inline-block bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-3 py-2 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 border border-blue-600/20 active:scale-95"
+                                className="hidden md:inline-block btn-primary px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105"
                             >
                                 Contact Us
                             </Link>
@@ -142,13 +131,9 @@ const Navbar = () => {
                                 <div className="hidden md:flex items-center space-x-3 relative" ref={dropdownRef}>
                                     <button
                                         onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
-                                        className="flex items-center space-x-1 bg-slate-800/50 px-2 py-2.5 rounded-lg border border-gray-700/50 hover:bg-slate-700/50 transition-all duration-300 hover:border-blue-500/50"
+                                        className="flex items-center space-x-1 bg-slate-800/50 px-2 py-2.5 rounded-lg border border-gray-700/50 hover:bg-slate-700/50 transition-all duration-300 hover:border-primary/50"
                                     >
-                                        {/*<User className="w-2 h-2 text-blue-400" />*/}
                                         <span className="text-white text-sm font-medium">{user?.username}</span>
-                                        {/*<span className="text-xs text-gray-400 bg-blue-500/20 px-2 py-0.5 rounded">*/}
-                                        {/*    {user?.role[0]}*/}
-                                        {/*</span>*/}
                                         <ChevronDown
                                             className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${
                                                 isUserDropdownOpen ? "rotate-180" : ""
@@ -166,9 +151,9 @@ const Navbar = () => {
                                                 <Link
                                                     href="/dashboard/profile"
                                                     onClick={() => setIsUserDropdownOpen(false)}
-                                                    className="flex items-center space-x-3 px-4 py-3 text-gray-200 hover:bg-slate-700/50 hover:text-blue-400 transition-all duration-200 group"
+                                                    className="flex items-center space-x-3 px-4 py-3 text-gray-200 hover:bg-slate-700/50 hover:text-primary transition-all duration-200 group"
                                                 >
-                                                    <LayoutDashboard className="w-5 h-5 text-blue-400 group-hover:scale-110 transition-transform" />
+                                                    <LayoutDashboard className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
                                                     <span className="font-medium">Dashboard</span>
                                                 </Link>
                                                 <button
@@ -183,32 +168,32 @@ const Navbar = () => {
                                     )}
                                 </div>
                             ) : (
-                                <div className="hidden md:flex items-center space-x-4">
+                                <div className="hidden md:flex items-center space-x-4 ">
                                     <Link
                                         href="/login"
-                                        className="flex items-center space-x-2 border-white text-white px-5 py-2.5 rounded-lg font-semibold transition-all duration-300 hover:scale-105 border active:scale-95"
+                                        className="flex items-center bg-red-700 space-x-2  px-7 py-3 rounded-lg  font-semibold transition-all duration-300 hover:scale-105"
                                     >
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="h-4 w-4"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                                            />
-                                        </svg>
-                                        <span>Login</span>
+                                        {/*<svg*/}
+                                        {/*    xmlns="http://www.w3.org/2000/svg"*/}
+                                        {/*    className="h-4 w-4 bg-white"*/}
+                                        {/*    fill="none"*/}
+                                        {/*    viewBox="0 0 24 24"*/}
+                                        {/*    stroke="currentColor"*/}
+                                        {/*>*/}
+                                        {/*    <path*/}
+                                        {/*        strokeLinecap="round"*/}
+                                        {/*        strokeLinejoin="round"*/}
+                                        {/*        strokeWidth={2}*/}
+                                        {/*        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"*/}
+                                        {/*    />*/}
+                                        {/*</svg>*/}
+                                        <span className="text-white">Login</span>
                                     </Link>
                                 </div>
                             )}
 
                             <button
-                                className="lg:hidden p-2 text-white hover:text-blue-400 transition-colors duration-300"
+                                className="lg:hidden p-2 text-white hover:text-primary transition-colors duration-300"
                                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                             >
                                 {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -223,7 +208,7 @@ const Navbar = () => {
                         isMobileMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
                     }`}
                 >
-                    <div className="bg-slate-800/95 backdrop-blur-xl border-t border-gray-700/50">
+                    <div className="bg-nav ">
                         <div className="w-full px-6 py-4 space-y-4">
                             {[
                                 { href: "/", label: "Home" },
@@ -236,7 +221,7 @@ const Navbar = () => {
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className="block text-white hover:text-blue-400 font-medium py-2 transition-colors duration-300"
+                                    className="block text-body hover:text-primary font-medium py-2 transition-colors duration-300"
                                     onClick={() => setIsMobileMenuOpen(false)}
                                 >
                                     {link.label}
@@ -245,7 +230,7 @@ const Navbar = () => {
 
                             <Link
                                 href="/contact"
-                                className="block w-full text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:from-blue-700 hover:to-blue-800"
+                                className="block w-full text-center btn-primary text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300"
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 Contact Us
@@ -255,7 +240,7 @@ const Navbar = () => {
                                 {isAuthenticated ? (
                                     <div className="space-y-3">
                                         <div className="flex items-center space-x-2 bg-slate-700/50 px-4 py-3 rounded-lg">
-                                            <User className="w-5 h-5 text-blue-400" />
+                                            <User className="w-5 h-5 text-primary" />
                                             <div className="flex-1">
                                                 <p className="text-white text-sm font-medium">{user?.username}</p>
                                                 <p className="text-xs text-gray-400">{user?.role[0]}</p>
@@ -264,7 +249,7 @@ const Navbar = () => {
                                         <Link
                                             href="/dashboard/profile"
                                             onClick={() => setIsMobileMenuOpen(false)}
-                                            className="flex items-center justify-center space-x-2 w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300"
+                                            className="flex items-center justify-center space-x-2 w-full btn-primary text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300"
                                         >
                                             <LayoutDashboard className="w-5 h-5" />
                                             <span>Dashboard</span>
@@ -281,7 +266,7 @@ const Navbar = () => {
                                     <div className="space-y-3">
                                         <Link
                                             href="/login"
-                                            className="flex items-center justify-center space-x-2 w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300"
+                                            className="flex items-center justify-center space-x-2 w-full btn-secondary text-heading px-6 py-3 rounded-xl font-semibold transition-all duration-300"
                                             onClick={() => setIsMobileMenuOpen(false)}
                                         >
                                             <svg
@@ -308,8 +293,64 @@ const Navbar = () => {
                 </div>
             </nav>
 
-            {/* Animations */}
+            {/* Animations & Theme variables */}
             <style jsx global>{`
+                :root {
+                    --nav-bg: #FFFFFF;
+                    --nav-border: #E8EAED;
+                    --primary: #1A73E8;
+                    --secondary-bg: #FFFFFF;
+                    --secondary-border: #DADCE0;
+                    --heading: #202124;
+                    --body: #5F6368;
+                    --link: #1967D2;
+                    --success: #1E8E3E;
+                }
+
+                .bg-nav {
+                    background-color: var(--nav-bg);
+                }
+
+                .border-nav {
+                    border-bottom: 1px solid var(--nav-border);
+                }
+
+                .btn-primary {
+                    background-color: var(--primary);
+                    color: #ffffff;
+                }
+
+                .btn-secondary {
+                    background-color: var(--secondary-bg);
+                    border: 1px solid var(--secondary-border);
+                }
+
+                .text-heading {
+                    color: var(--heading);
+                }
+
+                .text-body {
+                    color: var(--body);
+                }
+
+                .link {
+                    color: var(--heading);
+                    transition: color 0.2s ease;
+                }
+
+                .link:hover {
+                    color: var(--link);
+                }
+
+                .animate-slideDown {
+                    animation: slideDown 0.4s ease-out;
+                }
+
+                .animate-fadeInUp {
+                    opacity: 0;
+                    animation: fadeInUp 0.5s ease-out forwards;
+                }
+
                 @keyframes slideDown {
                     from {
                         transform: translateY(-20%);
@@ -330,15 +371,6 @@ const Navbar = () => {
                         opacity: 1;
                         transform: translateY(0);
                     }
-                }
-
-                .animate-slideDown {
-                    animation: slideDown 0.4s ease-out;
-                }
-
-                .animate-fadeInUp {
-                    opacity: 0;
-                    animation: fadeInUp 0.5s ease-out forwards;
                 }
             `}</style>
         </>

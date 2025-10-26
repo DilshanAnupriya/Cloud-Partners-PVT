@@ -10,6 +10,8 @@ interface User {
     email: string;
     role: string[];
     isActive: boolean;
+    createdAt?: string;  // Add this
+    updatedAt?: string;
 }
 
 interface AuthContextType {
@@ -30,7 +32,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // API Base URL - Update this to your backend URL
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api/v1';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1';
 
 // Provider Props
 interface AuthProviderProps {
@@ -201,7 +203,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setToken(null);
         localStorage.removeItem('authToken');
         localStorage.removeItem('user');
-        router.push('/login');
+        router.push('/');
     };
 
     // Forgot Password
@@ -269,8 +271,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 throw new Error('No authentication token');
             }
 
+            if (!user) {
+                console.error('❌ No user data');
+                throw new Error('User not authenticated');
+            }
+
             console.log('📝 Updating user...');
+            console.log('👤 Current user ID:', user._id);
             console.log('🔑 Using token:', token.substring(0, 20) + '...');
+            console.log('📦 Update data:', userData);
 
             const response = await fetch(`${API_BASE_URL}/user/update-user`, {
                 method: 'PUT',
@@ -281,19 +290,26 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 body: JSON.stringify(userData),
             });
 
-            const data = await response.json();
             console.log('📡 Update user response status:', response.status);
 
+            const data = await response.json();
+            console.log('📦 Response data:', data);
+
             if (!response.ok) {
-                console.error('❌ Failed to update user:', data.error);
-                throw new Error(data.error || 'Failed to update user');
+                console.error('❌ Failed to update user:', data.error || data.message);
+                throw new Error(data.error || data.message || 'Failed to update user');
             }
 
             console.log('✅ User updated successfully');
+            console.log('👤 Updated user from response:', data.updateUser);
 
-            // Update local user state
-            setUser(data.updateUser);
-            localStorage.setItem('user', JSON.stringify(data.updateUser));
+            // IMPORTANT: Refetch the complete user profile to ensure we have all fields
+            console.log('🔄 Refetching complete user profile...');
+            await fetchUserProfile(token);
+
+            console.log('✅ Profile refetched successfully');
+
+            return data;
         } catch (error) {
             console.error('❌ Update user error:', error);
             throw error;

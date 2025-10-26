@@ -7,8 +7,8 @@ const verifyToken = require('../middleware/auth');
 router.post('/login',UserController.logIn);//
 router.post('/signup', UserController.signUp);//
 router.get('/all-users',verifyToken(['Admin']), UserController.getAllUsers);//
-router.get('/user-by',verifyToken(['User','Admin']),UserController.getByUserId);//
-router.put('/update-user/:id',verifyToken(['User','Admin']),UserController.updateUser);//
+router.get('/user-by',verifyToken(['Admin']),UserController.getByUserId);//
+router.put('/update-user',verifyToken(['Admin']),UserController.updateUser);//
 router.delete('/delete-user/:id',verifyToken(['Admin']),UserController.deleteUser);//
 router.post('/forgot-password', UserController.forgotPassword);
 router.put('/reset-password/:token', UserController.resetPassword);

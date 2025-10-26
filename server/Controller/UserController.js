@@ -101,24 +101,39 @@ const getByUserID = async (req, res) => {
     }
 }
 
-
 const updateUser = async (req, res) => {
-    try{
-        const updateUser = await User.findByIdAndUpdate(
-            req.params.id,
+    try {
+        // Get user ID from authenticated user (from JWT token via middleware)
+        const userId = req.user._id;
+
+        console.log('Updating user:', userId);
+        console.log('Update data:', req.body);
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
             req.body,
             {
-                new:true
+                new: true,
+                runValidators: true
             }
-        );
-        if(!updateUser){
-            return res.status(404).json({message:"Not Found"});
+        ).select('-password'); // Exclude password but include everything else
+
+        if (!updatedUser) {
+            console.log('User not found with ID:', userId);
+            return res.status(404).json({ message: "User not found" });
         }
-        res.status(200).json({message:`${updateUser.username} updated successfully`,updateUser:updateUser});
-    }catch(e){
-        res.status(500).json({error: e.message});
+
+        console.log('User updated successfully:', updatedUser);
+
+        res.status(200).json({
+            message: `${updatedUser.username} updated successfully`,
+            updateUser: updatedUser
+        });
+    } catch (e) {
+        console.error('Update user error:', e);
+        res.status(500).json({ error: e.message });
     }
-}
+};
 
 const deleteUser = async (req, res) => {
     try{

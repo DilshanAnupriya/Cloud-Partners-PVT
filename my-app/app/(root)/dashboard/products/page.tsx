@@ -98,7 +98,7 @@ const ProductManagementPage = () => {
     const fetchProducts = async () => {
         try {
             setProductsLoading(true);
-            const response = await fetch('http://localhost:3000/api/products/products', {
+            const response = await fetch('http://localhost:8080/api/products/products', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -198,8 +198,8 @@ const ProductManagementPage = () => {
             };
 
             const url = isEditing
-                ? `http://localhost:3000/api/products/products/${currentProduct}`
-                : 'http://localhost:3000/api/products/products';
+                ? `http://localhost:8080/api/products/products/${currentProduct}`
+                : 'http://localhost:8080/api/products/products';
             const method = isEditing ? 'PUT' : 'POST';
 
             const response = await fetch(url, {
@@ -239,7 +239,7 @@ const ProductManagementPage = () => {
         }
 
         try {
-            const response = await fetch(`http://localhost:3000/api/products/products/${productId}`, {
+            const response = await fetch(`http://localhost:8080/api/products/products/${productId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,

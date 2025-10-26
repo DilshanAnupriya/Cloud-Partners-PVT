@@ -15,7 +15,7 @@ interface Blog {
         _id: string;
         username: string;
         email: string;
-    };
+    } | null;
     category: string;
     tags: string[];
     featuredImage: string | null;
@@ -36,7 +36,7 @@ interface BlogStats {
     blogsByCategory: { _id: string; count: number }[];
 }
 
-const API_BASE_URL = 'http://localhost:3000/api/blogs';
+const API_BASE_URL = 'http://localhost:8080/api/blogs';
 
 const BlogManagement = () => {
     const { token, isAuthenticated, isLoading: authLoading } = useAuth();
@@ -108,7 +108,7 @@ const BlogManagement = () => {
                     'Content-Type': 'application/json'
                 }
             });
-
+            console.log('📡 Blogs response status:', response);
             console.log('📡 Blogs response status:', response.status);
 
             if (!response.ok) {
@@ -500,7 +500,7 @@ const BlogManagement = () => {
                           </span>
                                             </td>
                                             <td className="px-6 py-4 text-sm text-gray-900">{blog.views}</td>
-                                            <td className="px-6 py-4 text-sm text-gray-900">{blog.author.username}</td>
+                                            <td className="px-6 py-4 text-sm text-gray-900">{blog.author?.username}</td>
                                             <td className="px-6 py-4 text-sm text-gray-500">
                                                 {new Date(blog.createdAt).toLocaleDateString()}
                                             </td>

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, Plus, Edit, Trash2, X, Eye, EyeOff, RefreshCw, ChevronLeft, ChevronRight } from 'lucide-react';
 import Sidebar from "@/components/ui/Sidebar";
 import DashboardNavbar from "@/components/ui/DashboardNavbar";
+import {useAuth} from "@/app/Context/AuthContext";
 
 // Types
 interface User {
@@ -24,6 +25,7 @@ interface UserFormData {
 }
 
 const UserManagementPage = () => {
+    const { token, isAuthenticated, isLoading: authLoading } = useAuth();
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(false);
     const [searchText, setSearchText] = useState('');
@@ -47,7 +49,7 @@ const UserManagementPage = () => {
         isActive: true
     });
 
-    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api/v1';
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1';
 
     // Fetch users
     const fetchUsers = async () => {
@@ -219,7 +221,18 @@ const UserManagementPage = () => {
 
     const totalPages = Math.ceil(totalCount / size);
 
-    return (
+
+    if (!isAuthenticated) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="text-center">
+                    <p className="text-xl text-gray-600 mb-4">Please log in to access the user management</p>
+                </div>
+            </div>
+        );
+    }
+
+        return (
         <div className="min-h-screen bg-gray-50 p-6 pt-15">
             <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
             <DashboardNavbar

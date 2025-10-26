@@ -22,6 +22,12 @@ export default function LoginPage() {
         }
     }, [isAuthenticated, router]);
 
+    // Validate cloudpartners.biz email
+    const validateEmail = (email: string): boolean => {
+        const emailRegex = /^[^\s@]+@cloudpartners\.biz$/i;
+        return emailRegex.test(email);
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
@@ -32,6 +38,15 @@ export default function LoginPage() {
             setError('Please fill in all fields');
             setLoading(false);
             return;
+        }
+
+        // Check if username is an email and validate domain
+        if (username.includes('@')) {
+            if (!validateEmail(username)) {
+                setError('Email address invalid');
+                setLoading(false);
+                return;
+            }
         }
 
         try {
@@ -101,7 +116,7 @@ export default function LoginPage() {
                             </div>
                         )}
 
-                        {/* Username Field */}
+                        {/* Username/Email Field */}
                         <div>
                             <label
                                 htmlFor="username"
@@ -138,6 +153,9 @@ export default function LoginPage() {
                                     placeholder="Enter your username"
                                 />
                             </div>
+                            <p className="mt-1 text-xs text-gray-500">
+
+                            </p>
                         </div>
 
                         {/* Password Field */}

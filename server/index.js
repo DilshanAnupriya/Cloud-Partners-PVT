@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cors({
-    origin: 'http://localhost:3001', // frontend URL
+    origin: 'http://localhost:3000', // frontend URL
     credentials: true, // if you need to send cookies or auth headers
 }));
 

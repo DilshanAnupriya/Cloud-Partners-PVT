@@ -11,9 +11,31 @@ import Footer from "@/components/ui/Footer";
 function LayoutContent({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const isDashboard = pathname?.startsWith('/dashboard');
+    const isLogin = pathname?.startsWith('/login');
+    const isSignup = pathname?.startsWith('/signup');
+    const isResetPassword = pathname?.startsWith('/reset-password');
+    const isForgotPassword = pathname?.startsWith('/forgot-password');
 
     if (isDashboard) {
         // Dashboard pages - no navbar/footer
+        return <>{children}</>;
+    }
+    if (isForgotPassword) {
+        // Dashboard pages - no navbar/footer
+        return <>{children}</>;
+    }
+
+    if (isLogin) {
+
+        return <>{children}</>;
+    }
+
+    if (isSignup) {
+
+        return <>{children}</>;
+    }
+    if (isResetPassword) {
+
         return <>{children}</>;
     }
 

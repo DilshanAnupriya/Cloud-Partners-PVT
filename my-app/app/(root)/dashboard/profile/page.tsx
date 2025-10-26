@@ -9,6 +9,7 @@ import DashboardNavbar from '@/components/ui/DashboardNavbar';
 import Alert from '@/components/ui/Alert';
 
 const UserProfilePage = () => {
+    const { token, isAuthenticated, isLoading: authLoading } = useAuth();
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -39,11 +40,14 @@ const UserProfilePage = () => {
         setLoading(true);
         setAlert(null);
 
+
         try {
             await updateUser(formData);
             setAlert({ type: 'success', message: 'Profile updated successfully!' });
             setIsEditing(false);
-        } catch (error: any) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+        } catch (error: never) {
             setAlert({ type: 'error', message: error.message || 'Failed to update profile' });
         } finally {
             setLoading(false);
@@ -69,7 +73,15 @@ const UserProfilePage = () => {
             </div>
         );
     }
-
+    if (!isAuthenticated) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="text-center">
+                    <p className="text-xl text-gray-600 mb-4">Please log in to access the profile management</p>
+                </div>
+            </div>
+        );
+    }
     return (
         <div className="min-h-screen bg-gray-50 pt-15">
             <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />

@@ -10,11 +10,11 @@ function HeroSection() {
 
     return (
         <div className="bg-black min-h-screen relative overflow-hidden" ref={containerRef}>
-            {/* Spotlight Effect */}
+            {/* Enhanced Spotlight Effect - Much Brighter */}
             <Spotlight
-                gradientFirst="radial-gradient(68.54% 68.72% at 55.02% 31.46%, hsla(220, 100%, 85%, .12) 0, hsla(220, 100%, 65%, .04) 50%, hsla(220, 100%, 45%, 0) 80%)"
-                gradientSecond="radial-gradient(50% 50% at 50% 50%, hsla(220, 100%, 85%, .08) 0, hsla(220, 100%, 65%, .03) 80%, transparent 100%)"
-                gradientThird="radial-gradient(50% 50% at 50% 50%, hsla(220, 100%, 85%, .06) 0, hsla(220, 100%, 45%, .02) 80%, transparent 100%)"
+                gradientFirst="radial-gradient(28.54% 68.72% at 55.02% 31.46%, hsla(220, 100%, 90%, .20) 0, hsla(220, 100%, 75%, .15) 50%, hsla(220, 100%, 60%, .0) 80%)"
+                gradientSecond="radial-gradient(50% 50% at 50% 50%, hsla(220, 100%, 95%, .01) 0, hsla(220, 100%, 75%, .12) 80%, transparent 100%)"
+                gradientThird="radial-gradient(50% 50% at 50% 50%, hsla(220, 100%, 90%, .2) 0, hsla(220, 100%, 60%, .08) 80%, transparent 100%)"
                 translateY={-300}
                 width={600}
                 height={1400}
@@ -23,45 +23,42 @@ function HeroSection() {
                 xOffset={120}
             />
 
-            {/* Background grid effect */}
-            <div className="absolute inset-0 opacity-20" style={{
+
+            {/* Background grid effect - More visible */}
+            <div className="absolute inset-0 opacity-30" style={{
                 backgroundImage: `
-                    linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-                    linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px)
+                    linear-gradient(to right, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 1px, transparent 1px)
                 `,
                 backgroundSize: '40px 40px'
             }}></div>
 
-            {/* Additional atmospheric glow */}
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-gradient-radial from-blue-500/20 via-purple-500/10 to-transparent rounded-full blur-3xl"></div>
+            {/* Enhanced atmospheric glow */}
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-[800px] h-[800px] bg-gradient-radial from-blue-400/40 via-purple-400/20 to-transparent rounded-full blur-3xl"></div>
 
             <ContainerScroll
                 titleComponent={
                     <div className="text-white mt-30 relative z-20 mb-20">
-                        {/* Enhanced title with subtle glow effect */}
+                        {/* Enhanced title with brighter glow effect */}
                         <div className="relative">
-                            <h1 className="text-4xl md:text-6xl font-bold mb-4 relative z-10">
-                                <span className="bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
-                                    Our Amazing Product
+                            <h1 className="text-4xl md:text-8xl font-bold mb-4 relative z-10">
+                                <span className="bg-gradient-to-r from-white via-blue-50 to-purple-50 bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(96,165,250,0.5)]">
+                                    Our Amazing Products
                                 </span>
                             </h1>
-                            {/* Subtle text glow */}
-                            <div className="absolute inset-0 text-4xl md:text-6xl font-bold mb-4 text-white/10 blur-sm">
-                                Our Amazing Product
-                            </div>
                         </div>
 
-                        <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto relative z-10">
+                        <p className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto relative z-10 drop-shadow-lg">
                             Experience the future of innovation with our cutting-edge solution
                             that transforms the way you work and live.
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 mt-10 justify-center relative z-10">
-                            <button className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-700 hover:to-purple-700 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/25">
+                            <button className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-purple-600 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-[0_0_30px_rgba(59,130,246,0.5)] hover:shadow-[0_0_40px_rgba(147,51,234,0.6)]">
                                 Get Started Today
                             </button>
                             <Link href="/contact">
-                                <button className="border border-gray-600 hover:border-blue-500 px-8 py-4 rounded-lg font-semibold transition-all duration-300 hover:bg-blue-500/10 backdrop-blur-sm">
+                                <button className="border-2 border-white hover:border-blue-400 px-8 py-4 rounded-lg font-semibold transition-all duration-300 hover:bg-blue-500/20 backdrop-blur-sm shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(59,130,246,0.4)]">
                                     Schedule Consultation
                                 </button>
                             </Link>
@@ -70,22 +67,24 @@ function HeroSection() {
                 }
             >
                 {/* Product content with enhanced lighting */}
-                <div className="h-150 w-full flex items-center justify-center p-0 relative z-20">
+                <div className="h-150 w-full flex items-center justify-center p-0 relative z-20 ">
                     <div className="relative w-full h-full">
-                        {/* Product glow effect */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-blue-500/20 via-transparent to-purple-500/20 rounded-2xl blur-xl"></div>
+                        {/* Brighter product glow effect with yellow */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-yellow-500/40 via-transparent to-amber-500/40 rounded-2xl blur-2xl"></div>
+                        <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/30 via-orange-400/20 to-amber-400/30 rounded-2xl blur-xl"></div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-2xl blur-xl"></div>
 
                         <Image
                             alt="Product cover"
                             src="/Pimages/productCover-2.png"
                             fill
-                            className="object-cover rounded-2xl relative z-10 shadow-2xl"
+                            className="object-cover rounded-2xl relative z-10 shadow-[0_0_60px_rgba(251,191,36,0.6),0_0_100px_rgba(245,158,11,0.3)]"
                             priority
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
                         />
 
-                        {/* Rim lighting effect */}
-                        <div className="absolute inset-0 rounded-2xl ring-1 ring-white/20 ring-inset"></div>
+
+
                     </div>
                 </div>
             </ContainerScroll>
