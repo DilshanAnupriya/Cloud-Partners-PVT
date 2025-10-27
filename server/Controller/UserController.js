@@ -276,6 +276,42 @@ const resetPassword = async (req, res) => {
         res.status(500).json({ error: e.message });
     }
 };
+const updateUserById = async (req, res) => {
+    try {
+        const userId = req.params.id; // Get user ID from URL parameter
+        const updateData = req.body;
+
+        console.log('Updating user by ID:', userId);
+        console.log('Update data:', updateData);
+
+        // Hash password if it's being updated
+        if (updateData.password) {
+            const salt = await bcrypt.genSalt(10);
+            updateData.password = await bcrypt.hash(updateData.password, salt);
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            updateData,
+            {
+                new: true,
+                runValidators: true
+            }
+        ).select('-password');
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.status(200).json({
+            message: `${updatedUser.username} updated successfully`,
+            updateUser: updatedUser
+        });
+    } catch (e) {
+        console.error('Update user by ID error:', e);
+        res.status(500).json({ error: e.message });
+    }
+};
 
 module.exports = {
     signUp,
@@ -286,4 +322,5 @@ module.exports = {
     deleteUser,
     forgotPassword,
     resetPassword,
+    updateUserById
 }

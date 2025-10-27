@@ -131,9 +131,9 @@ const Navbar = () => {
                                 <div className="hidden md:flex items-center space-x-3 relative" ref={dropdownRef}>
                                     <button
                                         onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
-                                        className="flex items-center space-x-1 bg-slate-800/50 px-2 py-2.5 rounded-lg border border-gray-700/50 hover:bg-slate-700/50 transition-all duration-300 hover:border-primary/50"
+                                        className="flex items-center space-x-1 bg-green-700 px-3 py-2.5 rounded-lg transition-all duration-300 hover:border-primary/50"
                                     >
-                                        <span className="text-white text-sm font-medium">{user?.username}</span>
+                                        <span className="text-white text-m font-medium">{user?.username}</span>
                                         <ChevronDown
                                             className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${
                                                 isUserDropdownOpen ? "rotate-180" : ""
@@ -142,23 +142,23 @@ const Navbar = () => {
                                     </button>
 
                                     {isUserDropdownOpen && (
-                                        <div className="absolute top-full right-0 mt-2 w-56 bg-slate-800 border border-gray-700/50 rounded-xl shadow-2xl overflow-hidden z-50 animate-slideDown">
-                                            <div className="px-4 py-3 bg-slate-700/50 border-b border-gray-700/50">
-                                                <p className="text-white text-sm font-semibold">{user?.username}</p>
-                                                <p className="text-gray-400 text-xs">{user?.email}</p>
+                                        <div className="absolute top-full right-0 mt-2 w-56 bg-white border border-gray-700/50 rounded-xl shadow-2xl overflow-hidden z-50 animate-slideDown">
+                                            <div className="px-4 py-3 bg-white border-b border-gray-700/50">
+                                                <p className="text-black text-sm font-semibold">{user?.username}</p>
+                                                <p className="text-black text-xs">{user?.email}</p>
                                             </div>
                                             <div className="py-2">
                                                 <Link
                                                     href="/dashboard/profile"
                                                     onClick={() => setIsUserDropdownOpen(false)}
-                                                    className="flex items-center space-x-3 px-4 py-3 text-gray-200 hover:bg-slate-700/50 hover:text-primary transition-all duration-200 group"
+                                                    className="flex items-center space-x-3 px-4 py-3 text-black hover:bg-gray-100 hover:text-primary transition-all duration-200 group"
                                                 >
                                                     <LayoutDashboard className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
                                                     <span className="font-medium">Dashboard</span>
                                                 </Link>
                                                 <button
                                                     onClick={handleLogout}
-                                                    className="flex items-center space-x-3 px-4 py-3 text-gray-200 hover:bg-red-600/10 hover:text-red-400 transition-all duration-200 w-full group"
+                                                    className="flex items-center space-x-3 px-4 py-3 text-black hover:bg-red-600/10 hover:text-red-400 transition-all duration-200 w-full group"
                                                 >
                                                     <LogOut className="w-5 h-5 text-red-400 group-hover:scale-110 transition-transform" />
                                                     <span className="font-medium">Logout</span>

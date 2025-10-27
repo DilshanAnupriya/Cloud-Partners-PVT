@@ -263,7 +263,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
     };
 
-    // Update User
     const updateUser = async (userData: Partial<User>) => {
         try {
             if (!token) {
@@ -281,13 +280,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             console.log('🔑 Using token:', token.substring(0, 20) + '...');
             console.log('📦 Update data:', userData);
 
+            // DON'T include _id - backend gets it from JWT token
             const response = await fetch(`${API_BASE_URL}/user/update-user`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(userData),
+                body: JSON.stringify(userData), // Just send the update data
             });
 
             console.log('📡 Update user response status:', response.status);
@@ -301,9 +301,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             }
 
             console.log('✅ User updated successfully');
-            console.log('👤 Updated user from response:', data.updateUser);
 
-            // IMPORTANT: Refetch the complete user profile to ensure we have all fields
+            // Refetch the complete user profile
             console.log('🔄 Refetching complete user profile...');
             await fetchUserProfile(token);
 
@@ -315,6 +314,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             throw error;
         }
     };
+
 
     const value: AuthContextType = {
         user,

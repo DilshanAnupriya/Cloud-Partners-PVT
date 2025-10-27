@@ -102,7 +102,6 @@ const UserManagementPage = () => {
         setError('');
         setSuccess('');
 
-        // Validate role selection
         if (formData.role.length === 0) {
             setError('Please select at least one role');
             return;
@@ -110,15 +109,23 @@ const UserManagementPage = () => {
 
         try {
             const token = localStorage.getItem('authToken');
+
+            // Different endpoints for create vs update
             const url = isEditMode
-                ? `${API_BASE_URL}/user/update-user`
+                ? `${API_BASE_URL}/user/update-user-by/${selectedUser?._id}` // New endpoint needed
                 : `${API_BASE_URL}/user/signup`;
 
             const method = isEditMode ? 'PUT' : 'POST';
 
-            // Don't send password if editing and password is empty
-            const bodyData = isEditMode && !formData.password
-                ? { username: formData.username, email: formData.email, role: formData.role, isActive: formData.isActive }
+            // Don't include _id in body - it's in the URL
+            const bodyData = isEditMode
+                ? {
+                    username: formData.username,
+                    email: formData.email,
+                    role: formData.role,
+                    isActive: formData.isActive,
+                    ...(formData.password && { password: formData.password })
+                }
                 : formData;
 
             const response = await fetch(url, {
@@ -146,7 +153,6 @@ const UserManagementPage = () => {
             setError(err.message || 'Operation failed. Please try again.');
         }
     };
-
     // Handle delete
     const handleDelete = async (userId: string) => {
         if (!confirm('Are you sure you want to delete this user?')) {
@@ -233,13 +239,13 @@ const UserManagementPage = () => {
     }
 
         return (
-        <div className="min-h-screen bg-gray-50 p-6 pt-25">
+        <div className="min-h-screen bg-gray-50 p-6 pt-25 2xl:ml-10 lg:ml-[-90px]">
             <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
             <DashboardNavbar
                 onMenuClick={() => setSidebarOpen(true)}
                 title="Profile Settings"
             />
-            <div className="max-w-7xl mx-auto p-4 lg:p-8 ml-90">
+            <div className="lg:ml-64 pt-24 p-4 lg:p-8">
                 {/* Header */}
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold text-gray-800 mb-2">User Management</h1>

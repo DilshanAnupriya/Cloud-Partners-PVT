@@ -17,6 +17,8 @@ import {
     FileCode,
     StickyNote
 } from 'lucide-react';
+import Sidebar from "@/components/ui/Sidebar";
+import DashboardNavbar from "@/components/ui/DashboardNavbar";
 
 // Types
 interface Snippet {
@@ -54,7 +56,7 @@ export default function SnippetDetailPage() {
     const params = useParams();
     const router = useRouter();
     const snippetId = params.snippetId as string;
-
+    const [sidebarOpen, setSidebarOpen] = useState(false);
     const [snippet, setSnippet] = useState<Snippet | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -191,10 +193,15 @@ export default function SnippetDetailPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 pt-22 lg:ml-50">
+            <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+            <DashboardNavbar
+                onMenuClick={() => setSidebarOpen(true)}
+                title="Profile Settings"
+            />
             {/* Header */}
             <header className="bg-white shadow-sm border-b border-gray-200">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                     <div className="flex items-center justify-between mb-4">
                         <button
                             onClick={() => router.push(`/dashboard/code-manager/${snippet.project._id}`)}
@@ -294,7 +301,7 @@ export default function SnippetDetailPage() {
                 </div>
             </header>
 
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-8">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Code Section */}
                     <div className="lg:col-span-2">

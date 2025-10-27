@@ -415,13 +415,13 @@ const BlogManagement = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 p-6 pt-30">
+        <div className="min-h-screen bg-gray-50 p-6 pt-30  2xl:ml-2 lg:ml-[-140px]">
             <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
             <DashboardNavbar
                 onMenuClick={() => setSidebarOpen(true)}
                 title="Profile Settings"
             />
-            <div className="max-w-7xl mx-auto 2xl:ml-100">
+            <div className="lg:ml-64 pt-24 p-4 lg:p-8">
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold text-gray-900 mb-2">Blog Management</h1>
                     <p className="text-gray-600">

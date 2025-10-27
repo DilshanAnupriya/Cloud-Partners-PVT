@@ -12,6 +12,6 @@ router.put('/update-user',verifyToken(['Admin']),UserController.updateUser);//
 router.delete('/delete-user/:id',verifyToken(['Admin']),UserController.deleteUser);//
 router.post('/forgot-password', UserController.forgotPassword);
 router.put('/reset-password/:token', UserController.resetPassword);
-
+router.put('/update-user-by/:id',verifyToken(['Admin']) , UserController.updateUserById);
 
 module.exports = router;

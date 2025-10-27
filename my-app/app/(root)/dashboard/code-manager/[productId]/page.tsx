@@ -17,6 +17,8 @@ import {
     Lock,
     TrendingUp
 } from 'lucide-react';
+import Sidebar from "@/components/ui/Sidebar";
+import DashboardNavbar from "@/components/ui/DashboardNavbar";
 
 // Types
 interface Project {
@@ -61,7 +63,7 @@ export default function ProjectDetailPage() {
     const params = useParams();
     const router = useRouter();
     const projectId = params.productId as string;
-
+    const [sidebarOpen, setSidebarOpen] = useState(false);
     const [project, setProject] = useState<Project | null>(null);
     const [snippets, setSnippets] = useState<Snippet[]>([]);
     const [loading, setLoading] = useState(true);
@@ -185,9 +187,14 @@ export default function ProjectDetailPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 pt-20 pl-10 lg:pl-65 ">
+            <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+            <DashboardNavbar
+                onMenuClick={() => setSidebarOpen(true)}
+                title="Profile Settings"
+            />
             {/* Header */}
-            <header className="bg-white shadow-sm border-b border-gray-200">
+            <header className="bg-white shadow-sm border-b border-gray-200 ">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                     <button
                         onClick={() => router.push('/dashboard/code-manager')}
@@ -243,21 +250,21 @@ export default function ProjectDetailPage() {
 
                     {/* Stats */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-                        <div className="bg-gray-50 rounded-lg p-4">
+                        <div className="bg-gray-50 shadow-2xs border-1 border-gray-700 rounded-lg p-4">
                             <div className="flex items-center gap-2 text-gray-600 mb-1">
                                 <Code className="w-4 h-4" />
                                 <span className="text-sm font-medium">Total Snippets</span>
                             </div>
                             <p className="text-2xl font-bold text-gray-900">{snippets.length}</p>
                         </div>
-                        <div className="bg-gray-50 rounded-lg p-4">
+                        <div className="bg-gray-50 shadow-2xs border-1 border-gray-700  rounded-lg p-4">
                             <div className="flex items-center gap-2 text-gray-600 mb-1">
                                 <TrendingUp className="w-4 h-4" />
                                 <span className="text-sm font-medium">Languages</span>
                             </div>
                             <p className="text-2xl font-bold text-gray-900">{languages.length}</p>
                         </div>
-                        <div className="bg-gray-50 rounded-lg p-4">
+                        <div className="bg-gray-50 shadow-2xs border-1 border-gray-700  rounded-lg p-4">
                             <div className="flex items-center gap-2 text-gray-600 mb-1">
                                 <Calendar className="w-4 h-4" />
                                 <span className="text-sm font-medium">Last Updated</span>

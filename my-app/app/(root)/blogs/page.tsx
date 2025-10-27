@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { Heart, MessageCircle, Eye, Search, Filter, ChevronLeft, ChevronRight, ChevronDown, X, TrendingUp, Clock, Sparkles } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 // Types
 interface Author {
@@ -65,6 +66,7 @@ const AVAILABLE_TAGS = [
 ];
 
 export default function BlogPage() {
+    const router = useRouter();
     const [blogs, setBlogs] = useState<Blog[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchText, setSearchText] = useState('');
@@ -107,9 +109,8 @@ export default function BlogPage() {
         fetchBlogs();
     }, [currentPage, searchText, category, selectedTags]);
 
-
-    const viewBlog = (slug: string) => {
-        console.log('Navigate to blog:', slug);
+    const viewBlog = (id: string) => {
+        router.push(`/blogs/${id}`);
     };
 
     const formatDate = (date: string) => {
@@ -146,11 +147,11 @@ export default function BlogPage() {
     return (
         <div className="min-h-screen bg-white">
             {/* Hero Section with Search */}
-            <div className="relative bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900  pt-20">
-                <div className="absolute inset-0 "></div>
+            <div className="relative bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 pt-20">
+                <div className="absolute inset-0"></div>
                 <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDE0YzAgMS4xLS45IDItMiAycy0yLS45LTItMiAuOS0yIDItMiAyIC45IDIgMnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-30"></div>
 
-                <div className="relative max-w-7xl  mx-auto px-4 sm:px-6 lg:px-8 py-20">
+                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
                     <div className="text-center mb-12">
                         <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full text-white/90 text-sm font-medium mb-6">
                             <Sparkles className="w-4 h-4" />
@@ -328,14 +329,14 @@ export default function BlogPage() {
             </div>
 
             {/* Results Section */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 ">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 {/* Stats Bar */}
                 <div className="flex items-center justify-between mb-8 pb-6 border-b border-gray-800">
                     <div className="flex items-center gap-4">
                         <h2 className="text-2xl font-bold text-black">
                             {searchText ? 'Search Results' : 'Latest Articles'}
                         </h2>
-                        <span className="px-4 py-1.5 bg-blue-500 border  text-white text-sm font-semibold rounded-full">
+                        <span className="px-4 py-1.5 bg-blue-500 border text-white text-sm font-semibold rounded-full">
                             {totalBlogs} {totalBlogs === 1 ? 'article' : 'articles'}
                         </span>
                     </div>
@@ -363,8 +364,8 @@ export default function BlogPage() {
                 ) : blogs.length === 0 ? (
                     <div className="text-center py-20">
                         <div className="text-8xl mb-6">📝</div>
-                        <h3 className="text-3xl font-bold text-white mb-3">No articles found</h3>
-                        <p className="text-gray-400 text-lg mb-8">Try adjusting your search or filters</p>
+                        <h3 className="text-3xl font-bold text-black mb-3">No articles found</h3>
+                        <p className="text-gray-600 text-lg mb-8">Try adjusting your search or filters</p>
                         {hasActiveFilters && (
                             <button
                                 onClick={clearFilters}
@@ -381,8 +382,8 @@ export default function BlogPage() {
                             {blogs.map((blog) => (
                                 <article
                                     key={blog._id}
-                                    className="group bg-white shadow-2xl   rounded-2xl overflow-hidden hover:border-blue-700 hover:shadow-2xl transition-all duration-300 cursor-pointer"
-                                    onClick={() => viewBlog(blog.slug)}
+                                    className="group bg-white shadow-2xl rounded-2xl overflow-hidden hover:border-blue-700 hover:shadow-2xl transition-all duration-300 cursor-pointer"
+                                    onClick={() => viewBlog(blog._id)}
                                 >
                                     {/* Featured Image */}
                                     <div className="relative h-56 overflow-hidden">
@@ -415,7 +416,7 @@ export default function BlogPage() {
                                             {blog.tags.slice(0, 3).map((tag, idx) => (
                                                 <span
                                                     key={idx}
-                                                    className="px-3 py-1  border-1 border-green-600 text-green-600 text-xs font-medium rounded-full"
+                                                    className="px-3 py-1 border-1 border-green-600 text-green-600 text-xs font-medium rounded-full"
                                                 >
                                                     #{tag}
                                                 </span>
