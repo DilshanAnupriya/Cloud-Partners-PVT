@@ -9,19 +9,19 @@ function HeroSection() {
     const containerRef = useRef(null);
 
     return (
-        <div className="bg-black min-h-screen relative overflow-hidden" ref={containerRef}>
+        <div className="bg-white min-h-screen relative overflow-hidden" ref={containerRef}>
             {/* Enhanced Spotlight Effect - Much Brighter */}
-            <Spotlight
-                gradientFirst="radial-gradient(28.54% 68.72% at 55.02% 31.46%, hsla(220, 100%, 90%, .20) 0, hsla(220, 100%, 75%, .15) 50%, hsla(220, 100%, 60%, .0) 80%)"
-                gradientSecond="radial-gradient(50% 50% at 50% 50%, hsla(220, 100%, 95%, .01) 0, hsla(220, 100%, 75%, .12) 80%, transparent 100%)"
-                gradientThird="radial-gradient(50% 50% at 50% 50%, hsla(220, 100%, 90%, .2) 0, hsla(220, 100%, 60%, .08) 80%, transparent 100%)"
-                translateY={-300}
-                width={600}
-                height={1400}
-                smallWidth={280}
-                duration={8}
-                xOffset={120}
-            />
+            {/*<Spotlight*/}
+            {/*    gradientFirst="radial-gradient(28.54% 68.72% at 55.02% 31.46%, hsla(220, 100%, 90%, .20) 0, hsla(220, 100%, 75%, .15) 50%, hsla(220, 100%, 60%, .0) 80%)"*/}
+            {/*    gradientSecond="radial-gradient(50% 50% at 50% 50%, hsla(220, 100%, 95%, .01) 0, hsla(220, 100%, 75%, .12) 80%, transparent 100%)"*/}
+            {/*    gradientThird="radial-gradient(50% 50% at 50% 50%, hsla(220, 100%, 90%, .2) 0, hsla(220, 100%, 60%, .08) 80%, transparent 100%)"*/}
+            {/*    translateY={-300}*/}
+            {/*    width={600}*/}
+            {/*    height={1400}*/}
+            {/*    smallWidth={280}*/}
+            {/*    duration={8}*/}
+            {/*    xOffset={120}*/}
+            {/*/>*/}
 
 
             {/* Background grid effect - More visible */}
@@ -42,13 +42,13 @@ function HeroSection() {
                         {/* Enhanced title with brighter glow effect */}
                         <div className="relative">
                             <h1 className="text-4xl md:text-8xl font-bold mb-4 relative z-10">
-                                <span className="bg-gradient-to-r from-white via-blue-50 to-purple-50 bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(96,165,250,0.5)]">
+                                <span className="bg-black bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(96,165,250,0.5)]">
                                     Our Amazing Products
                                 </span>
                             </h1>
                         </div>
 
-                        <p className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto relative z-10 drop-shadow-lg">
+                        <p className="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto relative z-10 drop-shadow-lg">
                             Experience the future of innovation with our cutting-edge solution
                             that transforms the way you work and live.
                         </p>
@@ -58,7 +58,7 @@ function HeroSection() {
                                 Get Started Today
                             </button>
                             <Link href="/contact">
-                                <button className="border-2 border-white hover:border-blue-400 px-8 py-4 rounded-lg font-semibold transition-all duration-300 hover:bg-blue-500/20 backdrop-blur-sm shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(59,130,246,0.4)]">
+                                <button className="border-3 border-black text-black hover:border-blue-400 px-8 py-4 rounded-lg font-semibold transition-all duration-300 hover:bg-blue-500/20 backdrop-blur-sm shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(59,130,246,0.4)]">
                                     Schedule Consultation
                                 </button>
                             </Link>
@@ -66,25 +66,17 @@ function HeroSection() {
                     </div>
                 }
             >
-                {/* Product content with enhanced lighting */}
-                <div className="h-150 w-full flex items-center justify-center p-0 relative z-20 ">
-                    <div className="relative w-full h-full">
-                        {/* Brighter product glow effect with yellow */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-yellow-500/40 via-transparent to-amber-500/40 rounded-2xl blur-2xl"></div>
-                        <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/30 via-orange-400/20 to-amber-400/30 rounded-2xl blur-xl"></div>
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-2xl blur-xl"></div>
-
+                {/* Product content with enhanced yellow shadow */}
+                <div className="h-150 w-full flex items-center justify-center p-0 relative z-20 shadow-2xl shadow-yellow-500/80">
+                    <div className="relative w-full h-full rounded-2xl shadow-[0_0_60px_rgba(234,179,8,0.6),0_0_100px_rgba(234,179,8,0.4)]">
                         <Image
                             alt="Product cover"
                             src="/Pimages/productCover-2.png"
                             fill
-                            className="object-cover rounded-2xl relative z-10 shadow-[0_0_60px_rgba(251,191,36,0.6),0_0_100px_rgba(245,158,11,0.3)]"
+                            className="object-cover rounded-2xl relative z-10"
                             priority
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
                         />
-
-
-
                     </div>
                 </div>
             </ContainerScroll>

@@ -40,8 +40,26 @@ const blogSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Draft', 'Published', 'Archived'],
+        enum: ['Draft', 'Pending', 'Approved', 'Rejected', 'Published', 'Archived'],
         default: 'Draft'
+    },
+    approvalStatus: {
+        type: String,
+        enum: ['Pending', 'Approved', 'Rejected'],
+        default: null
+    },
+    approvedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        default: null
+    },
+    approvedAt: {
+        type: Date,
+        default: null
+    },
+    rejectionReason: {
+        type: String,
+        default: null
     },
     views: {
         type: Number,
@@ -98,5 +116,6 @@ blogSchema.pre('save', function(next) {
 
 // Index for better search performance
 blogSchema.index({ title: 'text', content: 'text', tags: 'text' });
+blogSchema.index({ status: 1, approvalStatus: 1 });
 
 module.exports = mongoose.model('Blog', blogSchema);

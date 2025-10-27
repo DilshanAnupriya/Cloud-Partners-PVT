@@ -37,7 +37,7 @@ const InfoSection = () => {
                             }`}
                         >
                             Unlock Success With{' '}
-                            <span className="bg-gradient-to-r from-blue-400 to-blue-300 bg-clip-text text-transparent">
+                            <span className="bg-gradient-to-r from-[#4285F4] via-[#DB4437] via-[#F4B400] to-[#0F9D58] bg-clip-text text-transparent">
                 Zoho
               </span>
                         </h1>

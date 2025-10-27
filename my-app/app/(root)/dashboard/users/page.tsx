@@ -233,13 +233,13 @@ const UserManagementPage = () => {
     }
 
         return (
-        <div className="min-h-screen bg-gray-50 p-6 pt-15">
+        <div className="min-h-screen bg-gray-50 p-6 pt-25">
             <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
             <DashboardNavbar
                 onMenuClick={() => setSidebarOpen(true)}
                 title="Profile Settings"
             />
-            <div className="max-w-7xl mx-auto p-4 lg:p-8 ml-60">
+            <div className="max-w-7xl mx-auto p-4 lg:p-8 ml-90">
                 {/* Header */}
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold text-gray-800 mb-2">User Management</h1>

@@ -588,7 +588,7 @@ export function ProductList() {
 
         {/* Enhanced CTA Section */}
         <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="relative bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 rounded-3xl p-12 text-center shadow-2xl overflow-hidden">
+          <div className="relative bg-gradient-to-br from-gray-900 via-black to-black rounded-3xl p-12 text-center shadow-2xl overflow-hidden">
             {/* Animated background effects */}
             <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
             <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
