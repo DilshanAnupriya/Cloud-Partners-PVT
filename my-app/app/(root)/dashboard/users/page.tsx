@@ -522,6 +522,42 @@ const UserManagementPage = () => {
                                             />
                                             <span className="ml-2 text-sm text-gray-700">Admin</span>
                                         </label>
+                                        <label className="flex items-center cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={formData.role.includes('Sales')}
+                                                onChange={() => toggleRole('Sales')}
+                                                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                            />
+                                            <span className="ml-2 text-sm text-gray-700">Sales</span>
+                                        </label>
+                                        <label className="flex items-center cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={formData.role.includes('BA')}
+                                                onChange={() => toggleRole('BA')}
+                                                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                            />
+                                            <span className="ml-2 text-sm text-gray-700">BA</span>
+                                        </label>
+                                        <label className="flex items-center cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={formData.role.includes('PM')}
+                                                onChange={() => toggleRole('PM')}
+                                                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                            />
+                                            <span className="ml-2 text-sm text-gray-700">PM</span>
+                                        </label>
+                                        <label className="flex items-center cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={formData.role.includes('Developer')}
+                                                onChange={() => toggleRole('Developer')}
+                                                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                            />
+                                            <span className="ml-2 text-sm text-gray-700">Developer</span>
+                                        </label>
                                     </div>
                                 </div>
 

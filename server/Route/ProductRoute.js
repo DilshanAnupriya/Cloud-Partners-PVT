@@ -24,12 +24,12 @@ router.get('/products/:id', getProductById);
 router.post('/products/compare', compareProducts);
 
 // Protected routes (admin only)
-router.post('/products', verifyToken(['Admin']), createProduct);
-router.put('/products/:id', verifyToken(['Admin']), updateProduct);
-router.delete('/products/:id', verifyToken(['Admin']), deleteProduct);
+router.post('/products', verifyToken(['Sales','Admin']), createProduct);
+router.put('/products/:id', verifyToken(['Sales','Admin']), updateProduct);
+router.delete('/products/:id', verifyToken(['Sales','Admin']), deleteProduct);
 
 
 // Statistics (admin only)
-router.get('/products-stats', verifyToken(['Admin']), getProductStats);
+router.get('/products-stats', verifyToken(['Sales','Admin']), getProductStats);
 
 module.exports = router;

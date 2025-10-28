@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, Plus, Folder, Code, Star, Eye, Calendar, TrendingUp, BarChart3, FileCode, Edit, Trash2, Copy, X, Save, AlertCircle } from 'lucide-react';
+import { Search, Plus, Folder, Code, Star, Eye, Calendar, TrendingUp, BarChart3, FileCode, Edit, Trash2, Copy, X, Save, AlertCircle, Users } from 'lucide-react';
 import Sidebar from "@/components/ui/Sidebar";
 import DashboardNavbar from "@/components/ui/DashboardNavbar";
 
@@ -17,6 +17,11 @@ interface Project {
     snippetCount: number;
     createdAt: string;
     updatedAt: string;
+    owner?: {
+        _id: string;
+        username: string;
+        email: string;
+    };
 }
 
 interface Snippet {
@@ -43,14 +48,15 @@ interface Snippet {
 interface Stats {
     totalProjects: number;
     publicProjects: number;
+    privateProjects: number;
     totalSnippets: number;
     snippetsByLanguage: Array<{ _id: string; count: number }>;
+    projectsByOwner?: Array<{ _id: string; count: number; username: string; email: string }>;
 }
 
 // API Configuration
 const API_BASE_URL = 'http://localhost:8080/api/code';
 
-// Add debugging to getAuthHeaders
 const getAuthHeaders = () => {
     const token = localStorage.getItem('authToken');
     console.log('🔑 Token from localStorage:', token ? token.substring(0, 20) + '...' : 'NO TOKEN');
@@ -76,15 +82,18 @@ const LANGUAGES = [
 
 export default function CodeManagementDashboard() {
     const router = useRouter();
-    const [projects, setProjects] = useState<Project[]>([]);
+    const [myProjects, setMyProjects] = useState<Project[]>([]);
+    const [allProjects, setAllProjects] = useState<Project[]>([]);
     const [snippets, setSnippets] = useState<Snippet[]>([]);
     const [stats, setStats] = useState<Stats | null>(null);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedFilter, setSelectedFilter] = useState<'all' | 'projects' | 'snippets'>('all');
+    const [projectViewMode, setProjectViewMode] = useState<'my' | 'all'>('my');
     const [languageFilter, setLanguageFilter] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [sidebarOpen, setSidebarOpen] = useState(false);
+
     // Modal states
     const [showProjectModal, setShowProjectModal] = useState(false);
     const [showSnippetModal, setShowSnippetModal] = useState(false);
@@ -123,15 +132,21 @@ export default function CodeManagementDashboard() {
         setLoading(true);
         setError('');
         try {
-            const [projectsRes, snippetsRes, statsRes] = await Promise.all([
+            const [myProjectsRes, allProjectsRes, snippetsRes, statsRes] = await Promise.all([
                 fetch(`${API_BASE_URL}/projects`, { headers: getAuthHeaders() }),
+                fetch(`${API_BASE_URL}/projects/all`, { headers: getAuthHeaders() }),
                 fetch(`${API_BASE_URL}/snippets`, { headers: getAuthHeaders() }),
-                fetch(`${API_BASE_URL}/projects/stats`, { headers: getAuthHeaders() })
+                fetch(`${API_BASE_URL}/projects/stats/all`, { headers: getAuthHeaders() })
             ]);
 
-            if (projectsRes.ok) {
-                const projectsData = await projectsRes.json();
-                setProjects(projectsData.projects || []);
+            if (myProjectsRes.ok) {
+                const myProjectsData = await myProjectsRes.json();
+                setMyProjects(myProjectsData.projects || []);
+            }
+
+            if (allProjectsRes.ok) {
+                const allProjectsData = await allProjectsRes.json();
+                setAllProjects(allProjectsData.projects || []);
             }
 
             if (snippetsRes.ok) {
@@ -231,9 +246,8 @@ export default function CodeManagementDashboard() {
         }
     };
 
-    // Snippet CRUD operations with detailed error logging
+    // Snippet CRUD operations
     const handleCreateSnippet = async () => {
-        // Validation
         if (!snippetForm.title.trim()) {
             setError('Snippet title is required');
             return;
@@ -249,13 +263,6 @@ export default function CodeManagementDashboard() {
 
         try {
             setError('');
-            console.log('Creating snippet with data:', {
-                title: snippetForm.title,
-                language: snippetForm.language,
-                project: snippetForm.project,
-                codeLength: snippetForm.code.length
-            });
-
             const response = await fetch(`${API_BASE_URL}/snippets`, {
                 method: 'POST',
                 headers: getAuthHeaders(),
@@ -263,21 +270,14 @@ export default function CodeManagementDashboard() {
             });
 
             const data = await response.json();
-            console.log('Response status:', response.status);
-            console.log('Response data:', data);
 
             if (response.ok) {
                 await fetchDashboardData();
                 setShowSnippetModal(false);
                 resetSnippetForm();
             } else {
-                // Detailed error handling
                 const errorMessage = data.error || data.message || 'Failed to create snippet';
                 setError(`Error ${response.status}: ${errorMessage}`);
-                console.error('Create snippet error:', {
-                    status: response.status,
-                    error: data
-                });
             }
         } catch (error) {
             console.error('Network error creating snippet:', error);
@@ -462,8 +462,10 @@ export default function CodeManagementDashboard() {
         }
     };
 
-    // Search and filter logic
-    const filteredProjects = projects.filter(project =>
+    // Search and filter logic - use appropriate project list based on view mode
+    const currentProjects = projectViewMode === 'my' ? myProjects : allProjects;
+
+    const filteredProjects = currentProjects.filter(project =>
         project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         project.description?.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -475,7 +477,6 @@ export default function CodeManagementDashboard() {
         return matchesSearch && matchesLanguage;
     });
 
-
     return (
         <div className="min-h-screen bg-gray-50 pt-30 2xl:ml-30 lg:pl-23">
             <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -484,7 +485,6 @@ export default function CodeManagementDashboard() {
                 title="Code Management"
             />
 
-            {/* Loading State */}
             {loading ? (
                 <div className="flex items-center justify-center min-h-[60vh]">
                     <div className="flex flex-col items-center gap-4">
@@ -497,7 +497,6 @@ export default function CodeManagementDashboard() {
                 </div>
             ) : (
                 <>
-                    {/* Error Banner */}
                     {error && (
                         <div className="bg-red-50 border-l-4 border-red-500 p-4">
                             <div className="flex items-center max-w-7xl mx-auto">
@@ -516,7 +515,6 @@ export default function CodeManagementDashboard() {
                         </div>
                     )}
 
-                    {/* Header */}
                     <header className="">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                             <div className="flex items-center justify-between">
@@ -535,7 +533,7 @@ export default function CodeManagementDashboard() {
                                     <button
                                         onClick={() => openSnippetModal()}
                                         className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2 transition-colors"
-                                        disabled={projects.length === 0}
+                                        disabled={myProjects.length === 0}
                                     >
                                         <Code className="w-4 h-4" />
                                         New Snippet
@@ -546,7 +544,7 @@ export default function CodeManagementDashboard() {
                     </header>
 
                     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                        {/* Statistics Cards */}
+                        {/* Statistics Cards - Using All Project Stats */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                             <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
                                 <div className="flex items-center justify-between">
@@ -587,11 +585,11 @@ export default function CodeManagementDashboard() {
                             <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-sm font-medium text-gray-600">Languages</p>
-                                        <p className="text-3xl font-bold text-gray-900 mt-2">{stats?.snippetsByLanguage?.length || 0}</p>
+                                        <p className="text-sm font-medium text-gray-600">Private Projects</p>
+                                        <p className="text-3xl font-bold text-gray-900 mt-2">{stats?.privateProjects || 0}</p>
                                     </div>
                                     <div className="p-3 bg-orange-100 rounded-lg">
-                                        <BarChart3 className="w-6 h-6 text-orange-600" />
+                                        <Users className="w-6 h-6 text-orange-600" />
                                     </div>
                                 </div>
                             </div>
@@ -667,7 +665,27 @@ export default function CodeManagementDashboard() {
                         {/* Projects Section */}
                         {(selectedFilter === 'all' || selectedFilter === 'projects') && (
                             <div className="mb-8">
-                                <h2 className="text-xl font-bold text-gray-900 mb-4">Projects</h2>
+                                <div className="flex items-center justify-between mb-4">
+                                    <h2 className="text-xl font-bold text-gray-900">Projects</h2>
+                                    <div className="flex gap-2">
+                                        <button
+                                            onClick={() => setProjectViewMode('my')}
+                                            className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                                                projectViewMode === 'my' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                            }`}
+                                        >
+                                            My Projects ({myProjects.length})
+                                        </button>
+                                        <button
+                                            onClick={() => setProjectViewMode('all')}
+                                            className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                                                projectViewMode === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                            }`}
+                                        >
+                                            All Projects ({allProjects.length})
+                                        </button>
+                                    </div>
+                                </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                     {filteredProjects.map((project) => (
                                         <div
@@ -686,6 +704,9 @@ export default function CodeManagementDashboard() {
                                                     <div>
                                                         <h3 className="font-semibold text-gray-900">{project.name}</h3>
                                                         <p className="text-sm text-gray-500">{project.snippetCount} snippets</p>
+                                                        {projectViewMode === 'all' && project.owner && (
+                                                            <p className="text-xs text-gray-400 mt-1">by {project.owner.username}</p>
+                                                        )}
                                                     </div>
                                                 </div>
                                                 {project.isPublic && (
@@ -704,28 +725,30 @@ export default function CodeManagementDashboard() {
                                                     ))}
                                                 </div>
                                             )}
-                                            <div className="flex gap-2 pt-4 border-t border-gray-200">
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        openProjectModal(project);
-                                                    }}
-                                                    className="flex-1 px-3 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 flex items-center justify-center gap-2 text-sm transition-colors"
-                                                >
-                                                    <Edit className="w-4 h-4" />
-                                                    Edit
-                                                </button>
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleDeleteProject(project._id);
-                                                    }}
-                                                    className="flex-1 px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 flex items-center justify-center gap-2 text-sm transition-colors"
-                                                >
-                                                    <Trash2 className="w-4 h-4" />
-                                                    Delete
-                                                </button>
-                                            </div>
+                                            {projectViewMode === 'my' && (
+                                                <div className="flex gap-2 pt-4 border-t border-gray-200">
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            openProjectModal(project);
+                                                        }}
+                                                        className="flex-1 px-3 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 flex items-center justify-center gap-2 text-sm transition-colors"
+                                                    >
+                                                        <Edit className="w-4 h-4" />
+                                                        Edit
+                                                    </button>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleDeleteProject(project._id);
+                                                        }}
+                                                        className="flex-1 px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 flex items-center justify-center gap-2 text-sm transition-colors"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            )}
                                         </div>
                                     ))}
                                 </div>
@@ -733,12 +756,14 @@ export default function CodeManagementDashboard() {
                                     <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
                                         <Folder className="w-12 h-12 text-gray-400 mx-auto mb-3" />
                                         <p className="text-gray-600">No projects found</p>
-                                        <button
-                                            onClick={() => openProjectModal()}
-                                            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                                        >
-                                            Create Your First Project
-                                        </button>
+                                        {projectViewMode === 'my' && (
+                                            <button
+                                                onClick={() => openProjectModal()}
+                                                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                                            >
+                                                Create Your First Project
+                                            </button>
+                                        )}
                                     </div>
                                 )}
                             </div>
@@ -832,7 +857,7 @@ export default function CodeManagementDashboard() {
                                     <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
                                         <Code className="w-12 h-12 text-gray-400 mx-auto mb-3" />
                                         <p className="text-gray-600">No snippets found</p>
-                                        {projects.length > 0 && (
+                                        {myProjects.length > 0 && (
                                             <button
                                                 onClick={() => openSnippetModal()}
                                                 className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
@@ -1001,7 +1026,7 @@ export default function CodeManagementDashboard() {
                                                 onChange={(e) => setSnippetForm({ ...snippetForm, project: e.target.value })}
                                             >
                                                 <option value="">Select a project</option>
-                                                {projects.map((project) => (
+                                                {myProjects.map((project) => (
                                                     <option key={project._id} value={project._id}>
                                                         {project.icon} {project.name}
                                                     </option>

@@ -107,12 +107,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('✅ User profile fetched successfully');
                 setUser(data.User);
                 localStorage.setItem('user', JSON.stringify(data.User));
             } else {
                 const errorData = await response.json().catch(() => ({}));
-                console.error('❌ Failed to fetch user profile:', response.status, errorData);
                 throw new Error(errorData.message || 'Failed to fetch user profile');
             }
         } catch (error) {
@@ -153,9 +151,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             await fetchUserProfile(data.token);
 
             // Redirect to dashboard or home
-            router.push('/dashboard');
+            router.push('/');
         } catch (error) {
-            console.error('❌ Login error:', error);
             throw error;
         }
     };

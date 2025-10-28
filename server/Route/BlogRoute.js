@@ -24,10 +24,10 @@ router.get('/blogs/:id/public', getBlogById);
 
 // ==================== USER ROUTES ====================
 // Users can create, view their own blogs
-router.post('/blogs', verifyToken(['User', 'Admin']), createBlog);
-router.get('/my-blogs', verifyToken(['User', 'Admin']), getMyBlogs);
-router.put('/blogs/:id', verifyToken(['User', 'Admin']), updateBlog);
-router.delete('/blogs/:id', verifyToken(['User', 'Admin']), deleteBlog);
+router.post('/blogs', verifyToken(['Sales','PM','BA','Developer', 'Admin']), createBlog);
+router.get('/my-blogs', verifyToken(['Sales','PM','BA','Developer', 'Admin']), getMyBlogs);
+router.put('/blogs/:id', verifyToken(['Sales','PM','BA','Developer', 'Admin']), updateBlog);
+router.delete('/blogs/:id', verifyToken(['Sales','PM','BA','Developer', 'Admin']), deleteBlog);
 
 // ==================== ADMIN ROUTES ====================
 // Admin approval workflow

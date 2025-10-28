@@ -1,4 +1,3 @@
-
 const Project = require('../Model/ProjectModel');
 const CodeSnippet = require('../Model/CodeSnippetModel');
 
@@ -91,6 +90,61 @@ const getMyProjects = async (req, res) => {
         });
     } catch (error) {
         console.error('Error fetching projects:', error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
+// Get ALL projects (Admin only)
+const getAllProjects = async (req, res) => {
+    try {
+        const { search, tag, sortBy = 'createdAt', order = 'desc', owner } = req.query;
+
+        const filter = {};
+
+        // Filter by owner if provided
+        if (owner) {
+            filter.owner = owner;
+        }
+
+        // Search filter
+        if (search) {
+            filter.$or = [
+                { name: { $regex: search, $options: 'i' } },
+                { description: { $regex: search, $options: 'i' } }
+            ];
+        }
+
+        // Tag filter
+        if (tag) {
+            filter.tags = tag;
+        }
+
+        const sortOrder = order === 'asc' ? 1 : -1;
+
+        const projects = await Project.find(filter)
+            .sort({ [sortBy]: sortOrder })
+            .populate('owner', 'username email');
+
+        // Get snippet count for each project
+        const projectsWithCount = await Promise.all(
+            projects.map(async (project) => {
+                const snippetCount = await CodeSnippet.countDocuments({
+                    project: project._id
+                });
+                return {
+                    ...project.toObject(),
+                    snippetCount
+                };
+            })
+        );
+
+        res.status(200).json({
+            message: 'All projects retrieved successfully',
+            projects: projectsWithCount,
+            count: projectsWithCount.length
+        });
+    } catch (error) {
+        console.error('Error fetching all projects:', error);
         res.status(500).json({ error: error.message });
     }
 };
@@ -213,7 +267,7 @@ const deleteProject = async (req, res) => {
     }
 };
 
-// Get project statistics
+// Get project statistics for current user
 const getProjectStats = async (req, res) => {
     try {
         const userId = req.user._id;
@@ -255,11 +309,86 @@ const getProjectStats = async (req, res) => {
     }
 };
 
+// Get ALL projects statistics (Admin only)
+const getAllProjectStats = async (req, res) => {
+    try {
+        const totalProjects = await Project.countDocuments({});
+        const publicProjects = await Project.countDocuments({ isPublic: true });
+        const privateProjects = await Project.countDocuments({ isPublic: false });
+        const totalSnippets = await CodeSnippet.countDocuments({});
+
+        // Get projects by owner count
+        const projectsByOwner = await Project.aggregate([
+            { $group: { _id: '$owner', count: { $sum: 1 } } },
+            { $sort: { count: -1 } },
+            { $limit: 10 },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'ownerInfo'
+                }
+            },
+            { $unwind: '$ownerInfo' },
+            {
+                $project: {
+                    _id: 1,
+                    count: 1,
+                    username: '$ownerInfo.username',
+                    email: '$ownerInfo.email'
+                }
+            }
+        ]);
+
+        // Get snippets by language (all users)
+        const snippetsByLanguage = await CodeSnippet.aggregate([
+            { $group: { _id: '$language', count: { $sum: 1 } } },
+            { $sort: { count: -1 } },
+            { $limit: 10 }
+        ]);
+
+        // Get projects by tag
+        const projectsByTag = await Project.aggregate([
+            { $unwind: '$tags' },
+            { $group: { _id: '$tags', count: { $sum: 1 } } },
+            { $sort: { count: -1 } },
+            { $limit: 10 }
+        ]);
+
+        // Get recent projects (all users)
+        const recentProjects = await Project.find({})
+            .sort({ createdAt: -1 })
+            .limit(10)
+            .populate('owner', 'username email')
+            .select('name icon color createdAt owner');
+
+        res.status(200).json({
+            message: 'All projects statistics retrieved successfully',
+            stats: {
+                totalProjects,
+                publicProjects,
+                privateProjects,
+                totalSnippets,
+                projectsByOwner,
+                snippetsByLanguage,
+                projectsByTag,
+                recentProjects
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching all project stats:', error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
 module.exports = {
     createProject,
     getMyProjects,
+    getAllProjects,
     getProjectById,
     updateProject,
     deleteProject,
-    getProjectStats
+    getProjectStats,
+    getAllProjectStats
 };

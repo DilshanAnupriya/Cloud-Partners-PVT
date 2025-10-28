@@ -28,6 +28,12 @@ const verifyToken = (requiredRoles = []) => {
             }
 
             console.log('✅ User found:', user.username, 'ID:', user._id);
+            // Normalize requiredRoles to an array of lowercase strings
+            let required = Array.isArray(requiredRoles) ? requiredRoles : [requiredRoles];
+            required = required.map(r => String(r || '').trim()).filter(Boolean);
+            const userRoles = (user.role || []).map(r => String(r || '').trim());
+
+            console.log('✅ User roles:', userRoles, 'Required:', required);
 
             // Check roles
             if (requiredRoles.length && !user.role.some(r => requiredRoles.includes(r))) {
