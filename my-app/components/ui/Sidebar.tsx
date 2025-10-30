@@ -18,6 +18,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         { id: 'profile', label: 'Profile', icon: User, path: '/dashboard/profile' },
         { id: 'blogs', label: 'Blogs', icon: FileText, path: '/dashboard/blogs' },
         { id: 'products', label: 'Products', icon: Package, path: '/dashboard/products' },
+        { id: 'Project-Manager', label: 'Project Manager', icon: Package, path: '/dashboard/project-manager' },
         { id: 'Code-Manager', label: 'Code Manager', icon: Package, path: '/dashboard/code-manager' },
         { id: 'users', label: 'Users', icon: Users, path: '/dashboard/users' },
     ];

@@ -15,6 +15,8 @@ const userRoutes = require('./Route/userRoute');
 const blogRoutes = require('./Route/blogRoute');
 const projectRoutes = require('./Route/projectRoute'); // NEW
 const snippetRoutes = require('./Route/codeSnippetRoute'); // NEW
+const pmRoutes = require('./route/pmRoute');
+const {join} = require("node:path");
 
 const app = express();
 
@@ -26,7 +28,7 @@ app.use(cors({
     origin: 'http://localhost:3000', // frontend URL
     credentials: true, // if you need to send cookies or auth headers
 }));
-
+app.use('/uploads', express.static(join(__dirname, 'uploads')));
 
 // File Upload Configuration
 const storage = multer.diskStorage({
@@ -43,22 +45,14 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Email Configuration
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    }
-});
 
 app.use('/api/products', productRoutes);
 app.use('/api/v1/user', userRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/code', projectRoutes); // NEW - Projects
 app.use('/api/code', snippetRoutes); // NEW - Snippets
+app.use('/api/v1/pm', pmRoutes);
+
 
 mongoose.connect(URL).then( () => {
     console.log('MongoDB Connected!...');
