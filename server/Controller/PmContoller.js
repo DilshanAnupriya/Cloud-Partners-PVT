@@ -1,10 +1,10 @@
-const Project = require('../Model/PmSchema');
-const User = require('../model/UserModel');
+const Pm = require('../Model/PmSchema');
+const User = require('../Model/UserModel');
 const nodemailer = require('nodemailer');
 const path = require('path');
 const fs = require('fs');
 
-// Email configuration (configure with your email service)
+// Email configuration
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -32,7 +32,7 @@ exports.createProject = async (req, res) => {
     try {
         const { name, description, client, salesperson, startDate, estimatedEndDate } = req.body;
 
-        const project = new Project({
+        const project = new Pm({
             name,
             description,
             client,
@@ -72,7 +72,7 @@ exports.getAllProjects = async (req, res) => {
         if (stage) filter.stage = stage;
         if (isActive !== undefined) filter.isActive = isActive === 'true';
 
-        const projects = await Project.find(filter)
+        const projects = await Pm.find(filter)
             .populate('salesperson', 'username email')
             .populate('projectManager', 'username email')
             .populate('businessAnalyst', 'username email')
@@ -93,16 +93,17 @@ exports.getAllProjects = async (req, res) => {
     }
 };
 
-// Get Single Project
+// FIX: Get Single Project - Fixed populate paths
 exports.getProjectById = async (req, res) => {
     try {
-        const project = await Project.findById(req.params.id)
+        const project = await Pm.findById(req.params.id)
             .populate('salesperson', 'username email role')
             .populate('projectManager', 'username email role')
             .populate('businessAnalyst', 'username email role')
             .populate('developers', 'username email role')
             .populate('tasks.assignedTo', 'username email')
-            .populate('progressUpdates.developer', 'username email')
+            .populate('progressUpdates.createdBy', 'username email')  // ✅ FIXED: Changed from developer to createdBy
+            .populate('documents.uploadedBy', 'username email')
             .populate('stageHistory.changedBy', 'username email');
 
         if (!project) {
@@ -125,10 +126,10 @@ exports.getProjectById = async (req, res) => {
     }
 };
 
-// Update Project
+// Update Project (Basic info)
 exports.updateProject = async (req, res) => {
     try {
-        const project = await Project.findByIdAndUpdate(
+        const project = await Pm.findByIdAndUpdate(
             req.params.id,
             req.body,
             { new: true, runValidators: true }
@@ -155,10 +156,110 @@ exports.updateProject = async (req, res) => {
     }
 };
 
+// Update Stage - Single unified endpoint
+exports.updateStage = async (req, res) => {
+    try {
+        const { stage } = req.body;
+        const project = await Pm.findById(req.params.id);
+
+        if (!project) {
+            return res.status(404).json({ success: false, message: 'Project not found' });
+        }
+
+        // Update stage
+        project.stage = stage;
+        project.stageHistory.push({
+            stage: stage,
+            changedBy: req.user.id
+        });
+
+        await project.save();
+        await project.populate('salesperson projectManager businessAnalyst developers');
+
+        res.status(200).json({ 
+            success: true, 
+            message: 'Stage updated successfully',
+            data: project 
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+// Assign Team Members - Single unified endpoint
+exports.assignTeamMembers = async (req, res) => {
+    try {
+        const { projectManager, businessAnalyst, developers } = req.body;
+        const project = await Pm.findById(req.params.id);
+
+        if (!project) {
+            return res.status(404).json({ success: false, message: 'Project not found' });
+        }
+
+        // Update team members
+        if (projectManager) project.projectManager = projectManager;
+        if (businessAnalyst) project.businessAnalyst = businessAnalyst;
+        if (developers && Array.isArray(developers)) project.developers = developers;
+
+        await project.save();
+        await project.populate('projectManager businessAnalyst developers', 'username email');
+
+        // Send notification emails
+        if (projectManager) {
+            const pm = await User.findById(projectManager);
+            if (pm) {
+                await sendNotificationEmail(
+                    pm.email,
+                    'New Project Assignment - Project Manager',
+                    `<h3>Project: ${project.name}</h3>
+                    <p>You have been assigned as the Project Manager.</p>
+                    <p>Client: ${project.client}</p>`
+                );
+            }
+        }
+
+        if (businessAnalyst) {
+            const ba = await User.findById(businessAnalyst);
+            if (ba) {
+                await sendNotificationEmail(
+                    ba.email,
+                    'New Project Assignment - Business Analyst',
+                    `<h3>Project: ${project.name}</h3>
+                    <p>You have been assigned as the Business Analyst.</p>
+                    <p>Client: ${project.client}</p>`
+                );
+            }
+        }
+
+        if (developers && developers.length > 0) {
+            for (const devId of developers) {
+                const dev = await User.findById(devId);
+                if (dev) {
+                    await sendNotificationEmail(
+                        dev.email,
+                        'New Project Assignment - Developer',
+                        `<h3>Project: ${project.name}</h3>
+                        <p>You have been assigned to this project.</p>
+                        <p>Client: ${project.client}</p>`
+                    );
+                }
+            }
+        }
+
+        res.status(200).json({ 
+            success: true, 
+            message: 'Team members assigned successfully',
+            data: project 
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
+
 // Delete Project
 exports.deleteProject = async (req, res) => {
     try {
-        const project = await Project.findByIdAndDelete(req.params.id);
+        const project = await Pm.findByIdAndDelete(req.params.id);
 
         if (!project) {
             return res.status(404).json({
@@ -180,188 +281,30 @@ exports.deleteProject = async (req, res) => {
     }
 };
 
-// Move to Requirement Gathering
-exports.moveToRequirementGathering = async (req, res) => {
+// Add Progress Update
+exports.addProgressUpdate = async (req, res) => {
     try {
-        const { businessAnalyst } = req.body;
-        const project = await Project.findById(req.params.id);
-
-        if (!project) {
-            return res.status(404).json({ success: false, message: 'Project not found' });
-        }
-
-        if (project.stage !== 'sales') {
-            return res.status(400).json({ success: false, message: 'Invalid stage transition' });
-        }
-
-        project.stage = 'requirement-gathering';
-        project.businessAnalyst = businessAnalyst;
-        project.stageHistory.push({
-            stage: 'requirement-gathering',
-            changedBy: req.user.id
-        });
-
-        await project.save();
-        await project.populate('businessAnalyst', 'username email');
-
-        // Send email to BA
-        const ba = await User.findById(businessAnalyst);
-        if (ba) {
-            await sendNotificationEmail(
-                ba.email,
-                'New Project Assignment - Requirement Gathering',
-                `<h3>Project: ${project.name}</h3>
-                <p>You have been assigned to gather requirements for this project.</p>
-                <p>Client: ${project.client}</p>`
-            );
-        }
-
-        res.status(200).json({ success: true, data: project });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-};
-
-// Handover to PM
-exports.handoverToPM = async (req, res) => {
-    try {
-        const { projectManager } = req.body;
-        const project = await Project.findById(req.params.id);
-
-        if (!project) {
-            return res.status(404).json({ success: false, message: 'Project not found' });
-        }
-
-        if (project.stage !== 'requirement-gathering') {
-            return res.status(400).json({ success: false, message: 'Invalid stage transition' });
-        }
-
-        project.stage = 'handover-to-pm';
-        project.projectManager = projectManager;
-        project.stageHistory.push({
-            stage: 'handover-to-pm',
-            changedBy: req.user.id
-        });
-
-        await project.save();
-        await project.populate('projectManager', 'username email');
-
-        // Send email to PM
-        const pm = await User.findById(projectManager);
-        if (pm) {
-            await sendNotificationEmail(
-                pm.email,
-                'New Project Assignment - Project Manager',
-                `<h3>Project: ${project.name}</h3>
-                <p>You have been assigned as the Project Manager for this project.</p>
-                <p>Client: ${project.client}</p>
-                <p>Please review and assign developers.</p>`
-            );
-        }
-
-        res.status(200).json({ success: true, data: project });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-};
-
-// Assign Developers
-exports.assignDevelopers = async (req, res) => {
-    try {
-        const { developers } = req.body;
-        const project = await Project.findById(req.params.id);
-
-        if (!project) {
-            return res.status(404).json({ success: false, message: 'Project not found' });
-        }
-
-        if (project.stage !== 'handover-to-pm') {
-            return res.status(400).json({ success: false, message: 'Invalid stage transition' });
-        }
-
-        project.developers = developers;
-        project.stage = 'assigned-to-developer';
-        project.stageHistory.push({
-            stage: 'assigned-to-developer',
-            changedBy: req.user.id
-        });
-
-        await project.save();
-        await project.populate('developers', 'username email');
-
-        // Send emails to all developers
-        for (const devId of developers) {
-            const developer = await User.findById(devId);
-            if (developer) {
-                await sendNotificationEmail(
-                    developer.email,
-                    'New Project Assignment - Developer',
-                    `<h3>Project: ${project.name}</h3>
-                    <p>You have been assigned to develop this project.</p>
-                    <p>Client: ${project.client}</p>
-                    <p>Please check the project details and start working.</p>`
-                );
-            }
-        }
-
-        res.status(200).json({ success: true, data: project });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-};
-
-// Update Progress (by Developer)
-exports.updateProgress = async (req, res) => {
-    try {
-        const { status, notes, percentage } = req.body;
-        const project = await Project.findById(req.params.id);
+        const { title, description } = req.body;
+        const project = await Pm.findById(req.params.id);
 
         if (!project) {
             return res.status(404).json({ success: false, message: 'Project not found' });
         }
 
         project.progressUpdates.push({
-            developer: req.user.id,
-            status,
-            notes,
-            percentage
+            title,
+            description,
+            createdBy: req.user.id
         });
 
-        // If all developers mark as finished, move to finished stage
-        if (status === 'finished') {
-            const allFinished = project.developers.every(devId => {
-                const lastUpdate = project.progressUpdates
-                    .filter(u => u.developer.toString() === devId.toString())
-                    .pop();
-                return lastUpdate && lastUpdate.status === 'finished';
-            });
-
-            if (allFinished) {
-                project.stage = 'finished';
-                project.actualEndDate = new Date();
-                project.stageHistory.push({
-                    stage: 'finished',
-                    changedBy: req.user.id
-                });
-
-                // Notify PM
-                if (project.projectManager) {
-                    const pm = await User.findById(project.projectManager);
-                    await sendNotificationEmail(
-                        pm.email,
-                        'Project Completed',
-                        `<h3>Project: ${project.name}</h3>
-                        <p>All developers have completed their work.</p>
-                        <p>The project is now finished.</p>`
-                    );
-                }
-            }
-        }
-
         await project.save();
-        await project.populate('progressUpdates.developer', 'username email');
+        await project.populate('progressUpdates.createdBy', 'username email');
 
-        res.status(200).json({ success: true, data: project });
+        res.status(200).json({ 
+            success: true, 
+            message: 'Progress update added successfully',
+            data: project 
+        });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
@@ -370,8 +313,8 @@ exports.updateProgress = async (req, res) => {
 // Add Task
 exports.addTask = async (req, res) => {
     try {
-        const { title, description, assignedTo, dueDate } = req.body;
-        const project = await Project.findById(req.params.id);
+        const { title, description, assignedTo, priority, dueDate } = req.body;
+        const project = await Pm.findById(req.params.id);
 
         if (!project) {
             return res.status(404).json({ success: false, message: 'Project not found' });
@@ -381,13 +324,15 @@ exports.addTask = async (req, res) => {
             title,
             description,
             assignedTo,
-            dueDate
+            priority: priority || 'medium',
+            dueDate,
+            status: 'pending'
         });
 
         await project.save();
         await project.populate('tasks.assignedTo', 'username email');
 
-        // Send email to assigned developer
+        // Send email notification
         if (assignedTo) {
             const developer = await User.findById(assignedTo);
             if (developer) {
@@ -402,7 +347,11 @@ exports.addTask = async (req, res) => {
             }
         }
 
-        res.status(200).json({ success: true, data: project });
+        res.status(200).json({ 
+            success: true, 
+            message: 'Task added successfully',
+            data: project 
+        });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
@@ -414,7 +363,7 @@ exports.updateTaskStatus = async (req, res) => {
         const { taskId } = req.params;
         const { status } = req.body;
 
-        const project = await Project.findOne({ 'tasks._id': taskId });
+        const project = await Pm.findOne({ 'tasks._id': taskId });
 
         if (!project) {
             return res.status(404).json({ success: false, message: 'Task not found' });
@@ -428,8 +377,13 @@ exports.updateTaskStatus = async (req, res) => {
         }
 
         await project.save();
+        await project.populate('tasks.assignedTo', 'username email');
 
-        res.status(200).json({ success: true, data: project });
+        res.status(200).json({ 
+            success: true, 
+            message: 'Task status updated successfully',
+            data: project 
+        });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
@@ -438,7 +392,7 @@ exports.updateTaskStatus = async (req, res) => {
 // Upload Document
 exports.uploadDocument = async (req, res) => {
     try {
-        const project = await Project.findById(req.params.id);
+        const project = await Pm.findById(req.params.id);
 
         if (!project) {
             return res.status(404).json({ success: false, message: 'Project not found' });
@@ -448,7 +402,6 @@ exports.uploadDocument = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Please upload a file' });
         }
 
-        // File information
         const fileUrl = `/uploads/documents/${req.file.filename}`;
 
         project.documents.push({
@@ -466,7 +419,7 @@ exports.uploadDocument = async (req, res) => {
         res.status(200).json({
             success: true,
             message: 'Document uploaded successfully',
-            data: project.documents[project.documents.length - 1]
+            data: project
         });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
@@ -476,7 +429,7 @@ exports.uploadDocument = async (req, res) => {
 // Upload Multiple Documents
 exports.uploadMultipleDocuments = async (req, res) => {
     try {
-        const project = await Project.findById(req.params.id);
+        const project = await Pm.findById(req.params.id);
 
         if (!project) {
             return res.status(404).json({ success: false, message: 'Project not found' });
@@ -486,7 +439,6 @@ exports.uploadMultipleDocuments = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Please upload at least one file' });
         }
 
-        // Add all uploaded files to project documents
         const uploadedDocs = req.files.map(file => ({
             name: file.originalname,
             url: `/uploads/documents/${file.filename}`,
@@ -504,7 +456,7 @@ exports.uploadMultipleDocuments = async (req, res) => {
         res.status(200).json({
             success: true,
             message: `${req.files.length} document(s) uploaded successfully`,
-            data: uploadedDocs
+            data: project
         });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
@@ -515,23 +467,19 @@ exports.uploadMultipleDocuments = async (req, res) => {
 exports.deleteDocument = async (req, res) => {
     try {
         const { documentId } = req.params;
-        const project = await Project.findOne({ 'documents._id': documentId });
+        const project = await Pm.findOne({ 'documents._id': documentId });
 
         if (!project) {
             return res.status(404).json({ success: false, message: 'Document not found' });
         }
 
         const document = project.documents.id(documentId);
-
-        // Delete file from filesystem
-        const fs = require('fs');
         const filePath = path.join(__dirname, '..', document.url);
 
         if (fs.existsSync(filePath)) {
             fs.unlinkSync(filePath);
         }
 
-        // Remove document from array
         project.documents.pull(documentId);
         await project.save();
 
@@ -548,7 +496,7 @@ exports.deleteDocument = async (req, res) => {
 exports.downloadDocument = async (req, res) => {
     try {
         const { documentId } = req.params;
-        const project = await Project.findOne({ 'documents._id': documentId });
+        const project = await Pm.findOne({ 'documents._id': documentId });
 
         if (!project) {
             return res.status(404).json({ success: false, message: 'Document not found' });
@@ -570,34 +518,39 @@ exports.downloadDocument = async (req, res) => {
 // Add Roadmap Milestone
 exports.addRoadmapMilestone = async (req, res) => {
     try {
-        const { milestone, description, targetDate } = req.body;
-        const project = await Project.findById(req.params.id);
+        const { title, description, dueDate } = req.body;
+        const project = await Pm.findById(req.params.id);
 
         if (!project) {
             return res.status(404).json({ success: false, message: 'Project not found' });
         }
 
         project.roadmap.push({
-            milestone,
+            title,
             description,
-            targetDate
+            dueDate,
+            status: 'pending'
         });
 
         await project.save();
 
-        res.status(200).json({ success: true, data: project });
+        res.status(200).json({ 
+            success: true, 
+            message: 'Milestone added successfully',
+            data: project 
+        });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
 };
 
-// Update Roadmap Milestone
-exports.updateRoadmapMilestone = async (req, res) => {
+// Update Roadmap Milestone Status
+exports.updateRoadmapMilestoneStatus = async (req, res) => {
     try {
         const { milestoneId } = req.params;
         const { status } = req.body;
 
-        const project = await Project.findOne({ 'roadmap._id': milestoneId });
+        const project = await Pm.findOne({ 'roadmap._id': milestoneId });
 
         if (!project) {
             return res.status(404).json({ success: false, message: 'Milestone not found' });
@@ -612,7 +565,11 @@ exports.updateRoadmapMilestone = async (req, res) => {
 
         await project.save();
 
-        res.status(200).json({ success: true, data: project });
+        res.status(200).json({ 
+            success: true, 
+            message: 'Milestone status updated successfully',
+            data: project 
+        });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }

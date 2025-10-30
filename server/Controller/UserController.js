@@ -71,9 +71,17 @@ const getAllUsers = async (req, res) => {
             .skip((page-1)*size)
             .limit(parseInt(size));
         const count = await User.countDocuments(filter);
-        res.status(200).json({message:"Users List.....",list:allUsers,count:count});
+        res.status(200).json({
+            success: true,
+            message:"Users List.....",
+            data: allUsers,
+            count: count
+        });
     }catch(e){
-        res.status(500).json({error: e.message});
+        res.status(500).json({
+            success: false,
+            error: e.message
+        });
     }
 }
 

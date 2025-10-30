@@ -15,6 +15,11 @@ const taskSchema = new mongoose.Schema({
         enum: ['pending', 'in-progress', 'completed'],
         default: 'pending'
     },
+    priority: {
+        type: String,
+        enum: ['low', 'medium', 'high'],
+        default: 'medium'
+    },
     dueDate: Date,
     completedAt: Date,
     createdAt: {
@@ -23,24 +28,42 @@ const taskSchema = new mongoose.Schema({
     }
 });
 
+// FIX: Updated progress update schema to match frontend
 const progressUpdateSchema = new mongoose.Schema({
-    developer: {
+    title: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
-    status: {
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
+});
+
+// FIX: Updated roadmap schema to match frontend
+const roadmapSchema = new mongoose.Schema({
+    title: {
         type: String,
-        enum: ['on-going', 'finished'],
         required: true
     },
-    notes: String,
-    percentage: {
-        type: Number,
-        min: 0,
-        max: 100
+    description: String,
+    dueDate: Date,
+    status: {
+        type: String,
+        enum: ['pending', 'in-progress', 'completed'],
+        default: 'pending'
     },
-    updatedAt: {
+    completedAt: Date,
+    createdAt: {
         type: Date,
         default: Date.now
     }
@@ -125,18 +148,8 @@ const PmSchema = new mongoose.Schema({
         }
     }],
 
-    // Roadmap
-    roadmap: [{
-        milestone: String,
-        description: String,
-        targetDate: Date,
-        status: {
-            type: String,
-            enum: ['pending', 'in-progress', 'completed'],
-            default: 'pending'
-        },
-        completedAt: Date
-    }],
+    // FIX: Updated roadmap using schema
+    roadmap: [roadmapSchema],
 
     // Dates
     startDate: Date,
@@ -165,4 +178,4 @@ PmSchema.pre('save', function(next) {
     next();
 });
 
-module.exports = mongoose.models.Project || mongoose.model('Pm', PmSchema);
+module.exports = mongoose.model('Pm', PmSchema);

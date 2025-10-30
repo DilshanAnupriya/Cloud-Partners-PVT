@@ -5,6 +5,7 @@ import { Search, Plus, Edit, Trash2, X, Eye, EyeOff, RefreshCw, ChevronLeft, Che
 import Sidebar from "@/components/ui/Sidebar";
 import DashboardNavbar from "@/components/ui/DashboardNavbar";
 import {useAuth} from "@/app/Context/AuthContext";
+import { log } from 'console';
 
 // Types
 interface User {
@@ -49,7 +50,7 @@ const UserManagementPage = () => {
         isActive: true
     });
 
-    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1';
+    const API_BASE_URL = 'http://localhost:8080/api/v1';
 
     // Fetch users
     const fetchUsers = async () => {
@@ -72,8 +73,9 @@ const UserManagementPage = () => {
             }
 
             const data = await response.json();
-            setUsers(data.list);
-            setTotalCount(data.count);
+            console.log('Response:', data);
+            setUsers(data.data || []);
+            setTotalCount(data.count || 0);
         } catch (err) {
             setError('Failed to load users. Please try again.');
             console.error('Error fetching users:', err);
