@@ -33,5 +33,15 @@ router.get('/:id/documents/:documentId/download', verifyToken(['BA','PM','Sales'
 // FIX: Roadmap Management
 router.post('/:id/roadmap', verifyToken(['BA','PM','Admin']), pm.addRoadmapMilestone);
 router.put('/:id/roadmap/:milestoneId/status', verifyToken(['BA','PM','Developer','Admin']), pm.updateRoadmapMilestoneStatus);
+router.put('/:id/roadmap/:milestoneId', verifyToken(['BA','PM','Admin']), pm.updateRoadmapMilestone);
+router.delete('/:id/roadmap/:milestoneId', verifyToken(['BA','PM','Admin']), pm.deleteRoadmapMilestone);
+
+// Progress Update Management
+router.put('/:id/progress/:progressId', verifyToken(['BA','PM','Developer','Admin']), pm.updateProgressUpdate);
+router.delete('/:id/progress/:progressId', verifyToken(['BA','PM','Admin']), pm.deleteProgressUpdate);
+
+// Task Management - Additional endpoints
+router.put('/:id/tasks/:taskId', verifyToken(['BA','PM','Admin']), pm.updateTask);
+router.delete('/:id/tasks/:taskId', verifyToken(['BA','PM','Admin']), pm.deleteTask);
 
 module.exports = router;

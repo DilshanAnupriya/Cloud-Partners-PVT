@@ -127,6 +127,16 @@ const ProjectDetailsPage: React.FC = () => {
   const [showProgressModal, setShowProgressModal] = useState(false);
   const [showAssignModal, setShowAssignModal] = useState(false);
   
+  // Edit modal states
+  const [showEditTaskModal, setShowEditTaskModal] = useState(false);
+  const [showEditMilestoneModal, setShowEditMilestoneModal] = useState(false);
+  const [showEditProgressModal, setShowEditProgressModal] = useState(false);
+  
+  // Edit item tracking
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [editingMilestone, setEditingMilestone] = useState<Milestone | null>(null);
+  const [editingProgress, setEditingProgress] = useState<ProgressUpdate | null>(null);
+  
   // Form states
   const [projectForm, setProjectForm] = useState({
     name: '',
@@ -160,6 +170,30 @@ const ProjectDetailsPage: React.FC = () => {
     businessAnalyst: '',
     developers: [] as string[]
   });
+
+  // Edit form states
+  const [editTaskForm, setEditTaskForm] = useState({
+    title: '',
+    description: '',
+    assignedTo: '',
+    priority: 'medium' as 'low' | 'medium' | 'high',
+    dueDate: ''
+  });
+  
+  const [editMilestoneForm, setEditMilestoneForm] = useState({
+    title: '',
+    description: '',
+    dueDate: ''
+  });
+  
+  const [editProgressForm, setEditProgressForm] = useState({
+    title: '',
+    description: ''
+  });
+
+  // Document upload state
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
 
   // API Functions
   const fetchProject = async () => {
@@ -356,6 +390,117 @@ const ProjectDetailsPage: React.FC = () => {
     }
   };
 
+  const updateMilestone = async (milestoneId: string, data: { title: string; description: string; dueDate: string }) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/${projectId}/roadmap/${milestoneId}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (!response.ok) throw new Error('Failed to update milestone');
+
+      await fetchProject();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update milestone');
+    }
+  };
+
+  const deleteMilestone = async (milestoneId: string) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/${projectId}/roadmap/${milestoneId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) throw new Error('Failed to delete milestone');
+
+      await fetchProject();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete milestone');
+    }
+  };
+
+  const updateProgress = async (progressId: string, data: { title: string; description: string }) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/${projectId}/progress/${progressId}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (!response.ok) throw new Error('Failed to update progress');
+
+      await fetchProject();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update progress');
+    }
+  };
+
+  const deleteProgress = async (progressId: string) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/${projectId}/progress/${progressId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) throw new Error('Failed to delete progress');
+
+      await fetchProject();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete progress');
+    }
+  };
+
+  const updateTask = async (taskId: string, data: { title: string; description: string; assignedTo: string; priority: string; dueDate: string }) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/${projectId}/tasks/${taskId}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (!response.ok) throw new Error('Failed to update task');
+
+      await fetchProject();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update task');
+    }
+  };
+
+  const deleteTask = async (taskId: string) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/${projectId}/tasks/${taskId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) throw new Error('Failed to delete task');
+
+      await fetchProject();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete task');
+    }
+  };
+
   const addProgressUpdate = async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/${projectId}/progress`, {
@@ -374,6 +519,126 @@ const ProjectDetailsPage: React.FC = () => {
       setProgressForm({ title: '', description: '' });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to add progress update');
+    }
+  };
+
+  // Edit functions
+  const openEditTask = (task: Task) => {
+    setEditingTask(task);
+    setEditTaskForm({
+      title: task.title,
+      description: task.description,
+      assignedTo: task.assignedTo?._id || '',
+      priority: task.priority,
+      dueDate: task.dueDate ? task.dueDate.split('T')[0] : ''
+    });
+    setShowEditTaskModal(true);
+  };
+
+  const openEditMilestone = (milestone: Milestone) => {
+    setEditingMilestone(milestone);
+    setEditMilestoneForm({
+      title: milestone.title,
+      description: milestone.description,
+      dueDate: milestone.dueDate ? milestone.dueDate.split('T')[0] : ''
+    });
+    setShowEditMilestoneModal(true);
+  };
+
+  const openEditProgress = (progress: ProgressUpdate) => {
+    setEditingProgress(progress);
+    setEditProgressForm({
+      title: progress.title,
+      description: progress.description
+    });
+    setShowEditProgressModal(true);
+  };
+
+  const submitEditTask = async () => {
+    if (!editingTask) return;
+    
+    try {
+      await updateTask(editingTask._id, editTaskForm);
+      setShowEditTaskModal(false);
+      setEditingTask(null);
+      setEditTaskForm({ title: '', description: '', assignedTo: '', priority: 'medium', dueDate: '' });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update task');
+    }
+  };
+
+  const submitEditMilestone = async () => {
+    if (!editingMilestone) return;
+    
+    try {
+      await updateMilestone(editingMilestone._id, editMilestoneForm);
+      setShowEditMilestoneModal(false);
+      setEditingMilestone(null);
+      setEditMilestoneForm({ title: '', description: '', dueDate: '' });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update milestone');
+    }
+  };
+
+  const submitEditProgress = async () => {
+    if (!editingProgress) return;
+    
+    try {
+      await updateProgress(editingProgress._id, editProgressForm);
+      setShowEditProgressModal(false);
+      setEditingProgress(null);
+      setEditProgressForm({ title: '', description: '' });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update progress');
+    }
+  };
+
+  const uploadDocument = async () => {
+    if (!selectedFile) {
+      setError('Please select a file to upload');
+      return;
+    }
+
+    try {
+      setUploading(true);
+      const formData = new FormData();
+      formData.append('document', selectedFile);
+
+      const response = await fetch(`${API_BASE_URL}/${projectId}/documents`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      if (!response.ok) throw new Error('Failed to upload document');
+
+      await fetchProject();
+      setShowDocumentModal(false);
+      setSelectedFile(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to upload document');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const deleteDocument = async (documentId: string) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/${projectId}/documents/${documentId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) throw new Error('Failed to delete document');
+
+      await fetchProject();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete document');
     }
   };
 
@@ -415,8 +680,8 @@ const ProjectDetailsPage: React.FC = () => {
       'sales': 'bg-blue-100 text-blue-800',
       'requirement-gathering': 'bg-yellow-100 text-yellow-800',
       'handover-to-pm': 'bg-purple-100 text-purple-800',
-      'assigned-to-developer': 'bg-green-100 text-green-800',
-      'finished': 'bg-gray-100 text-gray-800'
+      'assigned-to-developer': 'bg-red-100 text-red-800',
+      'finished': 'bg-green-100 text-green-800'
     };
     return colors[stage as keyof typeof colors] || 'bg-gray-100 text-gray-800';
   };
@@ -432,7 +697,7 @@ const ProjectDetailsPage: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     const colors = {
-      'pending': 'bg-gray-100 text-gray-800',
+      'pending': 'bg-red-100 text-red-800',
       'in-progress': 'bg-blue-100 text-blue-800',
       'completed': 'bg-green-100 text-green-800'
     };
@@ -783,6 +1048,18 @@ const ProjectDetailsPage: React.FC = () => {
                             >
                               <CheckCircle className="w-4 h-4" />
                             </button>
+                            <button
+                              onClick={() => openEditTask(task)}
+                              className="text-yellow-600 hover:text-yellow-800"
+                            >
+                              <Edit className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => deleteTask(task._id)}
+                              className="text-red-600 hover:text-red-800"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -814,12 +1091,20 @@ const ProjectDetailsPage: React.FC = () => {
                             <p className="text-sm text-gray-600">{doc.type}</p>
                             <p className="text-xs text-gray-500">{(doc.size / 1024).toFixed(1)} KB</p>
                           </div>
-                          <button
-                            onClick={() => downloadDocument(doc._id)}
-                            className="text-blue-600 hover:text-blue-800"
-                          >
-                            <Download className="w-4 h-4" />
-                          </button>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => downloadDocument(doc._id)}
+                              className="text-blue-600 hover:text-blue-800"
+                            >
+                              <Download className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => deleteDocument(doc._id)}
+                              className="text-red-600 hover:text-red-800"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
                         </div>
                         <div className="text-xs text-gray-500">
                           Uploaded by {doc.uploadedBy?.username} on {new Date(doc.uploadedAt).toLocaleDateString()}
@@ -873,6 +1158,18 @@ const ProjectDetailsPage: React.FC = () => {
                             >
                               <CheckCircle className="w-4 h-4" />
                             </button>
+                            <button
+                              onClick={() => openEditMilestone(milestone)}
+                              className="text-yellow-600 hover:text-yellow-800"
+                            >
+                              <Edit className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => deleteMilestone(milestone._id)}
+                              className="text-red-600 hover:text-red-800"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -902,6 +1199,20 @@ const ProjectDetailsPage: React.FC = () => {
                           <div className="flex-1">
                             <h5 className="font-semibold text-gray-900">{update.title}</h5>
                             <p className="text-sm text-gray-600 mt-1">{update.description}</p>
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => openEditProgress(update)}
+                              className="text-yellow-600 hover:text-yellow-800"
+                            >
+                              <Edit className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => deleteProgress(update._id)}
+                              className="text-red-600 hover:text-red-800"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
                           </div>
                         </div>
                         <div className="text-xs text-gray-500">
@@ -1237,6 +1548,258 @@ const ProjectDetailsPage: React.FC = () => {
                 className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               >
                 Assign Team
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Document Upload Modal */}
+      {showDocumentModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold">Upload Document</h3>
+              <button
+                onClick={() => {
+                  setShowDocumentModal(false);
+                  setSelectedFile(null);
+                }}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Select File</label>
+                <input
+                  type="file"
+                  onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
+                />
+                {selectedFile && (
+                  <p className="text-sm text-gray-600 mt-1">
+                    Selected: {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
+                  </p>
+                )}
+              </div>
+            </div>
+            
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={() => {
+                  setShowDocumentModal(false);
+                  setSelectedFile(null);
+                }}
+                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={uploadDocument}
+                disabled={!selectedFile || uploading}
+                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {uploading ? 'Uploading...' : 'Upload'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Task Modal */}
+      {showEditTaskModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl max-w-md w-full p-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Edit Task</h2>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                <input
+                  type="text"
+                  value={editTaskForm.title}
+                  onChange={(e) => setEditTaskForm({...editTaskForm, title: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea
+                  value={editTaskForm.description}
+                  onChange={(e) => setEditTaskForm({...editTaskForm, description: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  rows={3}
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Assign To</label>
+                <select
+                  value={editTaskForm.assignedTo}
+                  onChange={(e) => setEditTaskForm({...editTaskForm, assignedTo: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">Select user</option>
+                  {project.developers?.map(dev => (
+                    <option key={dev._id} value={dev._id}>{dev.username}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+                  <select
+                    value={editTaskForm.priority}
+                    onChange={(e) => setEditTaskForm({...editTaskForm, priority: e.target.value as 'low' | 'medium' | 'high'})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
+                  <input
+                    type="date"
+                    value={editTaskForm.dueDate}
+                    onChange={(e) => setEditTaskForm({...editTaskForm, dueDate: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={() => {
+                  setShowEditTaskModal(false);
+                  setEditingTask(null);
+                }}
+                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={submitEditTask}
+                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                Update Task
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Milestone Modal */}
+      {showEditMilestoneModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl max-w-md w-full p-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Edit Milestone</h2>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                <input
+                  type="text"
+                  value={editMilestoneForm.title}
+                  onChange={(e) => setEditMilestoneForm({...editMilestoneForm, title: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea
+                  value={editMilestoneForm.description}
+                  onChange={(e) => setEditMilestoneForm({...editMilestoneForm, description: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  rows={3}
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
+                <input
+                  type="date"
+                  value={editMilestoneForm.dueDate}
+                  onChange={(e) => setEditMilestoneForm({...editMilestoneForm, dueDate: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+            </div>
+            
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={() => {
+                  setShowEditMilestoneModal(false);
+                  setEditingMilestone(null);
+                }}
+                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={submitEditMilestone}
+                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                Update Milestone
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Progress Modal */}
+      {showEditProgressModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl max-w-md w-full p-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Edit Progress Update</h2>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                <input
+                  type="text"
+                  value={editProgressForm.title}
+                  onChange={(e) => setEditProgressForm({...editProgressForm, title: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea
+                  value={editProgressForm.description}
+                  onChange={(e) => setEditProgressForm({...editProgressForm, description: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  rows={4}
+                />
+              </div>
+            </div>
+            
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={() => {
+                  setShowEditProgressModal(false);
+                  setEditingProgress(null);
+                }}
+                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={submitEditProgress}
+                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                Update Progress
               </button>
             </div>
           </div>

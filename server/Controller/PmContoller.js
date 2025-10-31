@@ -574,3 +574,165 @@ exports.updateRoadmapMilestoneStatus = async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 };
+
+// Update Progress Update
+exports.updateProgressUpdate = async (req, res) => {
+    try {
+        const { progressId } = req.params;
+        const { title, description } = req.body;
+
+        const project = await Pm.findOne({ 'progressUpdates._id': progressId });
+
+        if (!project) {
+            return res.status(404).json({ success: false, message: 'Progress update not found' });
+        }
+
+        const progressUpdate = project.progressUpdates.id(progressId);
+        if (title) progressUpdate.title = title;
+        if (description) progressUpdate.description = description;
+
+        await project.save();
+        await project.populate('progressUpdates.createdBy', 'username email');
+
+        res.status(200).json({ 
+            success: true, 
+            message: 'Progress update updated successfully',
+            data: project 
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+// Delete Progress Update
+exports.deleteProgressUpdate = async (req, res) => {
+    try {
+        const { progressId } = req.params;
+
+        const project = await Pm.findOne({ 'progressUpdates._id': progressId });
+
+        if (!project) {
+            return res.status(404).json({ success: false, message: 'Progress update not found' });
+        }
+
+        project.progressUpdates.pull(progressId);
+        await project.save();
+
+        res.status(200).json({ 
+            success: true, 
+            message: 'Progress update deleted successfully',
+            data: project 
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+// Update Roadmap Milestone
+exports.updateRoadmapMilestone = async (req, res) => {
+    try {
+        const { milestoneId } = req.params;
+        const { title, description, dueDate } = req.body;
+
+        const project = await Pm.findOne({ 'roadmap._id': milestoneId });
+
+        if (!project) {
+            return res.status(404).json({ success: false, message: 'Milestone not found' });
+        }
+
+        const milestone = project.roadmap.id(milestoneId);
+        if (title) milestone.title = title;
+        if (description) milestone.description = description;
+        if (dueDate) milestone.dueDate = dueDate;
+
+        await project.save();
+
+        res.status(200).json({ 
+            success: true, 
+            message: 'Milestone updated successfully',
+            data: project 
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+// Delete Roadmap Milestone
+exports.deleteRoadmapMilestone = async (req, res) => {
+    try {
+        const { milestoneId } = req.params;
+
+        const project = await Pm.findOne({ 'roadmap._id': milestoneId });
+
+        if (!project) {
+            return res.status(404).json({ success: false, message: 'Milestone not found' });
+        }
+
+        project.roadmap.pull(milestoneId);
+        await project.save();
+
+        res.status(200).json({ 
+            success: true, 
+            message: 'Milestone deleted successfully',
+            data: project 
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+// Update Task
+exports.updateTask = async (req, res) => {
+    try {
+        const { taskId } = req.params;
+        const { title, description, assignedTo, priority, dueDate } = req.body;
+
+        const project = await Pm.findOne({ 'tasks._id': taskId });
+
+        if (!project) {
+            return res.status(404).json({ success: false, message: 'Task not found' });
+        }
+
+        const task = project.tasks.id(taskId);
+        if (title) task.title = title;
+        if (description) task.description = description;
+        if (assignedTo) task.assignedTo = assignedTo;
+        if (priority) task.priority = priority;
+        if (dueDate) task.dueDate = dueDate;
+
+        await project.save();
+        await project.populate('tasks.assignedTo', 'username email');
+
+        res.status(200).json({ 
+            success: true, 
+            message: 'Task updated successfully',
+            data: project 
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+// Delete Task
+exports.deleteTask = async (req, res) => {
+    try {
+        const { taskId } = req.params;
+
+        const project = await Pm.findOne({ 'tasks._id': taskId });
+
+        if (!project) {
+            return res.status(404).json({ success: false, message: 'Task not found' });
+        }
+
+        project.tasks.pull(taskId);
+        await project.save();
+
+        res.status(200).json({ 
+            success: true, 
+            message: 'Task deleted successfully',
+            data: project 
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
