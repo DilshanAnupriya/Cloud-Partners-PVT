@@ -33,7 +33,7 @@ export default function LoginPage() {
         const initializeGoogleSignIn = () => {
             if (window.google) {
                 window.google.accounts.id.initialize({
-                    client_id: '422321966632-ak6o6pa82vsuntqc6r23s8ndas833bd1.apps.googleusercontent.com',
+                    client_id: process.env.GOOGLE_CLIENT_ID,
                     callback: handleGoogleSignIn,
                 });
                 window.google.accounts.id.renderButton(
