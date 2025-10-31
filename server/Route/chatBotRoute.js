@@ -3,7 +3,7 @@ const router = express.Router();
 const { chatWithAI, startChatSession, chatWithStreaming } = require('../Controller/ChatBotController');
 
 // Route to chat with AI
-router.post('/chat', chatWithAI);
+router.post('/', chatWithAI);
 
 // Route to start a new chat session
 router.post('/start-session', startChatSession);

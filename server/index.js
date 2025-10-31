@@ -17,6 +17,7 @@ const projectRoutes = require('./Route/projectRoute'); // NEW
 const snippetRoutes = require('./Route/codeSnippetRoute'); // NEW
 const pmRoutes = require('./route/pmRoute');
 const {join} = require("node:path");
+const chatRoutes = require('./Route/chatBotRoute');
 
 const app = express();
 
@@ -52,7 +53,7 @@ app.use('/api/blogs', blogRoutes);
 app.use('/api/code', projectRoutes); // NEW - Projects
 app.use('/api/code', snippetRoutes); // NEW - Snippets
 app.use('/api/v1/pm', pmRoutes);
-
+app.use('/api/v1/chat', chatRoutes);
 
 mongoose.connect(URL).then( () => {
     console.log('MongoDB Connected!...');

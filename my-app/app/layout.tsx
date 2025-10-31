@@ -7,7 +7,7 @@ import { AuthProvider } from './Context/AuthContext';
 import { usePathname } from 'next/navigation';
 import Navbar from "@/components/ui/NavBar";
 import Footer from "@/components/ui/Footer";
-
+import GeminiChatBot from '@/components/gemini/GeminiChatBot';
 function LayoutContent({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const isDashboard = pathname?.startsWith('/dashboard');
@@ -47,6 +47,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
                 {children}
             </main>
             <Footer />
+            <GeminiChatBot />
         </div>
     );
 }
