@@ -4,6 +4,9 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const User = require('../Model/UserModel');
 const JWT_SECRET = process.env.JWT_SECRET;
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
 
 // Email transporter configuration
 const transporter = nodemailer.createTransport({
@@ -50,7 +53,7 @@ const logIn = async (req, res) => {
             return res.status(401).json({error: 'Invalid password !'});
         }
         const payload = {userId:userExist._id,username:username,role:userExist.role};
-        const token = jwt.sign(payload,JWT_SECRET,{expiresIn: '1h'});
+        const token = jwt.sign(payload,JWT_SECRET,{expiresIn: '10h'});
         res.status(200).json({message:"Login Success !",token:token});
     }catch (e){
         res.status(500).json({error: e.message});
@@ -321,6 +324,94 @@ const updateUserById = async (req, res) => {
     }
 };
 
+
+const googleLogin = async (req, res) => {
+    try {
+        const { credential } = req.body;
+
+        if (!credential) {
+            return res.status(400).json({ error: 'Google credential is required' });
+        }
+
+        // Verify Google token
+        const ticket = await client.verifyIdToken({
+            idToken: credential,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+
+        const payload = ticket.getPayload();
+        const { email, name, sub: googleId, picture } = payload;
+
+        // Check if email domain is allowed (optional - for cloudpartners.biz only)
+        if (!email.endsWith('@cloudpartners.biz')) {
+            return res.status(403).json({ 
+                error: 'Only @cloudpartners.biz email addresses are allowed' 
+            });
+        }
+
+        // Check if user exists
+        let user = await User.findOne({ email });
+
+        if (!user) {
+            // Create new user with Google account
+            const username = email.split('@')[0]; // Use email prefix as username
+            
+            // Generate a random secure password (user won't use it for Google login)
+            const randomPassword = crypto.randomBytes(32).toString('hex');
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(randomPassword, salt);
+
+            user = new User({
+                username,
+                email,
+                password: hashedPassword,
+                role: ['Developer'], // Default role, you can customize this
+                isActive: true,
+                googleId,
+                profilePicture: picture,
+                authProvider: 'google'
+            });
+
+            await user.save();
+        } else {
+            // Update existing user with Google ID if not set
+            if (!user.googleId) {
+                user.googleId = googleId;
+                user.authProvider = user.authProvider || 'google';
+                user.profilePicture = user.profilePicture || picture;
+                await user.save();
+            }
+        }
+
+        // Generate JWT token
+        const jwtPayload = {
+            userId: user._id,
+            username: user.username,
+            role: user.role,
+            email: user.email
+        };
+        
+        const token = jwt.sign(jwtPayload, JWT_SECRET, { expiresIn: '10h' });
+
+        res.status(200).json({
+            message: 'Google login successful',
+            token,
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                role: user.role,
+                profilePicture: user.profilePicture
+            }
+        });
+    } catch (e) {
+        console.error('Google login error:', e);
+        res.status(500).json({ 
+            error: 'Google authentication failed. Please try again.' 
+        });
+    }
+};
+
 module.exports = {
     signUp,
     logIn,
@@ -330,5 +421,6 @@ module.exports = {
     deleteUser,
     forgotPassword,
     resetPassword,
-    updateUserById
+    updateUserById,
+    googleLogin
 }

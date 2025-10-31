@@ -30,6 +30,19 @@ const userSchema = new mongoose.Schema({
     resetPasswordExpire: {
         type: Date
     },
+    googleId: {
+        type: String,
+        unique: true,
+        sparse: true // Allows null values while maintaining uniqueness
+    },
+    profilePicture: {
+        type: String
+    },
+    authProvider: {
+        type: String,
+        enum: ['local', 'google'],
+        default: 'local'
+    },
     createdAt: {
         type: Date,
         default: Date.now,

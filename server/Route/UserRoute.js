@@ -13,5 +13,5 @@ router.delete('/delete-user/:id',verifyToken(['Admin']),UserController.deleteUse
 router.post('/forgot-password', UserController.forgotPassword);
 router.put('/reset-password/:token', UserController.resetPassword);
 router.put('/update-user-by/:id',verifyToken(['Admin']) , UserController.updateUserById);
-
+router.post('/google-login', UserController.googleLogin);
 module.exports = router;
