@@ -19,7 +19,7 @@ export default function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const { login, isAuthenticated } = useAuth();
+    const { login, isAuthenticated,setExternalAuth } = useAuth();
     const router = useRouter();
 
     useEffect(() => {
@@ -33,7 +33,7 @@ export default function LoginPage() {
         const initializeGoogleSignIn = () => {
             if (window.google) {
                 window.google.accounts.id.initialize({
-                    client_id: process.env.GOOGLE_CLIENT_ID,
+                    client_id: `422321966632-ak6o6pa82vsuntqc6r23s8ndas833bd1.apps.googleusercontent.com`,
                     callback: handleGoogleSignIn,
                 });
                 window.google.accounts.id.renderButton(
@@ -65,38 +65,39 @@ export default function LoginPage() {
         }
     }, []);
 
-    const handleGoogleSignIn = async (response: any) => {
-        setLoading(true);
-        setError('');
+const handleGoogleSignIn = async (response: any) => {
+    setLoading(true);
+    setError('');
 
-        try {
-            const res = await fetch('http://localhost:5000/api/v1/user/google-login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    credential: response.credential,
-                }),
-            });
+    try {
+        const res = await fetch('http://localhost:8080/api/v1/user/google-login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                credential: response.credential,
+            }),
+        });
 
-            const data = await res.json();
+        const data = await res.json();
 
-            if (!res.ok) {
-                throw new Error(data.error || 'Google sign-in failed');
-            }
-
-            // Store token and redirect
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('user', JSON.stringify(data.user));
-            
-            router.push('/');
-        } catch (err: any) {
-            setError(err.message || 'Google sign-in failed');
-        } finally {
-            setLoading(false);
+        if (!res.ok) {
+            throw new Error(data.error || 'Google sign-in failed');
         }
-    };
+
+        // ✅ Use the new setExternalAuth method to update context
+        await setExternalAuth(data.token, data.user);
+        
+        // ✅ Navigate to home page (context is already updated)
+        router.push('/');
+        
+    } catch (err: any) {
+        setError(err.message || 'Google sign-in failed');
+    } finally {
+        setLoading(false);
+    }
+};
 
     const validateEmail = (email: string): boolean => {
         const emailRegex = /^[^\s@]+@cloudpartners\.biz$/i;

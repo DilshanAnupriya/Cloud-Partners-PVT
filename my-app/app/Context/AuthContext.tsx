@@ -26,6 +26,7 @@ interface AuthContextType {
     resetPassword: (token: string, password: string) => Promise<void>;
     updateUser: (userData: Partial<User>) => Promise<void>;
     fetchUserProfile: () => Promise<void>;
+    setExternalAuth: (token: string, user: User) => Promise<void>; 
 }
 
 // Create Context
@@ -118,6 +119,27 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             throw error;
         }
     };
+
+// Add this method to your AuthProvider component
+const setExternalAuth = async (authToken: string, userData: User) => {
+    try {
+        console.log('🔐 Setting external auth...');
+        
+        // Set state
+        setToken(authToken);
+        setUser(userData);
+        
+        // Store in localStorage
+        localStorage.setItem('authToken', authToken);
+        localStorage.setItem('user', JSON.stringify(userData));
+        
+        console.log('✅ External auth set successfully');
+    } catch (error) {
+        console.error('❌ Error setting external auth:', error);
+        throw error;
+    }
+};
+
 
     // Login
     const login = async (username: string, password: string) => {
@@ -325,6 +347,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         resetPassword,
         updateUser,
         fetchUserProfile,
+        setExternalAuth
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
