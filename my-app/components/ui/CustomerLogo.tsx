@@ -340,7 +340,10 @@ const GoogleProductsSection = () => {
 
             {/* Subtle Background Elements */}
             <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-blue-50 to-transparent opacity-50 rounded-full transform translate-x-48 -translate-y-48" />
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-gray-50 to-transparent opacity-50 rounded-full transform -translate-x-48 translate-y-48" />
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-white to-transparent opacity-50 rounded-full transform -translate-x-48 translate-y-48" />
+            
+            {/* Bottom Fade to White */}
+            <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent pointer-events-none" />
         </section>
     );
 };

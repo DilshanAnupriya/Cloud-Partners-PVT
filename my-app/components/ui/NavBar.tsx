@@ -39,7 +39,7 @@ const Navbar = () => {
 
     if (!mounted) {
         return (
-            <nav className="fixed top-0 left-0 right-0 z-50 bg-nav border-nav">
+            <nav className="fixed top-0 left-0 right-0 z-50 bg-nav ">
                 <div className="w-full px-6 py-4">
                     <div className="grid grid-cols-3 items-center">
                         <div className="flex items-center space-x-3">
