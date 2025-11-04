@@ -1,7 +1,8 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { motion, MotionValue } from "motion/react";
-import React from "react";
+import React, { useState } from "react";
+import GeminiChatBot from "@/components/gemini/GeminiChatBot";
 
 const transition = {
   duration: 0,
@@ -19,19 +20,36 @@ export const GoogleGeminiEffect = ({
   description?: string;
   className?: string;
 }) => {
+  const [isGeminiOpen, setIsGeminiOpen] = useState(false);
   return (
     <div className={cn("relative w-full min-w-full h-full flex flex-col items-center justify-center", className)}>
       <div className="relative z-10 text-center">
-        <p className="text-2xl md:text-8xl font-normal pb-6 text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-800 to-neutral-600">
-          {title || `Build with Aceternity UI`}
-        </p>
-        <p className="text-sm md:text-2xl font-normal text-center text-neutral-600 mt-6 max-w-2xl mx-auto">
+        {title ? (
+          <p className="text-2xl md:text-8xl font-normal mt-[-40px] pb-6 text-center">
+            {title}
+          </p>
+        ) : (
+          <p className="text-2xl md:text-8xl font-normal mt-[-40px] pb-6 text-center">
+          
+            <span>
+              <span style={{ color: "#4285F4" }}>G</span>
+              <span style={{ color: "#EA4335" }}>o</span>
+              <span style={{ color: "#FBBC05" }}>o</span>
+              <span style={{ color: "#4285F4" }}>g</span>
+              <span style={{ color: "#34A853" }}>l</span>
+              <span style={{ color: "#EA4335" }}>e</span>
+            </span>
+           <span className="bg-clip-text text-transparent bg-gradient-to-b from-neutral-800 to-neutral-600 ml-5">Gemini </span>
+
+          </p>
+        )}
+        <p className="text-sm md:text-2xl font-normal text-center text-neutral-600 mt-[-15px] max-w-2xl mx-auto">
           {description ||
             `Scroll this component and see the bottom SVG come to life wow this
           works!`}
         </p>
-        <button className="font-bold bg-white border border-neutral-300 rounded-full md:px-6 md:py-3 px-4 py-2 mt-8 md:text-lg text-black text-sm shadow-lg hover:shadow-xl transition-shadow">
-          ui.aceternity.com
+        <button onClick={() => setIsGeminiOpen(true)} className="font-bold bg-white border border-neutral-300 rounded-full md:px-6 md:py-3 px-4 py-2 mt-10  md:text-lg text-black text-sm shadow-lg hover:shadow-xl transition-shadow">
+          Connect with Gemini
         </button>
       </div>
       <svg
@@ -157,6 +175,9 @@ export const GoogleGeminiEffect = ({
           </filter>
         </defs>
       </svg>
+
+      {/* Gemini ChatBot Mount */}
+      <GeminiChatBot open={isGeminiOpen} onOpenChange={setIsGeminiOpen} />
     </div>
   );
 };

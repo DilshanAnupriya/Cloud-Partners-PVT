@@ -5,7 +5,7 @@ const upload = require('../Config/multer');
 const verifyToken = require("../Middleware/Auth");
 
 // Basic CRUD Operations
-router.post('/', verifyToken(['BA','PM','Admin']), pm.createProject);
+router.post('/', verifyToken(['Sales','BA','PM','Admin']), pm.createProject);
 router.get('/', verifyToken(['BA','PM','Sales','Developer','Admin']), pm.getAllProjects);
 router.get('/:id', verifyToken(['BA','PM','Sales','Developer','Admin']), pm.getProjectById);
 router.put('/:id', verifyToken(['BA','PM','Developer','Admin']), pm.updateProject);

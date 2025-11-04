@@ -39,22 +39,21 @@ const Navbar = () => {
 
     if (!mounted) {
         return (
-            <nav className="fixed top-0 left-0 right-0 z-50 bg-nav ">
-                <div className="w-full px-6 py-4">
-                    <div className="grid grid-cols-3 items-center">
-                        <div className="flex items-center space-x-3">
-                            <div className="relative w-10 h-10 rounded-full flex items-center justify-center">
+            <nav className="fixed top-0 left-0 right-0 z-50 bg-nav">
+                <div className="w-full px-4 sm:px-6 py-2">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2 sm:space-x-3">
+                            <div className="relative w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 rounded-full flex items-center justify-center overflow-hidden">
                                 <Image
-                                    className="rounded-full"
+                                    className="rounded-full object-cover"
                                     alt="Logo"
-                                    src="/companyLogo.png"
-                                    width={40}
-                                    height={40}
+                                    src="/2-1-removebg-preview.png"
+                                    width={80}
+                                    height={80}
                                 />
                             </div>
-                            <span className="text-5xl font-extrabold text-heading">Cloud Partners</span>
                         </div>
-                        <div className="hidden lg:flex justify-center space-x-8 text-heading">
+                        <div className="hidden lg:flex justify-center space-x-6 xl:space-x-8 text-heading">
                             <Link href="/" className="link">Home</Link>
                             <Link href="/product" className="link">Products</Link>
                             <Link href="/service" className="link">Services</Link>
@@ -63,7 +62,7 @@ const Navbar = () => {
                             <Link href="/career" className="link">Careers</Link>
                         </div>
                         <div className="flex justify-end">
-                            <div className="btn-primary px-6 py-2.5 rounded-lg text-white">
+                            <div className="bg-blue-500 px-4 sm:px-6 py-2 sm:py-2 rounded-lg text-white text-sm sm:text-base transition-colors">
                                 Contact Us
                             </div>
                         </div>
@@ -80,23 +79,23 @@ const Navbar = () => {
                     isScrolled ? "bg-nav border-nav" : "bg-nav border-nav"
                 } animate-slideDown`}
             >
-                <div className="w-full px-6 py-4">
-                    <div className="grid grid-cols-3 items-center gap-4">
+                <div className="w-full px-4 sm:px-6 py-2 sm:py-3">
+                    <div className="flex items-center justify-between gap-2 sm:gap-4 relative">
                         {/* Logo - Left */}
-                        <div className="flex items-center space-x-3 group cursor-pointer">
-                            <div className="relative w-40 h-20 rounded-full flex items-center justify-center overflow-hidden ">
+                        <div className="flex items-center space-x-2 sm:space-x-3 group cursor-pointer flex-shrink-0">
+                            <div className="relative w-20 h-20 sm:w-20 sm:h-20 md:w-22 md:h-22 lg:w-24 lg:h-24 rounded-full flex items-center justify-center overflow-hidden">
                                 <Image
                                     className="rounded-full w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                                     alt="Logo"
                                     src="/2-1-removebg-preview.png"
-                                    width={40}
-                                    height={40}
+                                    width={96}
+                                    height={96}
                                 />
                             </div>
                         </div>
 
                         {/* Navigation Links - Center */}
-                        <div className="hidden lg:flex justify-center items-center space-x-10 text-[18px] font-extrabold">
+                        <div className="hidden lg:flex absolute left-1/2 transform -translate-x-1/2 items-center space-x-6 xl:space-x-10 text-base xl:text-[18px] font-extrabold">
                             {[
                                 { href: "/", label: "Home", delay: 400 },
                                 { href: "/product", label: "Products", delay: 500 },
@@ -119,21 +118,21 @@ const Navbar = () => {
                         </div>
 
                         {/* Right Side Buttons */}
-                        <div className="flex items-center justify-end space-x-4">
+                        <div className="flex items-center justify-end space-x-2 sm:space-x-3 md:space-x-4">
                             <Link
                                 href="/contact"
-                                className="hidden md:inline-block btn-primary px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105"
+                                className="hidden lg:inline-block bg-blue-500 text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2 md:py-2 rounded-lg text-xs sm:text-sm md:text-base font-semibold transition-all duration-300 hover:scale-105 whitespace-nowrap"
                             >
                                 Contact Us
                             </Link>
 
                             {isAuthenticated ? (
-                                <div className="hidden md:flex items-center space-x-3 relative" ref={dropdownRef}>
+                                <div className="hidden lg:flex items-center space-x-3 relative" ref={dropdownRef}>
                                     <button
                                         onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
-                                        className="flex items-center space-x-1 bg-green-700 px-3 py-2.5 rounded-lg transition-all duration-300 hover:border-primary/50"
+                                        className="flex items-center space-x-1 bg-white border-gray-700 border px-3 py-2.5 rounded-lg transition-all duration-300 hover:border-primary/50"
                                     >
-                                        <span className="text-white text-m font-medium">{user?.username}</span>
+                                        <span className="text-black text-sm font-medium">{user?.username}</span>
                                         <ChevronDown
                                             className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${
                                                 isUserDropdownOpen ? "rotate-180" : ""
@@ -168,35 +167,22 @@ const Navbar = () => {
                                     )}
                                 </div>
                             ) : (
-                                <div className="hidden md:flex items-center space-x-4 ">
+                                <div className="hidden lg:flex items-center space-x-4">
                                     <Link
                                         href="/login"
-                                        className="flex items-center bg-red-700 space-x-2  px-7 py-3 rounded-lg  font-semibold transition-all duration-300 hover:scale-105"
+                                        className="flex items-center bg-white border border-black text-black space-x-2 px-4 md:px-6 lg:px-7 py-2 md:py-2.5 lg:py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105 whitespace-nowrap"
                                     >
-                                        {/*<svg*/}
-                                        {/*    xmlns="http://www.w3.org/2000/svg"*/}
-                                        {/*    className="h-4 w-4 bg-white"*/}
-                                        {/*    fill="none"*/}
-                                        {/*    viewBox="0 0 24 24"*/}
-                                        {/*    stroke="currentColor"*/}
-                                        {/*>*/}
-                                        {/*    <path*/}
-                                        {/*        strokeLinecap="round"*/}
-                                        {/*        strokeLinejoin="round"*/}
-                                        {/*        strokeWidth={2}*/}
-                                        {/*        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"*/}
-                                        {/*    />*/}
-                                        {/*</svg>*/}
-                                        <span className="text-white">Login</span>
+                                        <span className="text-black text-xs sm:text-sm md:text-base">Login</span>
                                     </Link>
                                 </div>
                             )}
 
                             <button
-                                className="lg:hidden p-2 text-white hover:text-primary transition-colors duration-300"
+                                className="lg:hidden p-2 text-heading hover:text-primary transition-colors duration-300"
                                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                                aria-label="Toggle menu"
                             >
-                                {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                                {isMobileMenuOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <Menu className="w-5 h-5 sm:w-6 sm:h-6" />}
                             </button>
                         </div>
                     </div>
@@ -208,8 +194,8 @@ const Navbar = () => {
                         isMobileMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
                     }`}
                 >
-                    <div className="bg-nav ">
-                        <div className="w-full px-6 py-4 space-y-4">
+                    <div className="bg-nav border-t border-gray-200">
+                        <div className="w-full px-4 sm:px-6 py-3 space-y-3">
                             {[
                                 { href: "/", label: "Home" },
                                 { href: "/product", label: "Products" },
@@ -221,7 +207,7 @@ const Navbar = () => {
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className="block text-body hover:text-primary font-medium py-2 transition-colors duration-300"
+                                    className="block text-body hover:text-primary hover:bg-gray-50 font-medium py-3 px-3 sm:px-4 rounded-lg transition-all duration-300"
                                     onClick={() => setIsMobileMenuOpen(false)}
                                 >
                                     {link.label}
@@ -230,20 +216,20 @@ const Navbar = () => {
 
                             <Link
                                 href="/contact"
-                                className="block w-full text-center btn-primary text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300"
+                                className="block w-full text-center bg-blue-500 text-white px-6 py-2.5 rounded-xl font-semibold transition-all duration-300 hover:bg-blue-600"
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 Contact Us
                             </Link>
 
-                            <div className="border-t border-gray-700/50 pt-4 mt-4">
+                            <div className="border-t border-gray-200 pt-4 mt-4">
                                 {isAuthenticated ? (
                                     <div className="space-y-3">
-                                        <div className="flex items-center space-x-2 bg-slate-700/50 px-4 py-3 rounded-lg">
+                                        <div className="flex items-center space-x-3 bg-gray-50 px-4 py-3 rounded-lg">
                                             <User className="w-5 h-5 text-primary" />
                                             <div className="flex-1">
-                                                <p className="text-white text-sm font-medium">{user?.username}</p>
-                                                <p className="text-xs text-gray-400">{user?.role[0]}</p>
+                                                <p className="text-black text-sm font-medium">{user?.username}</p>
+                                                <p className="text-xs text-gray-600">{user?.role?.[0]}</p>
                                             </div>
                                         </div>
                                         <Link
@@ -370,6 +356,20 @@ const Navbar = () => {
                     to {
                         opacity: 1;
                         transform: translateY(0);
+                    }
+                }
+
+                /* Mobile-first responsive adjustments */
+                @media (max-width: 640px) {
+                    .animate-slideDown {
+                        animation-duration: 0.3s;
+                    }
+                }
+
+                /* Prevent layout shift on mobile menu toggle */
+                @media (max-width: 1024px) {
+                    body {
+                        overflow-x: hidden;
                     }
                 }
             `}</style>

@@ -167,7 +167,7 @@ export function ProductList() {
   }
 
   return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 text-gray-900">
+      <div className="min-h-screen bg-blue-50 text-gray-900">
         {/* Services Section */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           {/* Header Section with Modern Design */}
@@ -588,11 +588,9 @@ export function ProductList() {
 
         {/* Enhanced CTA Section */}
         <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="relative bg-gradient-to-br from-gray-900 via-black to-black rounded-3xl p-12 text-center shadow-2xl overflow-hidden">
+          <div className="relative bg-slate-700 rounded-3xl p-12 text-center shadow-2xl overflow-hidden">
             {/* Animated background effects */}
-            <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
-            <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-
+           
             <div className="relative z-10">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-full text-sm font-semibold mb-4">
                 <Sparkles className="w-4 h-4" />
@@ -606,13 +604,13 @@ export function ProductList() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/contact">
-                  <button className="bg-white text-blue-600 hover:bg-blue-50 px-8 py-4 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
+                  <button className="bg-blue-500 text-white px-8 py-4 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
                     <Phone className="w-5 h-5" />
                     Contact Us Now
                   </button>
                 </Link>
                 <Link href="/about">
-                  <button className="border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 rounded-xl font-bold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+                  <button className="border-1 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 rounded-xl font-bold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2">
                     <Globe className="w-5 h-5" />
                     About Us
                   </button>

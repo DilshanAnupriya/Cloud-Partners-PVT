@@ -9,7 +9,7 @@ function HeroSection() {
     const containerRef = useRef(null);
 
     return (
-        <div className="bg-white min-h-screen relative overflow-hidden" ref={containerRef}>
+        <div className="min-h-screen relative overflow-hidden bg-gradient-to-b from-white via-white to-blue-50 pb-30" ref={containerRef}>
             {/* Enhanced Spotlight Effect - Much Brighter */}
             {/*<Spotlight*/}
             {/*    gradientFirst="radial-gradient(28.54% 68.72% at 55.02% 31.46%, hsla(220, 100%, 90%, .20) 0, hsla(220, 100%, 75%, .15) 50%, hsla(220, 100%, 60%, .0) 80%)"*/}
@@ -42,7 +42,7 @@ function HeroSection() {
                         {/* Enhanced title with brighter glow effect */}
                         <div className="relative">
                             <h1 className="text-4xl md:text-8xl font-bold mb-4 relative z-10">
-                                <span className="bg-black bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(96,165,250,0.5)]">
+                                <span className="bg-black bg-clip-text text-transparent ">
                                     Our Amazing Products
                                 </span>
                             </h1>
@@ -54,11 +54,11 @@ function HeroSection() {
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 mt-10 justify-center relative z-10">
-                            <button className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-purple-600 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-[0_0_30px_rgba(59,130,246,0.5)] hover:shadow-[0_0_40px_rgba(147,51,234,0.6)]">
+                            <button className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-[0_0_30px_rgba(59,130,246,0.5)] ">
                                 Get Started Today
                             </button>
                             <Link href="/contact">
-                                <button className="border-3 border-black text-black hover:border-blue-400 px-8 py-4 rounded-lg font-semibold transition-all duration-300 hover:bg-blue-500/20 backdrop-blur-sm shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(59,130,246,0.4)]">
+                                <button className="border-3 border-black text-black  px-8 py-4 rounded-lg font-semibold transition-all duration-300 backdrop-blur-sm shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:scale-105 ">
                                     Schedule Consultation
                                 </button>
                             </Link>

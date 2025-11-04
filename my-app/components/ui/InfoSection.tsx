@@ -32,12 +32,12 @@ const InfoSection = () => {
 
 
                         <h1
-                            className={`text-5xl lg:text-6xl font-bold text-gray-900 leading-tight transition-all duration-700 delay-300 ${
+                            className={`text-5xl lg:text-6xl font-bold text-slate-700 leading-tight transition-all duration-700 delay-300 ${
                                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                             }`}
                         >
                             Unlock Success With{' '}
-                            <span className="bg-gradient-to-r from-[#4285F4] via-[#DB4437] via-[#F4B400] to-[#0F9D58] bg-clip-text text-transparent">
+                            <span className="bg-slate-700 bg-clip-text text-transparent">
                 Zoho
               </span>
                         </h1>

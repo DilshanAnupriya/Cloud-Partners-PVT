@@ -26,8 +26,8 @@ const GeminiSection: React.FC = () => {
       <div className="sticky top-0 w-full h-screen flex items-center justify-center overflow-hidden">
         <GoogleGeminiEffect
           pathLengths={[pathLengthFirst, pathLengthSecond, pathLengthThird, pathLengthFourth, pathLengthFifth]}
-          title="Google Gemini Effect"
-          description="Scroll to reveal smooth, layered motion paths."
+         
+          description=" Connect with Google Gemini, a powerful AI assistant."
           className="w-full h-full"
         />
       </div>
