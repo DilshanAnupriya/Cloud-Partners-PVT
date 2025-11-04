@@ -11,11 +11,11 @@ const URL = process.env.MONGO_DB;
 
 const CodeSnippet = require('./Model/CodeSnippetModel');
 const productRoutes = require('./Route/ProductRoute');
-const userRoutes = require('./Route/userRoute');
-const blogRoutes = require('./Route/blogRoute');
+const userRoutes = require('./Route/UserRoute');
+const blogRoutes = require('./Route/BlogRoute');
 const projectRoutes = require('./Route/projectRoute'); // NEW
 const snippetRoutes = require('./Route/codeSnippetRoute'); // NEW
-const pmRoutes = require('./route/pmRoute');
+const pmRoutes = require('./Route/pmRoute');
 const {join} = require("node:path");
 const chatRoutes = require('./Route/chatBotRoute');
 
