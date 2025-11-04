@@ -14,7 +14,7 @@ const {
     deleteBlog,
     getBlogStats
 } = require('../Controller/BlogController');
-const verifyToken = require('../middleware/auth');
+const verifyToken = require('../Middleware/Auth');
 
 // ==================== PUBLIC ROUTES ====================
 // No authentication required

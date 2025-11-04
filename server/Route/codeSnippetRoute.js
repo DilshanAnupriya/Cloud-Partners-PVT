@@ -10,7 +10,7 @@ const {
     toggleFavorite,
     duplicateSnippet
 } = require('../Controller/CodeSnippetController');
-const verifyToken = require('../middleware/auth');
+const verifyToken = require('../Middleware/Auth');
 // All routes require authentication
 router.use(verifyToken());
 

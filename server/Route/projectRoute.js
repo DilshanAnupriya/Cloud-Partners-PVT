@@ -10,7 +10,7 @@ const {
     getAllProjectStats,
     getAllProjects
 } = require('../Controller/ProjectController');
-const verifyToken = require('../middleware/auth');
+const verifyToken = require('../Middleware/Auth');
 
 // All routes require authentication
 router.use(verifyToken());

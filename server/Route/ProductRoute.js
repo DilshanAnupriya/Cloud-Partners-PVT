@@ -12,7 +12,7 @@ const {
     getProductStats,
     compareProducts
 } = require('../Controller/ProductController');
-const verifyToken = require('../middleware/auth');
+const verifyToken = require('../Middleware/Auth');
 
 // Public routes (no authentication required)
 router.get('/products', getAllProducts);
