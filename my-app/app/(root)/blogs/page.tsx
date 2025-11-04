@@ -34,7 +34,7 @@ interface BlogResponse {
     currentPage: number;
 }
 
-const API_BASE_URL = 'http://localhost:8080/api/blogs';
+const API_BASE_URL = '/api/blogs';
 
 const CATEGORIES = [
     'Technology',

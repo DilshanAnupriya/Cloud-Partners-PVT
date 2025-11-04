@@ -70,7 +70,7 @@ const handleGoogleSignIn = async (response: any) => {
     setError('');
 
     try {
-        const res = await fetch('http://localhost:8080/api/v1/user/google-login', {
+        const res = await fetch('/api/v1/user/google-login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

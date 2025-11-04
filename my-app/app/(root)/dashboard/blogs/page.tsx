@@ -44,7 +44,7 @@ interface BlogStats {
     blogsByCategory: { _id: string; count: number }[];
 }
 
-const API_BASE_URL = 'http://localhost:8080/api/blogs';
+const API_BASE_URL = '/api/blogs';
 
 const BlogManagement = () => {
     const { token, isAuthenticated, isLoading: authLoading, user } = useAuth();

@@ -37,7 +37,7 @@ import {
 } from 'lucide-react';
 
 // API Base URL
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1/pm';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api/v1/pm';
 
 // Types
 interface User {
@@ -234,7 +234,7 @@ const ProjectDetailsPage: React.FC = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/api/v1/user/all-users`, {
+      const response = await fetch(`/api/v1/user/all-users`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

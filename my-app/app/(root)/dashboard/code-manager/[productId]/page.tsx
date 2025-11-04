@@ -49,7 +49,7 @@ interface Snippet {
     updatedAt: string;
 }
 
-const API_BASE_URL = 'http://localhost:8080/api/code';
+const API_BASE_URL = '/api/code';
 
 const getAuthHeaders = () => {
     const token = localStorage.getItem('authToken');

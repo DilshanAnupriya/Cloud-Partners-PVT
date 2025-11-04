@@ -41,7 +41,7 @@ export function ProductList() {
   const [showComparison, setShowComparison] = useState<boolean>(false)
   const [showFilters, setShowFilters] = useState<boolean>(false)
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/products'
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api/products'
 
   // Fetch products from API
   const fetchProducts = async (category: string = 'all', vendor: string = '', page: number = 1) => {
