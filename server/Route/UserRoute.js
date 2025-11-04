@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const UserController = require('../controller/userController');
+const UserController = require('../Controller/UserController');
 const verifyToken = require('../Middleware/Auth');
 
 //http://localhost:3000/api/v1/user/signup
