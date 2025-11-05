@@ -2,6 +2,24 @@
 import React, { useEffect, useRef } from 'react';
 import { Coffee, TrendingUp, Award, Users, Zap, Briefcase } from 'lucide-react';
 
+// Type augmentation for Zoho Recruit embed script
+type RecEmbedJS = {
+    load: (options: {
+        widget_id: string;
+        page_name?: string;
+        source?: string;
+        site?: string;
+        brand_color?: string;
+        empty_job_msg?: string;
+    }) => void;
+};
+
+declare global {
+    interface Window {
+        rec_embed_js?: RecEmbedJS;
+    }
+}
+
 const CareerPage = () => {
     const heroRef = useRef<HTMLElement>(null);
     const jobsRef = useRef<HTMLElement>(null);
@@ -24,16 +42,14 @@ const CareerPage = () => {
 
         script.onload = () => {
             // Initialize Zoho Recruit widget after script loads
-            if (window.rec_embed_js) {
-                window.rec_embed_js.load({
-                    widget_id: "rec_job_listing_div",
-                    page_name: "Careers",
-                    source: "CareerSite",
-                    site: "https://careers.cloudpartners.biz",
-                    brand_color: "#6875E2",
-                    empty_job_msg: "No current Openings"
-                });
-            }
+            window.rec_embed_js?.load({
+                widget_id: "rec_job_listing_div",
+                page_name: "Careers",
+                source: "CareerSite",
+                site: "https://careers.cloudpartners.biz",
+                brand_color: "#6875E2",
+                empty_job_msg: "No current Openings"
+            });
         };
 
         document.body.appendChild(script);
