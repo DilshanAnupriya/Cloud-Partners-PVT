@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { CheckCircle, ArrowRight, Phone, Globe, Loader2, AlertCircle, X, GitCompare, Filter, Sparkles } from 'lucide-react'
 import Link from "next/link"
@@ -24,6 +24,8 @@ interface PaginationData {
   count: number;
 }
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api/products'
+
 export function ProductList() {
   const [activeCategory, setActiveCategory] = useState<string>('all')
   const [activeVendor, setActiveVendor] = useState<string>('')
@@ -41,10 +43,8 @@ export function ProductList() {
   const [showComparison, setShowComparison] = useState<boolean>(false)
   const [showFilters, setShowFilters] = useState<boolean>(false)
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api/products'
-
   // Fetch products from API
-  const fetchProducts = async (category: string = 'all', vendor: string = '', page: number = 1) => {
+  const fetchProducts = useCallback(async (category: string = 'all', vendor: string = '', page: number = 1) => {
     setLoading(true)
     setError(null)
 
@@ -79,10 +79,10 @@ export function ProductList() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
 
   // Compare products
-  const compareProducts = async () => {
+  const compareProducts = useCallback(async () => {
     if (selectedProducts.length < 2) {
       alert('Please select at least 2 products to compare')
       return
@@ -108,7 +108,7 @@ export function ProductList() {
       alert((err as Error).message)
       console.error('Error comparing products:', err)
     }
-  }
+  }, [selectedProducts])
 
   // Toggle product selection for comparison
   const toggleProductSelection = (productId: string) => {
@@ -128,7 +128,7 @@ export function ProductList() {
   // Initial load
   useEffect(() => {
     fetchProducts(activeCategory, activeVendor, 1)
-  }, [activeCategory, activeVendor])
+  }, [activeCategory, activeVendor, fetchProducts])
 
   const categories = [
     { id: 'all', name: 'All Products', icon: '' },
@@ -151,20 +151,20 @@ export function ProductList() {
     { id: 'Other', name: 'Other', color: 'from-purple-500 to-pink-500' }
   ]
 
-  const handleCategoryChange = (categoryId: string) => {
+  const handleCategoryChange = useCallback((categoryId: string) => {
     setActiveCategory(categoryId)
-    setPagination({ ...pagination, currentPage: 1 })
-  }
+    setPagination(p => ({ ...p, currentPage: 1 }))
+  }, [])
 
-  const handleVendorChange = (vendorId: string) => {
+  const handleVendorChange = useCallback((vendorId: string) => {
     setActiveVendor(vendorId)
-    setPagination({ ...pagination, currentPage: 1 })
-  }
+    setPagination(p => ({ ...p, currentPage: 1 }))
+  }, [])
 
-  const handlePageChange = (newPage: number) => {
+  const handlePageChange = useCallback((newPage: number) => {
     fetchProducts(activeCategory, activeVendor, newPage)
     window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
+  }, [activeCategory, activeVendor, fetchProducts])
 
   return (
       <div className="min-h-screen bg-blue-50 text-gray-900">

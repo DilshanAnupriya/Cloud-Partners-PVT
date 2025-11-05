@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import {
     ArrowLeft,
@@ -10,9 +10,7 @@ import {
     Star,
     Eye,
     Calendar,
-    Edit,
     Trash2,
-    Filter,
     Globe,
     Lock,
     TrendingUp
@@ -72,11 +70,7 @@ export default function ProjectDetailPage() {
     const [languageFilter, setLanguageFilter] = useState('');
     const [sortBy, setSortBy] = useState<'createdAt' | 'updatedAt' | 'title'>('createdAt');
 
-    useEffect(() => {
-        fetchProjectData();
-    }, [projectId]);
-
-    const fetchProjectData = async () => {
+    const fetchProjectData = useCallback(async () => {
         setLoading(true);
         setError('');
         try {
@@ -106,7 +100,11 @@ export default function ProjectDetailPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [projectId]);
+
+    useEffect(() => {
+        fetchProjectData();
+    }, [fetchProjectData]);
 
     const handleDeleteSnippet = async (id: string) => {
         if (!confirm('Are you sure you want to delete this snippet?')) return;
@@ -304,7 +302,7 @@ export default function ProjectDetailPage() {
                         <select
                             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                             value={sortBy}
-                            onChange={(e) => setSortBy(e.target.value as any)}
+                            onChange={(e) => setSortBy(e.target.value as 'createdAt' | 'updatedAt' | 'title')}
                         >
                             <option value="createdAt">Newest First</option>
                             <option value="updatedAt">Recently Updated</option>

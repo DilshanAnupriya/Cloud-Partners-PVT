@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Search, Plus, Edit, Trash2, X, Eye, EyeOff, RefreshCw, ChevronLeft, ChevronRight } from 'lucide-react';
 import Sidebar from "@/components/ui/Sidebar";
 import DashboardNavbar from "@/components/ui/DashboardNavbar";
 import {useAuth} from "@/app/Context/AuthContext";
-import { log } from 'console';
 
 // Types
 interface User {
@@ -26,7 +25,7 @@ interface UserFormData {
 }
 
 const UserManagementPage = () => {
-    const { token, isAuthenticated, isLoading: authLoading } = useAuth();
+    const { token, isAuthenticated } = useAuth();
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(false);
     const [searchText, setSearchText] = useState('');
@@ -40,7 +39,7 @@ const UserManagementPage = () => {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [isEditing, setIsEditing] = useState(false);
+    
 
     const [formData, setFormData] = useState<UserFormData>({
         username: '',
@@ -53,11 +52,10 @@ const UserManagementPage = () => {
     const API_BASE_URL = '/api/v1';
 
     // Fetch users
-    const fetchUsers = async () => {
+    const fetchUsers = useCallback(async () => {
         setLoading(true);
         setError('');
         try {
-            const token = localStorage.getItem('authToken');
             const response = await fetch(
                 `${API_BASE_URL}/user/all-users?searchText=${searchText}&page=${page}&size=${size}`,
                 {
@@ -82,11 +80,11 @@ const UserManagementPage = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [searchText, page, size, token]);
 
     useEffect(() => {
         fetchUsers();
-    }, [page]);
+    }, [page, fetchUsers]);
 
     // Handle search with debounce
     useEffect(() => {
@@ -96,7 +94,7 @@ const UserManagementPage = () => {
         }, 500);
 
         return () => clearTimeout(timer);
-    }, [searchText]);
+    }, [searchText, fetchUsers]);
 
     // Handle form submission (Create/Update)
     const handleSubmit = async (e: React.FormEvent) => {
@@ -151,8 +149,8 @@ const UserManagementPage = () => {
             fetchUsers();
 
             setTimeout(() => setSuccess(''), 3000);
-        } catch (err: any) {
-            setError(err.message || 'Operation failed. Please try again.');
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : 'Operation failed. Please try again.');
         }
     };
     // Handle delete
@@ -162,7 +160,6 @@ const UserManagementPage = () => {
         }
 
         try {
-            const token = localStorage.getItem('authToken');
             const response = await fetch(`${API_BASE_URL}/user/delete-user/${userId}`, {
                 method: 'DELETE',
                 headers: {
@@ -178,7 +175,7 @@ const UserManagementPage = () => {
             setSuccess('User deleted successfully!');
             fetchUsers();
             setTimeout(() => setSuccess(''), 3000);
-        } catch (err) {
+        } catch {
             setError('Failed to delete user. Please try again.');
         }
     };

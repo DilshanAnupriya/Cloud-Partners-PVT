@@ -1,22 +1,17 @@
 "use client";
 
 import React, { useState } from 'react';
-import { User, Settings, LogOut, Menu, Bell, ChevronDown } from 'lucide-react';
+import { LogOut, Menu, Bell, ChevronDown } from 'lucide-react';
 import { useAuth } from '@/app/Context/AuthContext';
-import { useRouter } from 'next/navigation';
 
 interface DashboardNavbarProps {
     onMenuClick: () => void;
     title?: string;
 }
 
-const DashboardNavbar: React.FC<DashboardNavbarProps> = ({
-                                                             onMenuClick,
-                                                             title = 'Dashboard'
-                                                         }) => {
+const DashboardNavbar: React.FC<DashboardNavbarProps> = ({ onMenuClick }) => {
     const [showUserMenu, setShowUserMenu] = useState(false);
     const { user, logout } = useAuth();
-    const router = useRouter();
 
     const handleLogout = () => {
         logout();

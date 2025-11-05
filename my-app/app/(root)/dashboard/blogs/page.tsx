@@ -1,6 +1,7 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Search, Plus, Edit2, Trash2, Eye, TrendingUp, X, CheckCircle, XCircle, Send } from 'lucide-react';
+import Image from 'next/image';
 
 // Import your actual auth context
 import { useAuth } from '@/app/Context/AuthContext';
@@ -60,8 +61,8 @@ const BlogManagement = () => {
     const [categoryFilter, setCategoryFilter] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
     const [approvalFilter, setApprovalFilter] = useState('');
-    const [sortBy, setSortBy] = useState('createdAt');
-    const [order, setOrder] = useState<'asc' | 'desc'>('desc');
+    const [sortBy] = useState('createdAt');
+    const [order] = useState<'asc' | 'desc'>('desc');
     const [pageSize] = useState(10);
 
     const [showCreateModal, setShowCreateModal] = useState(false);
@@ -84,27 +85,20 @@ const BlogManagement = () => {
 
     const categories = ['Technology', 'Lifestyle', 'Travel', 'Food', 'Health', 'Business', 'Education', 'Other'];
 
-    useEffect(() => {
-        if (!authLoading && isAuthenticated && token) {
-            fetchBlogs();
-            fetchStats();
-        }
-    }, [currentPage, searchText, categoryFilter, statusFilter, approvalFilter, sortBy, order, pageSize, token, isAuthenticated, authLoading, activeTab]);
-
-    const fetchBlogs = async () => {
+    const fetchBlogs = useCallback(async () => {
         if (!token) return;
         setLoading(true);
         try {
             let url = API_BASE_URL; // Base: 'http://localhost:8080/api/blogs'
 
             if (activeTab === 'pending' && isAdmin) {
-                url += '/blogs/pending'; // Fixed: no double /blogs
+                url += '/blogs/pending'; 
             } else if (activeTab === 'myblogs') {
-                url += '/my-blogs'; // Fixed: no double /blogs
+                url += '/my-blogs'; 
             } else if (isAdmin) {
                 url += '/blogs';
             } else {
-                url += '/my-blogs'; // Fixed: no double /blogs
+                url += '/my-blogs'; 
             }
 
             const params = new URLSearchParams({
@@ -146,9 +140,9 @@ const BlogManagement = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [token, isAdmin, activeTab, currentPage, pageSize, sortBy, order, searchText, categoryFilter, statusFilter, approvalFilter]);
 
-    const fetchStats = async () => {
+    const fetchStats = useCallback(async () => {
         if (!token || !isAdmin) return;
         try {
             const response = await fetch(`${API_BASE_URL}/blogs-stats`, {
@@ -164,7 +158,14 @@ const BlogManagement = () => {
         } catch (error) {
             console.error('Error fetching stats:', error);
         }
-    };
+    }, [token, isAdmin]);
+
+    useEffect(() => {
+        if (!authLoading && isAuthenticated && token) {
+            fetchBlogs();
+            fetchStats();
+        }
+    }, [fetchBlogs, fetchStats, token, isAuthenticated, authLoading]);
 
     const handleCreate = async () => {
         if (!formData.title || !formData.content) {
@@ -873,7 +874,7 @@ const BlogManagement = () => {
                             <div className="p-6">
                                 <h2 className="text-2xl font-bold mb-4 text-red-600">Reject Blog</h2>
                                 <p className="text-gray-700 mb-4">
-                                    Please provide a reason for rejecting "<strong>{selectedBlog.title}</strong>"
+                                    Please provide a reason for rejecting &quot;<strong>{selectedBlog.title}</strong>&quot;
                                 </p>
                                 <textarea
                                     rows={4}
@@ -922,9 +923,12 @@ const BlogManagement = () => {
                                 </div>
 
                                 {selectedBlog.featuredImage && (
-                                    <img
+                                    <Image
                                         src={selectedBlog.featuredImage}
                                         alt={selectedBlog.title}
+                                        width={1200}
+                                        height={256}
+                                        unoptimized
                                         className="w-full h-64 object-cover rounded-lg mb-4"
                                     />
                                 )}

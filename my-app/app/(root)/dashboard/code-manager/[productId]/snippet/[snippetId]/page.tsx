@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import {
     ArrowLeft,
@@ -62,18 +62,13 @@ export default function SnippetDetailPage() {
     const [error, setError] = useState('');
     const [copied, setCopied] = useState(false);
 
-    useEffect(() => {
-        fetchSnippet();
-    }, [snippetId]);
-
-    const fetchSnippet = async () => {
+    const fetchSnippet = useCallback(async () => {
         setLoading(true);
         setError('');
         try {
             const response = await fetch(`${API_BASE_URL}/snippets/${snippetId}`, {
                 headers: getAuthHeaders()
             });
-
             if (response.ok) {
                 const data = await response.json();
                 setSnippet(data.snippet);
@@ -86,7 +81,11 @@ export default function SnippetDetailPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [snippetId]);
+
+    useEffect(() => {
+        fetchSnippet();
+    }, [fetchSnippet]);
 
     const handleCopyCode = async () => {
         if (!snippet) return;

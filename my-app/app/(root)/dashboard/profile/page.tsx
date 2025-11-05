@@ -9,7 +9,7 @@ import DashboardNavbar from '@/components/ui/DashboardNavbar';
 import Alert from '@/components/ui/Alert';
 
 const UserProfilePage = () => {
-    const { token, isAuthenticated, isLoading: authLoading } = useAuth();
+    const { isAuthenticated } = useAuth();
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [loading, setLoading] = useState(false);

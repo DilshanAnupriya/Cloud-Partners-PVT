@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/app/Context/AuthContext';
 import Sidebar from '@/components/ui/Sidebar';
@@ -15,8 +15,6 @@ import {
   Download,
   Upload,
   Users,
-  Calendar,
-  Clock,
   CheckCircle,
   AlertCircle,
   FileText,
@@ -24,16 +22,9 @@ import {
   Building,
   Target,
   BarChart3,
-  Settings,
   MessageSquare,
-  Flag,
   PlayCircle,
-  PauseCircle,
-  RotateCcw,
-  CheckSquare,
-  Square,
-  Eye,
-  ExternalLink
+  CheckSquare
 } from 'lucide-react';
 
 // API Base URL
@@ -196,7 +187,7 @@ const ProjectDetailsPage: React.FC = () => {
   const [uploading, setUploading] = useState(false);
 
   // API Functions
-  const fetchProject = async () => {
+  const fetchProject = useCallback(async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/${projectId}`, {
         headers: {
@@ -230,9 +221,9 @@ const ProjectDetailsPage: React.FC = () => {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch project');
     }
-  };
+  }, [projectId, token]);
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       const response = await fetch(`/api/v1/user/all-users`, {
         headers: {
@@ -249,7 +240,7 @@ const ProjectDetailsPage: React.FC = () => {
     } catch (err) {
       console.error('Failed to fetch users:', err);
     }
-  };
+  }, [token]);
 
   const updateProject = async () => {
     try {
@@ -672,7 +663,7 @@ const ProjectDetailsPage: React.FC = () => {
       Promise.all([fetchProject(), fetchUsers()])
         .finally(() => setLoading(false));
     }
-  }, [token, projectId]);
+  }, [token, projectId, fetchProject, fetchUsers]);
 
   // Utility functions
   const getStageColor = (stage: string) => {
@@ -721,7 +712,7 @@ const ProjectDetailsPage: React.FC = () => {
         <div className="text-center">
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-gray-900 mb-2">Project Not Found</h2>
-          <p className="text-gray-600 mb-4">The project you're looking for doesn't exist or you don't have access to it.</p>
+          <p className="text-gray-600 mb-4">The project you&#39;re looking for doesn&#39;t exist or you don&#39;t have access to it.</p>
           <button
             onClick={() => router.push('/dashboard/project-manager')}
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg"

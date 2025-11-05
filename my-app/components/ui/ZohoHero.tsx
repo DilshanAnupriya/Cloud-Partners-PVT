@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { ArrowRight, Code, Users, Play, Shield, Database, Cloud, BarChart3, X, Loader2, Sparkles, TrendingUp, Zap } from "lucide-react";
+import { ArrowRight, Code, Users, Play, Shield, Database, Cloud, BarChart3, X, Loader2, Sparkles, TrendingUp } from "lucide-react";
 const useGSAPEffect = (ref: React.RefObject<HTMLElement>, delay = 0) => {
     useEffect(() => {
         if (ref.current) {

@@ -3,6 +3,7 @@
 import React from "react";
 import { WobbleCard } from "@/components/ui/wobble-card";
 import Link from "next/link";
+import Image from "next/image";
 
 export function WobbleCardDemo() {
   return (
@@ -30,12 +31,13 @@ export function WobbleCardDemo() {
             </Link>
           </div>
         </div>
-        <img
+        <Image
           src="/companyLogo.png"
           width={300}
           height={220}
           alt="Cloud Partners logo"
           className="absolute -right-4 lg:-right-[5%] bottom-10 object-contain rounded-2xl opacity-90"
+          priority
         />
       </WobbleCard>
 
@@ -70,7 +72,7 @@ export function WobbleCardDemo() {
             <span className="rounded-md bg-white/10 px-3 py-1">AI & Analytics</span>
           </div>
         </div>
-        <img
+        <Image
           src="/ourTeam.jpg"
           width={600}
           height={400}

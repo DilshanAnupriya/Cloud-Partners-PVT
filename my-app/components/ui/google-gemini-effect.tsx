@@ -43,7 +43,7 @@ export const GoogleGeminiEffect = ({
 
           </p>
         )}
-        <p className="text-sm md:text-2xl font-normal text-center text-neutral-600 mt-[-15px] max-w-2xl mx-auto">
+        <p className="text-sm md:text-2xl font-normal text-center text-neutral-600 mt-[-15px] 2xl:mt-[17px] max-w-2xl mx-auto">
           {description ||
             `Scroll this component and see the bottom SVG come to life wow this
           works!`}

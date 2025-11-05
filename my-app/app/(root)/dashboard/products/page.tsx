@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, Search, X, Save, Image, Tag, Globe, Mail, FileText, Star, Eye, EyeOff } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Plus, Edit2, Trash2, Search, X, Save, Image as ImageIcon, Tag, Globe, Mail, FileText, Star, Eye, EyeOff } from 'lucide-react';
+import NextImage from 'next/image';
 import { useAuth } from '@/app/Context/AuthContext';
 import Sidebar from "@/components/ui/Sidebar";
 import DashboardNavbar from "@/components/ui/DashboardNavbar"; // Add this import
@@ -85,17 +86,8 @@ const ProductManagementPage = () => {
         'Other'
     ];
 
-    useEffect(() => {
-        if (isAuthenticated && token) {
-            fetchProducts();
-        }
-    }, [isAuthenticated, token]);
 
-    useEffect(() => {
-        filterProducts();
-    }, [searchText, filterVendor, filterCategory, products]);
-
-    const fetchProducts = async () => {
+    const fetchProducts = useCallback(async () => {
         try {
             setProductsLoading(true);
             const response = await fetch('/api/products/products', {
@@ -111,14 +103,14 @@ const ProductManagementPage = () => {
             } else {
                 setAlert({ type: 'error', message: data.error || 'Failed to fetch products' });
             }
-        } catch (error) {
+        } catch {
             setAlert({ type: 'error', message: 'Failed to fetch products' });
         } finally {
             setProductsLoading(false);
         }
-    };
+    }, [token]);
 
-    const filterProducts = () => {
+    const filterProducts = useCallback(() => {
         let filtered = [...products];
 
         if (searchText) {
@@ -137,7 +129,17 @@ const ProductManagementPage = () => {
         }
 
         setFilteredProducts(filtered);
-    };
+    }, [searchText, filterVendor, filterCategory, products]);
+
+    useEffect(() => {
+        if (isAuthenticated && token) {
+            fetchProducts();
+        }
+    }, [isAuthenticated, token, fetchProducts]);
+
+    useEffect(() => {
+        filterProducts();
+    }, [filterProducts]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
@@ -223,7 +225,7 @@ const ProductManagementPage = () => {
             } else {
                 setAlert({ type: 'error', message: data.error || 'Operation failed' });
             }
-        } catch (error) {
+        } catch {
             setAlert({ type: 'error', message: 'An error occurred' });
         } finally {
             setLoading(false);
@@ -255,7 +257,7 @@ const ProductManagementPage = () => {
             } else {
                 setAlert({ type: 'error', message: data.error || 'Failed to delete product' });
             }
-        } catch (error) {
+        } catch {
             setAlert({ type: 'error', message: 'Failed to delete product' });
         }
     };
@@ -389,7 +391,14 @@ const ProductManagementPage = () => {
                                     <div className="flex items-start justify-between mb-4">
                                         <div className="flex-1">
                                             {product.logo ? (
-                                                <img src={product.logo} alt={product.name} className="w-12 h-12 rounded-lg object-cover mb-3" />
+                                                <NextImage
+                                                    src={product.logo}
+                                                    alt={product.name}
+                                                    width={48}
+                                                    height={48}
+                                                    className="w-12 h-12 rounded-lg object-cover mb-3"
+                                                    unoptimized
+                                                />
                                             ) : (
                                                 <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mb-3">
                                                     <span className="text-white text-xl font-bold">{product.name.charAt(0)}</span>
@@ -519,7 +528,7 @@ const ProductManagementPage = () => {
 
                                 <div className="space-y-2">
                                     <label className="block text-sm font-semibold text-gray-700 flex items-center gap-2">
-                                        <Image size={16} />
+                                        <ImageIcon size={16} />
                                         Logo URL
                                     </label>
                                     <input

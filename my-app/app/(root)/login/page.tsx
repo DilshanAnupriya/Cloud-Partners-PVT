@@ -1,15 +1,23 @@
 // app/login/page.tsx - Updated with Google Sign-In
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../Context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Script from 'next/script';
 
+type GoogleCredentialResponse = { credential: string };
 declare global {
     interface Window {
-        google: any;
+        google?: {
+            accounts: {
+                id: {
+                    initialize: (options: { client_id: string; callback: (response: GoogleCredentialResponse) => void }) => void;
+                    renderButton: (element: HTMLElement | null, options: { theme: string; size: string; width: string | number; text: string; shape: string }) => void;
+                };
+            };
+        };
     }
 }
 
@@ -21,6 +29,32 @@ export default function LoginPage() {
     const [loading, setLoading] = useState(false);
     const { login, isAuthenticated,setExternalAuth } = useAuth();
     const router = useRouter();
+    
+    const handleGoogleSignIn = useCallback(async (response: GoogleCredentialResponse) => {
+        setLoading(true);
+        setError('');
+        try {
+            const res = await fetch('/api/v1/user/google-login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    credential: response.credential,
+                }),
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.error || 'Google sign-in failed');
+            }
+            await setExternalAuth(data.token, data.user);
+            router.push('/');
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : 'Google sign-in failed');
+        } finally {
+            setLoading(false);
+        }
+    }, [router, setExternalAuth]);
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -63,41 +97,7 @@ export default function LoginPage() {
 
             return () => clearInterval(checkGoogle);
         }
-    }, []);
-
-const handleGoogleSignIn = async (response: any) => {
-    setLoading(true);
-    setError('');
-
-    try {
-        const res = await fetch('/api/v1/user/google-login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                credential: response.credential,
-            }),
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-            throw new Error(data.error || 'Google sign-in failed');
-        }
-
-        // ✅ Use the new setExternalAuth method to update context
-        await setExternalAuth(data.token, data.user);
-        
-        // ✅ Navigate to home page (context is already updated)
-        router.push('/');
-        
-    } catch (err: any) {
-        setError(err.message || 'Google sign-in failed');
-    } finally {
-        setLoading(false);
-    }
-};
+    }, [handleGoogleSignIn]);
 
     const validateEmail = (email: string): boolean => {
         const emailRegex = /^[^\s@]+@cloudpartners\.biz$/i;
@@ -125,8 +125,8 @@ const handleGoogleSignIn = async (response: any) => {
 
         try {
             await login(username, password);
-        } catch (err: any) {
-            setError(err.message || 'Login failed. Please check your credentials.');
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : 'Login failed. Please check your credentials.');
         } finally {
             setLoading(false);
         }

@@ -40,8 +40,9 @@ export default function ForgotPasswordPage() {
             await forgotPassword(email);
             setSuccess('Password reset link has been sent to your email address. Please check your inbox.');
             setEmail('');
-        } catch (err: any) {
-            setError(err.message || 'Failed to send reset email. Please try again.');
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : 'Failed to send reset email. Please try again.';
+            setError(message);
         } finally {
             setLoading(false);
         }
@@ -72,7 +73,7 @@ export default function ForgotPasswordPage() {
                         Forgot your password?
                     </h2>
                     <p className="mt-2 text-sm text-gray-600">
-                        No worries! Enter your email and we'll send you reset instructions
+                        No worries! Enter your email and we&apos;ll send you reset instructions
                     </p>
                 </div>
 
@@ -279,7 +280,7 @@ export default function ForgotPasswordPage() {
                         </div>
                         <div className="ml-3">
                             <p className="text-sm text-blue-700">
-                                If you don't receive an email within a few minutes, please check your spam folder or contact support.
+                                If you don&apos;t receive an email within a few minutes, please check your spam folder or contact support.
                             </p>
                         </div>
                     </div>

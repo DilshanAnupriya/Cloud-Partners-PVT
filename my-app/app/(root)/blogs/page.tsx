@@ -1,7 +1,8 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { Heart, MessageCircle, Eye, Search, Filter, ChevronLeft, ChevronRight, ChevronDown, X, TrendingUp, Clock, Sparkles } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, ChevronDown, X, TrendingUp, Clock, Sparkles } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 // Types
 interface Author {
@@ -80,32 +81,31 @@ export default function BlogPage() {
 
     const pageSize = 9;
 
-    const fetchBlogs = async () => {
-        setLoading(true);
-        try {
-            const params = new URLSearchParams({
-                page: currentPage.toString(),
-                size: pageSize.toString(),
-            });
-
-            if (searchText) params.append('searchText', searchText);
-            if (category) params.append('category', category);
-            if (selectedTags.length > 0) params.append('tags', selectedTags.join(','));
-
-            const response = await fetch(`${API_BASE_URL}/blogs/published?${params}`);
-            const data: BlogResponse = await response.json();
-
-            setBlogs(data.blogs);
-            setTotalPages(data.totalPages);
-            setTotalBlogs(data.count);
-        } catch (error) {
-            console.error('Error fetching blogs:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     useEffect(() => {
+        const fetchBlogs = async () => {
+            setLoading(true);
+            try {
+                const params = new URLSearchParams({
+                    page: currentPage.toString(),
+                    size: pageSize.toString(),
+                });
+
+                if (searchText) params.append('searchText', searchText);
+                if (category) params.append('category', category);
+                if (selectedTags.length > 0) params.append('tags', selectedTags.join(','));
+
+                const response = await fetch(`${API_BASE_URL}/blogs/published?${params}`);
+                const data: BlogResponse = await response.json();
+
+                setBlogs(data.blogs);
+                setTotalPages(data.totalPages);
+                setTotalBlogs(data.count);
+            } catch (error) {
+                console.error('Error fetching blogs:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
         fetchBlogs();
     }, [currentPage, searchText, category, selectedTags]);
 
@@ -388,10 +388,13 @@ export default function BlogPage() {
                                     {/* Featured Image */}
                                     <div className="relative h-56 overflow-hidden">
                                         {blog.featuredImage ? (
-                                            <img
+                                            <Image
                                                 src={blog.featuredImage}
                                                 alt={blog.title}
-                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                                fill
+                                                unoptimized
+                                                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                                className="object-cover group-hover:scale-110 transition-transform duration-500"
                                             />
                                         ) : (
                                             <div className="w-full h-full bg-gradient-to-br from-purple-600 via-pink-600 to-blue-600 flex items-center justify-center">

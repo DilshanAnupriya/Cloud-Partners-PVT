@@ -2,7 +2,6 @@
 import React, { useRef } from 'react';
 import Image from 'next/image';
 import { ContainerScroll } from '@/components/ui/container-scroll-animation';
-import { Spotlight } from "@/components/ui/spotlight-new";
 import Link from "next/link";
 
 function HeroSection() {

@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { ArrowRight, Code, Users, Play, Shield, Database, Cloud, BarChart3, X, Loader2, Sparkles, TrendingUp, Zap } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight, Code, Users, Play, Shield, Database, Cloud, BarChart3, X, Loader2, Sparkles, Zap } from "lucide-react";
 import { GoogleLogoBadge, ZohoLogoBadge } from "./ProductLogos";
 import { BackgroundRippleEffect } from "./background-ripple-effect";
 import ProfessionalBackground from "./ProfessionalBackground";
@@ -33,7 +34,7 @@ const ModernZohoHero = () => {
             { label: 'Status', href: 'https://status.cloud.google.com/' },
             { label: 'Pricing', href: 'https://cloud.google.com/pricing' },
         ],
-    };
+    } as const;
 
     const zohoInfo = {
         apps: [
@@ -59,7 +60,7 @@ const ModernZohoHero = () => {
             { label: 'Books Docs', href: 'https://www.zoho.com/books/help/' },
             { label: 'Marketplace', href: 'https://marketplace.zoho.com/' },
         ],
-    };
+    } as const;
 
     useEffect(() => {
         if (isBookingModalOpen) {
@@ -321,7 +322,7 @@ const ModernZohoHero = () => {
                                             <h3 className="text-3xl font-bold text-slate-900">Google Cloud Overview</h3>
                                             <p className="text-slate-600">General products, new features, and resources</p>
                                         </div>
-                                        <img src="/google-logo.webp" alt="Google" className="w-15 h-10" />
+                                        <Image src="/google-logo.webp" alt="Google" width={60} height={40} className="object-contain" />
                                     </div>
                                    
 
@@ -332,7 +333,7 @@ const ModernZohoHero = () => {
                                             {googleInfo.products.map((p, idx) => (
                                                 <div key={idx} className="rounded-2xl p-6 border border-gray-200 bg-gradient-to-br from-slate-50 to-white hover:border-blue-300 hover:shadow-lg transition-all">
                                                     <div className="flex items-center gap-3 mb-3">
-                                                        <GoogleLogoBadge name={p.name as any} />
+                                                        <GoogleLogoBadge name={p.name} />
                                                         <div className="text-base font-semibold text-slate-900">{p.name}</div>
                                                     </div>
                                                     <div className="text-sm text-slate-600">{p.desc}</div>
@@ -373,7 +374,7 @@ const ModernZohoHero = () => {
                                             <h3 className="text-3xl font-bold text-slate-900">Zoho Suite Overview</h3>
                                             <p className="text-slate-600">General apps, features, and resources</p>
                                         </div>
-                                        <img src="/zoho-one-logo.png" alt="Zoho" className="w-20 h-15" />
+                                        <Image src="/zoho-one-logo.png" alt="Zoho" width={80} height={60} className="object-contain" />
                                     </div>
                                    
 
@@ -383,7 +384,7 @@ const ModernZohoHero = () => {
                                         <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                                             {zohoInfo.apps.map((app, idx) => (
                                                 <div key={idx} className="flex items-center gap-3 rounded-2xl p-4 border border-gray-200 bg-gradient-to-br from-white to-slate-50">
-                                                    <ZohoLogoBadge name={app.name as any} />
+                                                    <ZohoLogoBadge name={app.name} />
                                                     <div>
                                                         <div className="text-sm font-semibold text-slate-900">{app.name}</div>
                                                         <div className="text-xs text-slate-600">{app.desc}</div>

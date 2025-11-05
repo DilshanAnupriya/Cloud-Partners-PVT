@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 
 // Types
@@ -46,45 +46,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const router = useRouter();
 
-    // Initialize auth state from localStorage
-    useEffect(() => {
-        const initAuth = async () => {
-            try {
-                const storedToken = localStorage.getItem('authToken');
-                const storedUser = localStorage.getItem('user');
-
-                console.log('🔍 Init Auth - Token exists:', !!storedToken);
-                console.log('🔍 Init Auth - User exists:', !!storedUser);
-
-                if (storedToken && storedUser) {
-                    setToken(storedToken);
-                    setUser(JSON.parse(storedUser));
-
-                    // Verify token is still valid
-                    try {
-                        await fetchUserProfile(storedToken);
-                        console.log('✅ Token is valid');
-                    } catch (error) {
-                        console.error('❌ Token validation failed:', error);
-                        // Token is invalid, clear everything
-                        logout();
-                    }
-                } else {
-                    console.log('⚠️ No stored credentials found');
-                }
-            } catch (error) {
-                console.error('❌ Error initializing auth:', error);
-                logout();
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        initAuth();
-    }, []);
+    
 
     // Fetch user profile
-    const fetchUserProfile = async (authToken?: string) => {
+    const fetchUserProfile = useCallback(async (authToken?: string) => {
         const tokenToUse = authToken || token;
 
         console.log('🔍 Fetching user profile...');
@@ -118,7 +83,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             console.error('❌ Error fetching user profile:', error);
             throw error;
         }
-    };
+    }, [token]);
 
 // Add this method to your AuthProvider component
 const setExternalAuth = async (authToken: string, userData: User) => {
@@ -216,14 +181,51 @@ const setExternalAuth = async (authToken: string, userData: User) => {
     };
 
     // Logout
-    const logout = () => {
+    const logout = useCallback(() => {
         console.log('🚪 Logging out...');
         setUser(null);
         setToken(null);
         localStorage.removeItem('authToken');
         localStorage.removeItem('user');
         router.push('/');
-    };
+    }, [router]);
+
+    // Initialize auth state from localStorage
+    useEffect(() => {
+        const initAuth = async () => {
+            try {
+                const storedToken = localStorage.getItem('authToken');
+                const storedUser = localStorage.getItem('user');
+
+                console.log('🔍 Init Auth - Token exists:', !!storedToken);
+                console.log('🔍 Init Auth - User exists:', !!storedUser);
+
+                if (storedToken && storedUser) {
+                    setToken(storedToken);
+                    setUser(JSON.parse(storedUser));
+
+                    // Verify token is still valid
+                    try {
+                        await fetchUserProfile(storedToken);
+                        console.log('✅ Token is valid');
+                    } catch (error) {
+                        console.error('❌ Token validation failed:', error);
+                        // Token is invalid, clear everything
+                        logout();
+                    }
+                } else {
+                    console.log('⚠️ No stored credentials found');
+                }
+            } catch (error) {
+                console.error('❌ Error initializing auth:', error);
+                logout();
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        initAuth();
+    }, [fetchUserProfile, logout]);
 
     // Forgot Password
     const forgotPassword = async (email: string) => {

@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, Plus, Folder, Code, Star, Eye, Calendar, TrendingUp, BarChart3, FileCode, Edit, Trash2, Copy, X, Save, AlertCircle, Users } from 'lucide-react';
+import { Search, Plus, Folder, Code, Star, Eye, Calendar, TrendingUp, FileCode, Edit, Trash2, Copy, X, Save, AlertCircle, Users } from 'lucide-react';
 import Sidebar from "@/components/ui/Sidebar";
 import DashboardNavbar from "@/components/ui/DashboardNavbar";
 

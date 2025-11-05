@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/Context/AuthContext';
 import Sidebar from '@/components/ui/Sidebar';
@@ -23,7 +23,7 @@ import {
   Building,
   ArrowRight
 } from 'lucide-react';
-import { log } from 'console';
+// Removed unused import
 
 // API Base URL
 const API_BASE_URL ='/api/v1/pm';
@@ -51,10 +51,10 @@ interface Project {
   actualEndDate?: string;
   isActive: boolean;
   createdAt: string;
-  tasks: any[];
-  documents: any[];
-  roadmap: any[];
-  progressUpdates: any[];
+  tasks: unknown[];
+  documents: unknown[];
+  roadmap: unknown[];
+  progressUpdates: unknown[];
 }
 
 const ProjectManagerDashboard: React.FC = () => {
@@ -83,7 +83,7 @@ const ProjectManagerDashboard: React.FC = () => {
   });
 
   // API Functions
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/`, {
         headers: {
@@ -99,9 +99,9 @@ const ProjectManagerDashboard: React.FC = () => {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch projects');
     }
-  };
+  }, [token]);
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       const response = await fetch(`/api/v1/user/all-users`, {
         headers: {
@@ -118,7 +118,7 @@ const ProjectManagerDashboard: React.FC = () => {
       console.error('Failed to fetch users:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch users');
     }
-  };
+  }, [token]);
 
   const createProject = async () => {
     try {
@@ -201,7 +201,7 @@ const ProjectManagerDashboard: React.FC = () => {
       Promise.all([fetchProjects(), fetchUsers()])
         .finally(() => setLoading(false));
     }
-  }, [token]);
+  }, [token, fetchProjects, fetchUsers]);
 
   // Utility functions
   const getStageColor = (stage: string) => {

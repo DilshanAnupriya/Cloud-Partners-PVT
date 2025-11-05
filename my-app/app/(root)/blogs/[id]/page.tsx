@@ -1,7 +1,8 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Heart, MessageCircle, Eye, Clock, ArrowLeft, Share2, Bookmark, User } from 'lucide-react';
+import { Heart, MessageCircle, Eye, Clock, ArrowLeft, Share2, Bookmark } from 'lucide-react';
+import Image from 'next/image';
 
 interface Author {
     _id: string;
@@ -48,31 +49,32 @@ export default function BlogDetailPage() {
     const [error, setError] = useState('');
 
     useEffect(() => {
+        const fetchBlogDetails = async () => {
+            setLoading(true);
+            setError('');
+            try {
+                // Using the slug endpoint for better SEO
+                const response = await fetch(`${API_BASE_URL}/blogs/${params.id}/public`);
+
+                if (!response.ok) {
+                    throw new Error('Blog not found');
+                }
+
+                const data = await response.json();
+                setBlog(data.blog);
+            } catch (err: unknown) {
+                console.error('Error fetching blog:', err);
+                const message = err instanceof Error ? err.message : 'Failed to load blog';
+                setError(message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
         if (params.id) {
             fetchBlogDetails();
         }
     }, [params.id]);
-
-    const fetchBlogDetails = async () => {
-        setLoading(true);
-        setError('');
-        try {
-            // Using the slug endpoint for better SEO
-            const response = await fetch(`${API_BASE_URL}/blogs/${params.id}/public`);
-
-            if (!response.ok) {
-                throw new Error('Blog not found');
-            }
-
-            const data = await response.json();
-            setBlog(data.blog);
-        } catch (err: any) {
-            console.error('Error fetching blog:', err);
-            setError(err.message || 'Failed to load blog');
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const formatDate = (date: string) => {
         return new Date(date).toLocaleDateString('en-US', {
@@ -133,10 +135,14 @@ export default function BlogDetailPage() {
             {/* Hero Section with Featured Image */}
             {blog.featuredImage && (
                 <div className="relative h-96 bg-gray-900">
-                    <img
+                    <Image
                         src={blog.featuredImage}
                         alt={blog.title}
-                        className="w-full h-full object-cover opacity-90"
+                        fill
+                        unoptimized
+                        priority
+                        sizes="100vw"
+                        className="object-cover opacity-90"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                 </div>

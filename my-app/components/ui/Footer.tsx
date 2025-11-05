@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
 
 const Footer = () => {
@@ -13,16 +14,18 @@ const Footer = () => {
                     <div className="lg:col-span-4 space-y-6">
                         <div className="flex items-center">
                             <div className="w-24 h-24 flex items-center justify-center border border-gray-200 rounded-xl bg-white">
-                                <img
+                                <Image
                                     alt="Cloud Partners logo"
                                     src="/2-1-removebg-preview.png"
-                                    className="w-20 h-20 rounded-xl object-contain"
+                                    width={80}
+                                    height={80}
+                                    className="rounded-xl object-contain"
                                 />
                             </div>
                         </div>
                         <div>
                             <p className="text-gray-600 text-sm leading-relaxed">
-                                Building innovative solutions for tomorrow's challenges. We're dedicated to
+                                Building innovative solutions for tomorrow&apos;s challenges. We&apos;re dedicated to
                                 delivering exceptional products and services that make a difference.
                             </p>
                         </div>
