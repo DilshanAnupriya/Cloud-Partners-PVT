@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const UserController = require('../Controller/UserController');
 const verifyToken = require('../Middleware/Auth');
+const upload = require('../Config/multer');
 
 //http://localhost:3000/api/v1/user/signup
 router.post('/login',UserController.logIn);//
@@ -9,6 +10,8 @@ router.post('/signup', UserController.signUp);//
 router.get('/all-users',verifyToken(['Sales','PM','BA','Developer', 'Admin']), UserController.getAllUsers);//
 router.get('/user-by',verifyToken(['Sales','PM','BA','Developer', 'Admin']),UserController.getByUserId);//
 router.put('/update-user',verifyToken(['Sales','PM','BA','Developer', 'Admin']),UserController.updateUser);//
+// Upload and update profile picture
+router.put('/profile-picture', verifyToken(['Sales','PM','BA','Developer', 'Admin']), upload.single('profilePicture'), UserController.updateProfilePicture);
 router.delete('/delete-user/:id',verifyToken(['Admin']),UserController.deleteUser);//
 router.post('/forgot-password', UserController.forgotPassword);
 router.put('/reset-password/:token', UserController.resetPassword);

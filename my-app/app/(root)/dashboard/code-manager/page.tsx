@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Search, Plus, Folder, Code, Star, Eye, Calendar, TrendingUp, FileCode, Edit, Trash2, Copy, X, Save, AlertCircle, Users } from 'lucide-react';
 import Sidebar from "@/components/ui/Sidebar";
 import DashboardNavbar from "@/components/ui/DashboardNavbar";
@@ -82,6 +82,7 @@ const LANGUAGES = [
 
 export default function CodeManagementDashboard() {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const [myProjects, setMyProjects] = useState<Project[]>([]);
     const [allProjects, setAllProjects] = useState<Project[]>([]);
     const [snippets, setSnippets] = useState<Snippet[]>([]);
@@ -403,6 +404,20 @@ export default function CodeManagementDashboard() {
         }
         setShowSnippetModal(true);
     };
+
+    // Open snippet modal when navigated with query param from other pages
+    useEffect(() => {
+        const create = searchParams.get('createSnippet');
+        if (create === 'true') {
+            const projectId = searchParams.get('projectId');
+            // Prefill project if provided
+            if (projectId) {
+                setSnippetForm(prev => ({ ...prev, project: projectId }));
+            }
+            setShowSnippetModal(true);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchParams]);
 
     const resetProjectForm = () => {
         setProjectForm({

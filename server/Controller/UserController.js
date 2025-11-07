@@ -237,6 +237,40 @@ const forgotPassword = async (req, res) => {
     }
 };
 
+// Upload and update profile picture
+const updateProfilePicture = async (req, res) => {
+    try {
+        const userId = req.user._id;
+
+        if (!req.file) {
+            return res.status(400).json({ error: 'No file uploaded' });
+        }
+
+        // Build public URL for the uploaded file
+        const relativePath = req.file.path.replace(/\\/g, '/'); // e.g., uploads/documents/filename
+        const publicUrl = `${req.protocol}://${req.get('host')}/${relativePath}`;
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { profilePicture: publicUrl },
+            { new: true, runValidators: true }
+        ).select('-password');
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        return res.status(200).json({
+            message: 'Profile picture updated successfully',
+            profilePicture: publicUrl,
+            user: updatedUser
+        });
+    } catch (e) {
+        console.error('Update profile picture error:', e);
+        return res.status(500).json({ error: e.message });
+    }
+};
+
 // Reset Password - Update password with token
 const resetPassword = async (req, res) => {
     try {
@@ -422,5 +456,6 @@ module.exports = {
     forgotPassword,
     resetPassword,
     updateUserById,
-    googleLogin
+    googleLogin,
+    updateProfilePicture
 }

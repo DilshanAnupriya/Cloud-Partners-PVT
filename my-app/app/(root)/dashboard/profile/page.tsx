@@ -1,7 +1,8 @@
 
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { Mail, Shield, Calendar, Edit2, Save, XCircle, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '@/app/Context/AuthContext';
 import Sidebar from '@/components/ui/Sidebar';
@@ -9,25 +10,33 @@ import DashboardNavbar from '@/components/ui/DashboardNavbar';
 import Alert from '@/components/ui/Alert';
 
 const UserProfilePage = () => {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user, updateUser, isLoading, token, fetchUserProfile } = useAuth();
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [loading, setLoading] = useState(false);
     const [alert, setAlert] = useState<{ type: 'success' | 'error' | 'info'; message: string } | null>(null);
 
-    const { user, updateUser, isLoading } = useAuth();
 
     const [formData, setFormData] = useState({
         username: '',
         email: '',
+        profilePicture: '' as string | undefined,
     });
+
+    // Photo upload state
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const [photoFile, setPhotoFile] = useState<File | null>(null);
+    const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
     useEffect(() => {
         if (user) {
             setFormData({
                 username: user.username || '',
                 email: user.email || '',
+                profilePicture: user.profilePicture || '',
             });
+            setPhotoPreview(null);
+            setPhotoFile(null);
         }
     }, [user]);
 
@@ -42,13 +51,43 @@ const UserProfilePage = () => {
 
 
         try {
-            await updateUser(formData);
+            const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api/v1';
+
+            // First upload photo if selected
+            if (photoFile) {
+                if (!token) {
+                    throw new Error('Not authenticated');
+                }
+                const form = new FormData();
+                form.append('profilePicture', photoFile);
+
+                const uploadResp = await fetch(`${API_BASE_URL}/user/profile-picture`, {
+                    method: 'PUT',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: form,
+                });
+                if (!uploadResp.ok) {
+                    const errData = await uploadResp.json().catch(() => ({}));
+                    throw new Error(errData.error || 'Failed to upload profile picture');
+                }
+            }
+
+            // Then update other profile fields
+            await updateUser({
+                username: formData.username,
+                email: formData.email,
+            });
+
+            // Refresh full user profile to reflect photo change
+            await fetchUserProfile();
+
             setAlert({ type: 'success', message: 'Profile updated successfully!' });
             setIsEditing(false);
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-        } catch (error: never) {
-            setAlert({ type: 'error', message: error.message || 'Failed to update profile' });
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : 'Failed to update profile';
+            setAlert({ type: 'error', message });
         } finally {
             setLoading(false);
         }
@@ -58,9 +97,36 @@ const UserProfilePage = () => {
         setFormData({
             username: user?.username || '',
             email: user?.email || '',
+            profilePicture: user?.profilePicture || '',
         });
         setIsEditing(false);
         setAlert(null);
+    };
+
+    const handlePhotoSelectClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    const onPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0] || null;
+        if (!file) return;
+        // Basic validation: type and size (<= 5MB)
+        if (!file.type.startsWith('image/')) {
+            setAlert({ type: 'error', message: 'Please select a valid image file.' });
+            return;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+            setAlert({ type: 'error', message: 'Image must be 5MB or smaller.' });
+            return;
+        }
+        const previewUrl = URL.createObjectURL(file);
+        setPhotoFile(file);
+        setPhotoPreview(previewUrl);
+    };
+
+    const clearPhotoSelection = () => {
+        setPhotoFile(null);
+        setPhotoPreview(null);
     };
 
     if (isLoading) {
@@ -107,11 +173,72 @@ const UserProfilePage = () => {
                         <div className="px-6 lg:px-8 pb-8">
                             <div className="flex flex-col sm:flex-row items-start sm:items-end gap-4 -mt-16 mb-6">
                                 <div className="relative">
-                                    <div className="w-32 h-32 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl border-4 border-white shadow-xl flex items-center justify-center">
-                    <span className="text-white text-4xl font-bold">
-                      {user?.username?.charAt(0).toUpperCase()}
-                    </span>
+                                    {/* Avatar / Photo */}
+                                    <div className="relative w-32 h-32 rounded-2xl border-4 border-white shadow-xl overflow-hidden">
+                                        {photoPreview ? (
+                                            // Preview selected file while editing
+                                            // eslint-disable-next-line @next/next/no-img-element
+                                            <img
+                                                src={photoPreview}
+                                                alt="Selected profile preview"
+                                                className="w-full h-full object-cover"
+                                            />
+                                        ) : user?.profilePicture ? (
+                                            // If remote URL, use next/image; otherwise fallback to img
+                                            user.profilePicture.startsWith('http') ? (
+                                                <Image
+                                                    src={user.profilePicture}
+                                                    alt={`${user?.username ?? 'User'} profile photo`}
+                                                    fill
+                                                    sizes="128px"
+                                                    className="object-cover"
+                                                    priority
+                                                />
+                                            ) : (
+                                                // eslint-disable-next-line @next/next/no-img-element
+                                                <img
+                                                    src={user.profilePicture}
+                                                    alt={`${user?.username ?? 'User'} profile photo`}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            )
+                                        ) : (
+                                            <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                                                <span className="text-white text-4xl font-bold">
+                                                    {user?.username?.charAt(0).toUpperCase()}
+                                                </span>
+                                            </div>
+                                        )}
                                     </div>
+
+                                    {/* Photo controls (visible in edit mode) */}
+                                    {isEditing && (
+                                        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-2">
+                                            <button
+                                                onClick={handlePhotoSelectClick}
+                                                className="px-3 py-1.5 bg-blue-600 text-white rounded-md text-sm shadow hover:bg-blue-700"
+                                            >
+                                                Change Photo
+                                            </button>
+                                            {photoPreview && (
+                                                <button
+                                                    onClick={clearPhotoSelection}
+                                                    className="px-3 py-1.5 bg-gray-200 text-gray-800 rounded-md text-sm shadow hover:bg-gray-300"
+                                                >
+                                                    Remove
+                                                </button>
+                                            )}
+                                            <input
+                                                ref={fileInputRef}
+                                                type="file"
+                                                accept="image/*"
+                                                className="hidden"
+                                                onChange={onPhotoChange}
+                                            />
+                                        </div>
+                                    )}
+
+                                    {/* Edit icon (unchanged) */}
                                     <button className="absolute bottom-0 right-0 w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center shadow-lg hover:bg-blue-700 transition-colors">
                                         <Edit2 size={18} className="text-white" />
                                     </button>

@@ -170,7 +170,7 @@ const Navbar = () => {
                                 <div className="hidden lg:flex items-center space-x-4">
                                     <Link
                                         href="/login"
-                                        className="flex items-center bg-white border border-black text-black space-x-2 px-4 md:px-6 lg:px-7 py-2 md:py-2.5 lg:py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105 whitespace-nowrap"
+                                        className="flex items-center bg-white border border-black text-black space-x-2 px-4 md:px-6 lg:px-7 py-2 md:py-2.5 lg:py-2 rounded-lg font-semibold transition-all duration-300 hover:scale-105 whitespace-nowrap"
                                     >
                                         <span className="text-black text-xs sm:text-sm md:text-base">Login</span>
                                     </Link>

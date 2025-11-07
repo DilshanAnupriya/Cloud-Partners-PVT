@@ -12,6 +12,7 @@ interface User {
     isActive: boolean;
     createdAt?: string;  // Add this
     updatedAt?: string;
+    profilePicture?: string; // Optional profile image URL
 }
 
 interface AuthContextType {

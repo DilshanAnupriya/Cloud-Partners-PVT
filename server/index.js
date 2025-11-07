@@ -21,9 +21,10 @@ const chatRoutes = require('./Route/chatBotRoute');
 
 const app = express();
 
-app.use(express.json());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+// Increase body size limits to avoid 413 on larger JSON payloads
+app.use(express.json({ limit: '10mb' }));
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: false }));
 
 app.use(cors({
     origin: 'http://localhost:3000', // frontend URL

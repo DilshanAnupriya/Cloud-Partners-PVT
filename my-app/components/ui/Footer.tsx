@@ -31,7 +31,7 @@ const Footer = () => {
                         </div>
                         <div className="flex space-x-3">
                             <a 
-                                href="#" 
+                                href="https://www.facebook.com/share/16a9n3N22C/" 
                                 aria-label="Facebook" 
                                 className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-50 text-gray-600 hover:bg-blue-600 hover:text-white transition-all duration-200"
                             >
@@ -45,7 +45,7 @@ const Footer = () => {
                                 <Twitter size={18} />
                             </a>
                             <a 
-                                href="#" 
+                                href="https://www.linkedin.com/company/cloudpartner/" 
                                 aria-label="LinkedIn" 
                                 className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-50 text-gray-600 hover:bg-blue-600 hover:text-white transition-all duration-200"
                             >
@@ -115,7 +115,7 @@ const Footer = () => {
                                     <Mail size={16} className="text-gray-600" />
                                 </div>
                                 <a href="mailto:hello@cloudpartners.com" className="text-gray-600 hover:text-blue-600 transition-colors text-sm">
-                                    hello@cloudpartners.com
+                                    hello@cloudpartners.biz
                                 </a>
                             </div>
                         </div>
