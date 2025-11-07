@@ -391,7 +391,7 @@ export default function ProjectDetailPage() {
                             {searchTerm || languageFilter ? 'No snippets match your filters' : 'No snippets yet'}
                         </p>
                         <button
-                            onClick={() => router.push('/dashboard')}
+                            onClick={() => router.push(`/dashboard/code-manager?createSnippet=true`)}
                             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                         >
                             Create First Snippet

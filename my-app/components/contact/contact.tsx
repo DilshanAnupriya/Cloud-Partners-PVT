@@ -339,7 +339,7 @@ function Contact() {
                     </div>
                     <div className="ml-5">
                       <h3 className="text-lg font-semibold text-gray-900 mb-1">Business Inquiries</h3>
-                      <p className="text-blue-600 font-medium hover:text-blue-700 cursor-pointer">hello@cloudpartners.com</p>
+                      <p className="text-blue-600 font-medium hover:text-blue-700 cursor-pointer">hello@cloudpartners.biz</p>
                       <p className="text-gray-500 text-sm mt-1">For new projects and partnerships</p>
                     </div>
                   </div>
